@@ -11,11 +11,8 @@ import java.util.List;
 
 @Entity
 @Table(name = "users")
-public class User extends AbstractBaseEntity {
-
-    @Column(name = "name", nullable = false)
-    @NotBlank
-    private String name;
+public class User extends AbstractNamedEntity {
+    private static final String emailRegex = "^([a-z0-9_-]+\\.)*[a-z0-9_-]+@[a-z0-9_-]+(\\.[a-z0-9_-]+)*\\.[a-z]{2,6}$";
 
     @Column(name = "password", nullable = false)
     @NotBlank
@@ -24,7 +21,7 @@ public class User extends AbstractBaseEntity {
 
     @Column(name = "email", nullable = false)
     @NotBlank
-    @Pattern(regexp = "^([a-z0-9_-]+\\.)*[a-z0-9_-]+@[a-z0-9_-]+(\\.[a-z0-9_-]+)*\\.[a-z]{2,6}$")
+    @Pattern(regexp = emailRegex)
     private String email;
 
     @Column(name = "registered", nullable = false)
@@ -37,7 +34,7 @@ public class User extends AbstractBaseEntity {
     private Role role;
 
     @OneToMany(fetch = FetchType.LAZY)
-    @OrderBy("dateTime")
+    @OrderBy("dateTime DESC")
     private List<Vote> votes;
 
     public User() {
@@ -48,20 +45,12 @@ public class User extends AbstractBaseEntity {
     }
 
     public User(Integer id, String name, String password, String email, LocalDateTime registered, Role role, List<Vote> votes) {
-        super(id);
+        super(id, name);
         this.name = name;
         this.password = password;
         this.email = email;
         this.registered = registered;
         this.role = role;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getPassword() {

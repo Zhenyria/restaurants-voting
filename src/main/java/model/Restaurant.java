@@ -1,43 +1,42 @@
 package model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import javax.validation.constraints.NotBlank;
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "restaurants")
-public class Restaurant extends AbstractBaseEntity {
+public class Restaurant extends AbstractNamedEntity {
 
-    @Column(name = "name")
-    @NotBlank
-    private String name;
+    @OneToMany(fetch = FetchType.LAZY)
+    @OrderBy("dateTime DESC")
+    private List<Menu> menus;
 
     public Restaurant() {
     }
 
-    public Restaurant(String name) {
-        this(null, name);
+    public Restaurant(String name, List<Menu> menus) {
+        this(null, name, menus);
     }
 
-    public Restaurant(Integer id, String name) {
-        super(id);
-        this.name = name;
+    public Restaurant(Integer id, String name, List<Menu> menus) {
+        super(id, name);
+        this.menus = menus;
     }
 
-    public String getName() {
-        return name;
+    public List<Menu> getMenus() {
+        return menus;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setMenus(List<Menu> menus) {
+        this.menus = menus;
     }
 
     @Override
     public String toString() {
         return "Restaurant{" +
-               "name='" + name + '\'' +
-               ", id=" + id +
+               "id=" + id +
+               ", name='" + name + '\'' +
+               ", menus=" + menus +
                '}';
     }
 }
