@@ -5,17 +5,12 @@ import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "menu_dishes")
-public class MenuDish extends AbstractBaseEntity {
+public class MenuDish extends AbstractMenuEntity {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "dish_id", nullable = false)
     @NotNull
     private Dish dish;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "menu_id", nullable = false)
-    @NotNull
-    private Menu menu;
 
     public MenuDish() {
     }
@@ -25,9 +20,8 @@ public class MenuDish extends AbstractBaseEntity {
     }
 
     public MenuDish(Integer id, Dish dish, Menu menu) {
-        super(id);
+        super(id, menu);
         this.dish = dish;
-        this.menu = menu;
     }
 
     public Dish getDish() {
@@ -38,20 +32,12 @@ public class MenuDish extends AbstractBaseEntity {
         this.dish = dish;
     }
 
-    public Menu getMenu() {
-        return menu;
-    }
-
-    public void setMenu(Menu menu) {
-        this.menu = menu;
-    }
-
     @Override
     public String toString() {
         return "MenuDish{" +
                "id=" + id +
-               ", dish=" + dish +
                ", menu=" + menu +
+               ", dish=" + dish +
                '}';
     }
 }
