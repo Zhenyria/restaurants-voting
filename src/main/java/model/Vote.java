@@ -2,7 +2,7 @@ package model;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "votes")
@@ -18,22 +18,22 @@ public class Vote extends AbstractBaseEntity {
     @NotNull
     private Menu menu;
 
-    @Column(name = "date_time", nullable = false)
+    @Column(name = "date", nullable = false)
     @NotNull
-    private LocalDateTime dateTime;
+    private LocalDate date;
 
     public Vote() {
     }
 
-    public Vote(User user, Menu menu, LocalDateTime dateTime) {
-        this(null, user, menu, dateTime);
+    public Vote(User user, Menu menu, LocalDate date) {
+        this(null, user, menu, date);
     }
 
-    public Vote(Integer id, User user, Menu menu, LocalDateTime dateTime) {
+    public Vote(Integer id, User user, Menu menu, LocalDate date) {
         super(id);
         this.user = user;
         this.menu = menu;
-        this.dateTime = dateTime;
+        this.date = date;
     }
 
     public User getUser() {
@@ -52,12 +52,12 @@ public class Vote extends AbstractBaseEntity {
         this.menu = menu;
     }
 
-    public LocalDateTime getDateTime() {
-        return dateTime;
+    public LocalDate getDate() {
+        return date;
     }
 
-    public void setDateTime(LocalDateTime dateTime) {
-        this.dateTime = dateTime;
+    public void setDate(LocalDate date) {
+        this.date = date;
     }
 
     @Override
@@ -66,7 +66,7 @@ public class Vote extends AbstractBaseEntity {
                "id=" + id +
                ", user=" + user +
                ", menu=" + menu +
-               ", dateTime=" + dateTime +
+               ", date=" + date +
                '}';
     }
 }

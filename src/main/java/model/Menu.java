@@ -2,7 +2,7 @@ package model;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -14,9 +14,8 @@ public class Menu extends AbstractBaseEntity {
     @NotNull
     private Restaurant restaurant;
 
-    @Column(name = "date_time", nullable = false)
-    @NotNull
-    private LocalDateTime dateTime;
+    @Column(name = "date", nullable = false)
+    private LocalDate date;
 
     @OneToMany(fetch = FetchType.EAGER)
     private List<MenuDish> dishes;
@@ -27,14 +26,14 @@ public class Menu extends AbstractBaseEntity {
     public Menu() {
     }
 
-    public Menu(Restaurant restaurant, LocalDateTime dateTime, List<MenuDish> dishes, List<Vote> votes) {
-        this(null, restaurant, dateTime, dishes, votes);
+    public Menu(Restaurant restaurant, LocalDate date, List<MenuDish> dishes, List<Vote> votes) {
+        this(null, restaurant, date, dishes, votes);
     }
 
-    public Menu(Integer id, Restaurant restaurant, LocalDateTime dateTime, List<MenuDish> dishes, List<Vote> votes) {
+    public Menu(Integer id, Restaurant restaurant, LocalDate date, List<MenuDish> dishes, List<Vote> votes) {
         super(id);
         this.restaurant = restaurant;
-        this.dateTime = dateTime;
+        this.date = date;
         this.dishes = dishes;
         this.votes = votes;
     }
@@ -47,12 +46,12 @@ public class Menu extends AbstractBaseEntity {
         this.restaurant = restaurant;
     }
 
-    public LocalDateTime getDateTime() {
-        return dateTime;
+    public LocalDate getDateTime() {
+        return date;
     }
 
-    public void setDateTime(LocalDateTime dateTime) {
-        this.dateTime = dateTime;
+    public void setDateTime(LocalDate date) {
+        this.date = date;
     }
 
     public List<MenuDish> getDishes() {
@@ -76,7 +75,7 @@ public class Menu extends AbstractBaseEntity {
         return "Menu{" +
                "id=" + id +
                ", restaurant=" + restaurant +
-               ", dateTime=" + dateTime +
+               ", date=" + date +
                ", dishes=" + dishes +
                ", votes=" + votes +
                '}';
