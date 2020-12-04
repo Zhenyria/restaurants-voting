@@ -34,7 +34,7 @@ public class User extends AbstractNamedEntity {
     private Role role;
 
     @OneToMany(fetch = FetchType.LAZY)
-    @OrderBy("dateTime DESC")
+    @OrderBy("date DESC")
     private List<Vote> votes;
 
     public User() {

@@ -8,7 +8,7 @@ import java.util.List;
 public class Restaurant extends AbstractNamedEntity {
 
     @OneToMany(fetch = FetchType.LAZY)
-    @OrderBy("dateTime DESC")
+    @OrderBy("date DESC")
     private List<Menu> menus;
 
     public Restaurant() {

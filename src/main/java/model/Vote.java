@@ -6,12 +6,17 @@ import java.time.LocalDate;
 
 @Entity
 @Table(name = "votes")
-public class Vote extends AbstractMenuEntity {
+public class Vote extends AbstractBaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     @NotNull
     private User user;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "menu_id", nullable = false)
+    @NotNull
+    protected Menu menu;
 
     @Column(name = "date", nullable = false)
     @NotNull
@@ -25,8 +30,9 @@ public class Vote extends AbstractMenuEntity {
     }
 
     public Vote(Integer id, User user, Menu menu, LocalDate date) {
-        super(id, menu);
+        super(id);
         this.user = user;
+        this.menu = menu;
         this.date = date;
     }
 
@@ -46,12 +52,20 @@ public class Vote extends AbstractMenuEntity {
         this.date = date;
     }
 
+    public Menu getMenu() {
+        return menu;
+    }
+
+    public void setMenu(Menu menu) {
+        this.menu = menu;
+    }
+
     @Override
     public String toString() {
         return "Vote{" +
                "id=" + id +
-               ", menu=" + menu +
                ", user=" + user +
+               ", menu=" + menu +
                ", date=" + date +
                '}';
     }
