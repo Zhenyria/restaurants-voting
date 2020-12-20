@@ -1,9 +1,11 @@
 package model;
 
+import org.hibernate.annotations.BatchSize;
+
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -12,45 +14,46 @@ import java.util.List;
 @Entity
 @Table(name = "users")
 public class User extends AbstractNamedEntity {
-    private static final String emailRegex = "^([a-z0-9_-]+\\.)*[a-z0-9_-]+@[a-z0-9_-]+(\\.[a-z0-9_-]+)*\\.[a-z]{2,6}$";
-
     @Column(name = "password", nullable = false)
     @NotBlank
     @Size(min = 6, max = 30)
     private String password;
 
     @Column(name = "email", nullable = false)
+    @Email
     @NotBlank
-    @Pattern(regexp = emailRegex)
     private String email;
 
     @Column(name = "registered", nullable = false)
     @NotNull
     private LocalDateTime registered;
 
-    @Column(name = "role", nullable = false)
-    @NotNull
     @Enumerated(EnumType.STRING)
-    private Role role;
+    @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"),
+            uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "role"}, name = "user_roles_unique_idx")})
+    @Column(name = "role")
+    @ElementCollection(fetch = FetchType.EAGER)
+    @BatchSize(size = 200)
+    private List<Role> roles;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @OrderBy("date DESC")
-    private List<Vote> votes;
+    @ManyToMany(mappedBy = "users", fetch = FetchType.LAZY)
+    private List<Menu> menus;
 
     public User() {
     }
 
-    public User(String name, String password, String email, LocalDateTime registered, Role role, List<Vote> votes) {
-        this(null, name, password, email, registered, role, votes);
+    public User(String name, String password, String email, LocalDateTime registered, List<Role> roles, List<Menu> menus) {
+        this(null, name, password, email, registered, roles, menus);
     }
 
-    public User(Integer id, String name, String password, String email, LocalDateTime registered, Role role, List<Vote> votes) {
+    public User(Integer id, String name, String password, String email, LocalDateTime registered, List<Role> roles, List<Menu> menus) {
         super(id, name);
         this.name = name;
         this.password = password;
         this.email = email;
         this.registered = registered;
-        this.role = role;
+        this.roles = roles;
+        this.menus = menus;
     }
 
     public String getPassword() {
@@ -77,32 +80,32 @@ public class User extends AbstractNamedEntity {
         this.registered = registered;
     }
 
-    public Role getRole() {
-        return role;
+    public List<Role> getRoles() {
+        return roles == null || roles.isEmpty() ? Collections.emptyList() : List.copyOf(roles);
     }
 
-    public void setRole(Role role) {
-        this.role = role;
+    public void setRoles(List<Role> roles) {
+        this.roles = roles == null || roles.isEmpty() ? Collections.emptyList() : List.copyOf(roles);
     }
 
-    public List<Vote> getVotes() {
-        return votes == null || votes.isEmpty() ? Collections.emptyList() : List.copyOf(votes);
+    public List<Menu> getMenus() {
+        return menus == null || menus.isEmpty() ? Collections.emptyList() : List.copyOf(menus);
     }
 
-    public void setVotes(List<Vote> votes) {
-        this.votes = votes == null || votes.isEmpty() ? Collections.emptyList() : List.copyOf(votes);
+    public void setMenus(List<Menu> menus) {
+        this.menus = menus == null || menus.isEmpty() ? Collections.emptyList() : List.copyOf(menus);
     }
 
     @Override
     public String toString() {
         return "User{" +
-               "name='" + name + '\'' +
+               "id=" + id +
+               ", name='" + name + '\'' +
                ", password='" + password + '\'' +
                ", email='" + email + '\'' +
                ", registered=" + registered +
-               ", role=" + role +
-               ", votes=" + votes +
-               ", id=" + id +
+               ", roles=" + roles +
+               ", menus=" + menus +
                '}';
     }
 }

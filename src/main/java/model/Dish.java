@@ -16,7 +16,7 @@ public class Dish extends AbstractNamedEntity {
     private Integer price;
 
     @ManyToMany(mappedBy = "dishes", fetch = FetchType.LAZY)
-    private List<Menu> menu;
+    private List<Menu> menus;
 
     public Dish() {
     }
@@ -39,12 +39,12 @@ public class Dish extends AbstractNamedEntity {
         this.price = price;
     }
 
-    public List<Menu> getMenu() {
-        return menu;
+    public List<Menu> getMenus() {
+        return menus;
     }
 
-    public void setMenu(List<Menu> menu) {
-        this.menu = menu;
+    public void setMenus(List<Menu> menu) {
+        this.menus = menu;
     }
 
     @Override
@@ -53,7 +53,7 @@ public class Dish extends AbstractNamedEntity {
                "id=" + id +
                ", name='" + name + '\'' +
                ", price=" + price +
-               ", menu=" + menu +
+               ", menus=" + menus +
                '}';
     }
 }

@@ -27,22 +27,36 @@ public class Menu extends AbstractBaseEntity {
     @OrderBy("name")
     private List<Dish> dishes;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    private List<Vote> votes;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "votes",
+            joinColumns = @JoinColumn(name = "menu_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    @OrderBy("name")
+    private List<User> users;
 
     public Menu() {
     }
 
-    public Menu(Restaurant restaurant, LocalDate date, List<Dish> dishes, List<Vote> votes) {
-        this(null, restaurant, date, dishes, votes);
+    public Menu(Restaurant restaurant, LocalDate date, List<Dish> dishes, List<User> users) {
+        this(null, restaurant, date, dishes, users);
     }
 
-    public Menu(Integer id, Restaurant restaurant, LocalDate date, List<Dish> dishes, List<Vote> votes) {
+    public Menu(Integer id, Restaurant restaurant, LocalDate date, List<Dish> dishes, List<User> users) {
         super(id);
         this.restaurant = restaurant;
         this.date = date;
         this.dishes = dishes;
-        this.votes = votes;
+        this.users = users;
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
     }
 
     public Restaurant getRestaurant() {
@@ -53,14 +67,6 @@ public class Menu extends AbstractBaseEntity {
         this.restaurant = restaurant;
     }
 
-    public LocalDate getDateTime() {
-        return date;
-    }
-
-    public void setDateTime(LocalDate date) {
-        this.date = date;
-    }
-
     public List<Dish> getDishes() {
         return dishes;
     }
@@ -69,12 +75,12 @@ public class Menu extends AbstractBaseEntity {
         this.dishes = dishes;
     }
 
-    public List<Vote> getVotes() {
-        return votes;
+    public List<User> getUsers() {
+        return users;
     }
 
-    public void setVotes(List<Vote> votes) {
-        this.votes = votes;
+    public void setUsers(List<User> users) {
+        this.users = users;
     }
 
     @Override
@@ -84,7 +90,7 @@ public class Menu extends AbstractBaseEntity {
                ", restaurant=" + restaurant +
                ", date=" + date +
                ", dishes=" + dishes +
-               ", votes=" + votes +
+               ", users=" + users +
                '}';
     }
 }
