@@ -1,4 +1,4 @@
-package to;
+package ru.zhenyria.restaurants.to;
 
 import org.hibernate.validator.constraints.SafeHtml;
 

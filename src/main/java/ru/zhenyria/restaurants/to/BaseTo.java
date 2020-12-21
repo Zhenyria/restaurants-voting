@@ -1,4 +1,4 @@
-package to;
+package ru.zhenyria.restaurants.to;
 
 public abstract class BaseTo {
     protected Integer id;

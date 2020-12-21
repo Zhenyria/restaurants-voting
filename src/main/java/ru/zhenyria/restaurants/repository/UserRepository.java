@@ -1,6 +1,6 @@
-package repository;
+package ru.zhenyria.restaurants.repository;
 
-import model.User;
+import ru.zhenyria.restaurants.model.User;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 

@@ -1,4 +1,4 @@
-package model;
+package ru.zhenyria.restaurants.model;
 
 import javax.persistence.*;
 import java.util.List;

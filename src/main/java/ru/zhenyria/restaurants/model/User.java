@@ -1,4 +1,4 @@
-package model;
+package ru.zhenyria.restaurants.model;
 
 import org.hibernate.annotations.BatchSize;
 

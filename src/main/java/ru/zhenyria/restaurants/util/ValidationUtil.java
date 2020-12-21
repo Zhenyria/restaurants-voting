@@ -1,6 +1,6 @@
-package util;
+package ru.zhenyria.restaurants.util;
 
-import model.AbstractBaseEntity;
+import ru.zhenyria.restaurants.model.AbstractBaseEntity;
 
 public class ValidationUtil {
 

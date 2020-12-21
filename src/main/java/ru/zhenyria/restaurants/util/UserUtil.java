@@ -1,7 +1,7 @@
-package util;
+package ru.zhenyria.restaurants.util;
 
-import model.User;
-import to.UserTo;
+import ru.zhenyria.restaurants.model.User;
+import ru.zhenyria.restaurants.to.UserTo;
 
 public class UserUtil {
     private UserUtil() {

@@ -1,6 +1,6 @@
-package repository;
+package ru.zhenyria.restaurants.repository;
 
-import model.Menu;
+import ru.zhenyria.restaurants.model.Menu;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
