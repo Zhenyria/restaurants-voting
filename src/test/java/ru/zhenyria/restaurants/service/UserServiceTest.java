@@ -88,4 +88,9 @@ class UserServiceTest extends AbstractServiceTest {
     void deleteNotFound() {
         assertThrows(RuntimeException.class, () -> service.delete(NOT_FOUND_ID));
     }
+
+    @Test
+    void getAll() {
+        USER_MATCHER.assertMatch(service.getAll(), users);
+    }
 }
