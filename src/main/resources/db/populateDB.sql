@@ -7,11 +7,11 @@ DELETE FROM USER_ROLES;
 DELETE FROM USERS;
 ALTER SEQUENCE GLOBAL_SEQ RESTART WITH 100000;
 
-INSERT INTO USERS (NAME, PASSWORD, EMAIL, REGISTERED)
-VALUES ('Piter', 'password', 'piter@gmail.com', '2000-12-05 12:56:58'),
-       ('Nikolas', 'password', 'nikolas@gmail.com', '2015-06-08 13:28:19'),
-       ('Petr', 'password', 'petr@mail.ru', '2018-08-13 08:17:54'),
-       ('Admin', 'admin', 'admin@gmail.com', '2001-06-09 10:12:34');
+INSERT INTO USERS (NAME, PASSWORD, EMAIL)
+VALUES ('Piter', 'password', 'piter@gmail.com'),
+       ('Nikolas', 'password', 'nikolas@gmail.com'),
+       ('Petr', 'password', 'petr@mail.ru'),
+       ('Admin', 'admin', 'admin@gmail.com');
 
 INSERT INTO USER_ROLES (USER_ID, ROLE)
 VALUES (100000, 'USER'),

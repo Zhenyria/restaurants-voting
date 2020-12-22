@@ -1,6 +1,8 @@
 package ru.zhenyria.restaurants.to;
 
-public abstract class BaseTo {
+import ru.zhenyria.restaurants.HasId;
+
+public abstract class BaseTo implements HasId {
     protected Integer id;
 
     public BaseTo() {

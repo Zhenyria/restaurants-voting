@@ -8,8 +8,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Table(name = "users")
@@ -34,7 +33,7 @@ public class User extends AbstractNamedEntity {
     @Column(name = "role")
     @ElementCollection(fetch = FetchType.EAGER)
     @BatchSize(size = 200)
-    private List<Role> roles;
+    private Set<Role> roles;
 
     @ManyToMany(mappedBy = "users", fetch = FetchType.LAZY)
     private List<Menu> menus;
@@ -42,11 +41,32 @@ public class User extends AbstractNamedEntity {
     public User() {
     }
 
-    public User(String name, String password, String email, LocalDateTime registered, List<Role> roles, List<Menu> menus) {
+    public User(User user) {
+        this(user.getId(), user.getName(), user.getPassword(), user.getEmail(), user.getRoles());
+    }
+
+    public User(String name, String password, String email, Role... roles) {
+        this(null, name, password, email, roles);
+    }
+
+    public User(Integer id, String name, String password, String email, Set<Role> roles) {
+        this(id, name, password, email, roles.toArray(new Role[0]));
+    }
+
+    public User(String name, String password, String email, LocalDateTime registered, Set<Role> roles, List<Menu> menus) {
         this(null, name, password, email, registered, roles, menus);
     }
 
-    public User(Integer id, String name, String password, String email, LocalDateTime registered, List<Role> roles, List<Menu> menus) {
+    public User(Integer id, String name, String password, String email, Role... roles) {
+        super(id, name);
+        this.name = name;
+        this.password = password;
+        this.email = email;
+        this.registered = LocalDateTime.now();
+        this.roles = Set.of(roles);
+    }
+
+    public User(Integer id, String name, String password, String email, LocalDateTime registered, Set<Role> roles, List<Menu> menus) {
         super(id, name);
         this.name = name;
         this.password = password;
@@ -80,12 +100,12 @@ public class User extends AbstractNamedEntity {
         this.registered = registered;
     }
 
-    public List<Role> getRoles() {
-        return roles == null || roles.isEmpty() ? Collections.emptyList() : List.copyOf(roles);
+    public Set<Role> getRoles() {
+        return roles;
     }
 
-    public void setRoles(List<Role> roles) {
-        this.roles = roles == null || roles.isEmpty() ? Collections.emptyList() : List.copyOf(roles);
+    public void setRoles(Collection<Role> roles) {
+        this.roles = roles == null || roles.isEmpty() ? Collections.emptySet() : EnumSet.copyOf(roles);
     }
 
     public List<Menu> getMenus() {
