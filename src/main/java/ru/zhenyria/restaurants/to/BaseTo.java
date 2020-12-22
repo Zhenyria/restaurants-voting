@@ -12,10 +12,6 @@ public abstract class BaseTo implements HasId {
         this.id = id;
     }
 
-    public boolean isNew() {
-        return this.id == null;
-    }
-
     public Integer getId() {
         return id;
     }

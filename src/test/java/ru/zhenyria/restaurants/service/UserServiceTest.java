@@ -6,6 +6,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.transaction.TransactionSystemException;
 import ru.zhenyria.restaurants.model.Role;
 import ru.zhenyria.restaurants.model.User;
+import ru.zhenyria.restaurants.to.UserTo;
 
 import javax.validation.ConstraintViolationException;
 
@@ -74,6 +75,21 @@ class UserServiceTest extends AbstractServiceTest {
     @Test
     void updateWithNotValidData() {
         User updated = getUpdated();
+        updated.setName(null);
+        assertThrows(TransactionSystemException.class, () -> service.update(updated));
+    }
+
+    @Test
+    void updateTo() {
+        User updated = getUpdated();
+        UserTo updatedTo = new UserTo(updated);
+        service.update(updatedTo);
+        USER_UPDATED_TO_MATCHER.assertMatch(service.get(USER_ID), updated);
+    }
+
+    @Test
+    void updateToWithNotValidData() {
+        UserTo updated = new UserTo(getUpdated());
         updated.setName(null);
         assertThrows(TransactionSystemException.class, () -> service.update(updated));
     }

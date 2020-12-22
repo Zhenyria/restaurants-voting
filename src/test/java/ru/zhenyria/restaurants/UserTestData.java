@@ -7,7 +7,10 @@ import java.util.EnumSet;
 import java.util.List;
 
 public class UserTestData {
-    public static final TestMatcher<User> USER_MATCHER = TestMatcher.usingIgnoringFieldsComparator(User.class, "menus", "registered");
+    public static final TestMatcher<User> USER_MATCHER =
+            TestMatcher.usingIgnoringFieldsComparator(User.class, "menus", "registered");
+    public static final TestMatcher<User> USER_UPDATED_TO_MATCHER =
+            TestMatcher.usingIgnoringFieldsComparator(User.class, "menus", "registered", "roles");
 
     public static final int USER_ID = 100000;
     public static final int ADMIN_ID = 100003;
@@ -20,6 +23,9 @@ public class UserTestData {
     public static final User admin = new User(ADMIN_ID, "Admin", "admin", "admin@gmail.com", Role.USER, Role.ADMIN);
 
     public static final List<User> users = List.of(admin, user2, user3, user1);
+
+    private UserTestData() {
+    }
 
     public static User getNew() {
         User user = new User(user1);
@@ -35,8 +41,5 @@ public class UserTestData {
         User user = getNew();
         user.setId(USER_ID);
         return user;
-    }
-
-    private UserTestData() {
     }
 }

@@ -1,21 +1,16 @@
 package ru.zhenyria.restaurants.to;
 
 import org.hibernate.validator.constraints.SafeHtml;
+import ru.zhenyria.restaurants.model.User;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-
 import java.io.Serializable;
 
 import static org.hibernate.validator.constraints.SafeHtml.WhiteListType.NONE;
 
-public class UserTo extends BaseTo implements Serializable {
-
-    @NotBlank
-    @Size(min = 2, max = 100)
-    @SafeHtml(whitelistType = NONE)
-    private String name;
+public class UserTo extends NamedTo implements Serializable {
 
     @NotBlank
     @Email
@@ -27,12 +22,17 @@ public class UserTo extends BaseTo implements Serializable {
     @SafeHtml(whitelistType = NONE)
     private String password;
 
-    public String getName() {
-        return name;
+    public UserTo() {
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public UserTo(User user) {
+        this(user.getId(), user.getName(), user.getEmail(), user.getPassword());
+    }
+
+    public UserTo(Integer id, String name, String email, String password) {
+        super(id, name);
+        this.email = email;
+        this.password = password;
     }
 
     public String getEmail() {
