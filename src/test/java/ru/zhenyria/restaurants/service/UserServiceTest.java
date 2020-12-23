@@ -45,12 +45,12 @@ class UserServiceTest extends AbstractServiceTest {
 
     @Test
     void get() {
-        User user = service.get(USER_ID);
+        User user = service.get(FIRST_USER_ID);
         USER_MATCHER.assertMatch(user, user1);
     }
 
     @Test
-    void getNotFound() {
+    void getNotExist() {
         assertThrows(RuntimeException.class, () -> service.get(NOT_FOUND_ID));
     }
 
@@ -69,11 +69,11 @@ class UserServiceTest extends AbstractServiceTest {
     void update() {
         User updated = getUpdated();
         service.update(updated);
-        USER_MATCHER.assertMatch(service.get(USER_ID), updated);
+        USER_MATCHER.assertMatch(service.get(FIRST_USER_ID), updated);
     }
 
     @Test
-    void updateWithNotValidData() {
+    void updateInvalid() {
         User updated = getUpdated();
         updated.setName(null);
         assertThrows(TransactionSystemException.class, () -> service.update(updated));
@@ -84,11 +84,11 @@ class UserServiceTest extends AbstractServiceTest {
         User updated = getUpdated();
         UserTo updatedTo = new UserTo(updated);
         service.update(updatedTo);
-        USER_UPDATED_TO_MATCHER.assertMatch(service.get(USER_ID), updated);
+        USER_UPDATED_TO_MATCHER.assertMatch(service.get(FIRST_USER_ID), updated);
     }
 
     @Test
-    void updateToWithNotValidData() {
+    void updateToInvalid() {
         UserTo updated = new UserTo(getUpdated());
         updated.setName(null);
         assertThrows(TransactionSystemException.class, () -> service.update(updated));
@@ -96,8 +96,8 @@ class UserServiceTest extends AbstractServiceTest {
 
     @Test
     void delete() {
-        service.delete(USER_ID);
-        assertThrows(RuntimeException.class, () -> service.get(USER_ID));
+        service.delete(FIRST_USER_ID);
+        assertThrows(RuntimeException.class, () -> service.get(FIRST_USER_ID));
     }
 
     @Test

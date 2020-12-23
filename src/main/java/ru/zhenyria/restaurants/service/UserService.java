@@ -1,6 +1,5 @@
 package ru.zhenyria.restaurants.service;
 
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -10,7 +9,7 @@ import ru.zhenyria.restaurants.to.UserTo;
 
 import java.util.List;
 
-import static ru.zhenyria.restaurants.util.UserUtil.updateUserFromTo;
+import static ru.zhenyria.restaurants.util.EntityUtil.UserUtil.updateUserFromTo;
 import static ru.zhenyria.restaurants.util.ValidationUtil.checkExisting;
 
 @Service
@@ -33,7 +32,6 @@ public class UserService {
         return checkExisting(repository.getByEmail(email));
     }
 
-    @CacheEvict(value = "users", allEntries = true)
     public User create(User user) {
         Assert.notNull(user, NULL_USER_MSG);
         return checkExisting(repository.save(user));
@@ -42,7 +40,7 @@ public class UserService {
     @Transactional
     public void update(UserTo updated) {
         Assert.notNull(updated, NULL_USER_MSG);
-        User user = get(updated.getId());
+        User user = get(updated.id());
         repository.save(updateUserFromTo(user, updated));
     }
 
