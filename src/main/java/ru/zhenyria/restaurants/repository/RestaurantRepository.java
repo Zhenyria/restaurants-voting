@@ -1,8 +1,8 @@
 package ru.zhenyria.restaurants.repository;
 
-import ru.zhenyria.restaurants.model.Restaurant;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
+import ru.zhenyria.restaurants.model.Restaurant;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -29,19 +29,15 @@ public class RestaurantRepository {
         return repository.findById(id).orElse(null);
     }
 
-    public Restaurant getWithMenu(int id, LocalDate date) {
-        return repository.getWithMenu(id, date);
+    public List<Restaurant> getAllWithActualMenu(LocalDate date) {
+        return repository.getAllWithActualMenu(date);
+    }
+
+    public List<Restaurant> getAllWithoutActualMenu(LocalDate date) {
+        return repository.getAllWithoutActualMenu(date);
     }
 
     public List<Restaurant> getAll() {
         return repository.findAll(SORT_NAME);
-    }
-
-    public List<Restaurant> getAllWithMenu(LocalDate date) {
-        return repository.getAllWithMenu(date);
-    }
-
-    public List<Restaurant> getAllWithoutMenu(LocalDate date) {
-        return repository.getAllWithoutMenu(date);
     }
 }
