@@ -31,7 +31,7 @@ public class RestaurantService {
 
     public void update(Restaurant restaurant) {
         Assert.notNull(restaurant, NULL_RESTAURANT_MSG);
-        repository.save(restaurant);
+        checkExisting(repository.save(restaurant));
     }
 
 

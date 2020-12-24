@@ -41,7 +41,7 @@ public class UserService {
     public void update(UserTo updated) {
         Assert.notNull(updated, NULL_USER_MSG);
         User user = get(updated.id());
-        repository.save(updateUserFromTo(user, updated));
+        checkExisting(repository.save(updateUserFromTo(user, updated)));
     }
 
     public void update(User user) {

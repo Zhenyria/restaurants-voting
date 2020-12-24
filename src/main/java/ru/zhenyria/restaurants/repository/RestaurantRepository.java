@@ -29,6 +29,10 @@ public class RestaurantRepository {
         return repository.findById(id).orElse(null);
     }
 
+    public Restaurant getReference(int id) {
+        return repository.getOne(id);
+    }
+
     public List<Restaurant> getAllWithActualMenu(LocalDate date) {
         return repository.getAllWithActualMenu(date);
     }
