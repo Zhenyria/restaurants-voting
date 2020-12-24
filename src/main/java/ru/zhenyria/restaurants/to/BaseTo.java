@@ -2,7 +2,9 @@ package ru.zhenyria.restaurants.to;
 
 import ru.zhenyria.restaurants.HasId;
 
-public abstract class BaseTo implements HasId {
+import java.io.Serializable;
+
+public abstract class BaseTo implements HasId, Serializable {
     protected Integer id;
 
     public BaseTo() {
