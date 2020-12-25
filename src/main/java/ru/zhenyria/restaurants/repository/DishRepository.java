@@ -20,15 +20,27 @@ public class DishRepository {
         return repository.save(dish);
     }
 
-    public boolean delete(int id) {
-        return repository.delete(id) != 0;
-    }
-
     public Dish get(int id) {
         return repository.findById(id).orElse(null);
     }
 
+    public Dish getReference(int id) {
+        return repository.getOne(id);
+    }
+
     public List<Dish> getAll() {
         return repository.findAll(SORT_NAME_PRICE);
+    }
+
+    public int addToMenu(int menuId, int id) {
+        return repository.addToMenu(menuId, id);
+    }
+
+    public int deleteFromMenu(int menuId, int id) {
+        return repository.deleteFormMenu(menuId, id);
+    }
+
+    public boolean delete(int id) {
+        return repository.delete(id) != 0;
     }
 }
