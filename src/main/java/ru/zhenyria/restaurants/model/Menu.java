@@ -3,6 +3,7 @@ package ru.zhenyria.restaurants.model;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 
 @Entity
@@ -37,6 +38,10 @@ public class Menu extends AbstractBaseEntity {
     private List<User> users;
 
     public Menu() {
+    }
+
+    public Menu(Restaurant restaurant, LocalDate date, List<Dish> dishes) {
+        this(restaurant, date, dishes, Collections.emptyList());
     }
 
     public Menu(Restaurant restaurant, LocalDate date, List<Dish> dishes, List<User> users) {
