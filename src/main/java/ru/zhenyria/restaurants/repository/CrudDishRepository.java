@@ -10,6 +10,9 @@ import ru.zhenyria.restaurants.model.Dish;
 @Transactional(readOnly = true)
 public interface CrudDishRepository extends JpaRepository<Dish, Integer> {
 
+    @Query(value = "SELECT COUNT(*) FROM MENU_DISHES WHERE DISH_ID=:id", nativeQuery = true)
+    int countUsing(@Param("id") int id);
+
     @Transactional
     @Modifying
     @Query(value = """

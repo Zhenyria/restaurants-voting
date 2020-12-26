@@ -67,7 +67,8 @@ VALUES ('Beef', 154),
        ('Beer', 52),
        ('Pina Coladas', 106),
        ('Corny flakes', 60),
-       ('Hamburger', 103);
+       ('Hamburger', 103),
+       ('Sprite', 23);
 
 INSERT INTO MENU_DISHES (DISH_ID, MENU_ID)
 VALUES (100016, 100007),

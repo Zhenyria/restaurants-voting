@@ -4,6 +4,7 @@ import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.Collections;
 import java.util.List;
 
 @Entity
@@ -19,6 +20,14 @@ public class Dish extends AbstractNamedEntity {
     private List<Menu> menus;
 
     public Dish() {
+    }
+
+    public Dish(Dish dish) {
+        this(dish.getId(), dish.getName(), dish.getPrice(), dish.getMenus());
+    }
+
+    public Dish(Integer id, String name, Integer price) {
+        this(id, name, price, Collections.emptyList());
     }
 
     public Dish(String name, Integer price, List<Menu> menus) {

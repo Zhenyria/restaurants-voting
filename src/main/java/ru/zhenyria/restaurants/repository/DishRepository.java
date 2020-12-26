@@ -1,8 +1,8 @@
 package ru.zhenyria.restaurants.repository;
 
-import ru.zhenyria.restaurants.model.Dish;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
+import ru.zhenyria.restaurants.model.Dish;
 
 import java.util.List;
 
@@ -32,12 +32,16 @@ public class DishRepository {
         return repository.findAll(SORT_NAME_PRICE);
     }
 
-    public int addToMenu(int menuId, int id) {
-        return repository.addToMenu(menuId, id);
+    public boolean isUsing(int id) {
+        return repository.countUsing(id) > 0;
     }
 
-    public int deleteFromMenu(int menuId, int id) {
-        return repository.deleteFormMenu(menuId, id);
+    public boolean addToMenu(int menuId, int id) {
+        return repository.addToMenu(menuId, id) != 0;
+    }
+
+    public boolean deleteFromMenu(int menuId, int id) {
+        return repository.deleteFormMenu(menuId, id) != 0;
     }
 
     public boolean delete(int id) {

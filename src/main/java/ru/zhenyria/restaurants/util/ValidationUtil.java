@@ -14,6 +14,12 @@ public class ValidationUtil {
         return entity;
     }
 
+    public static void checkUsing(boolean using) {
+        if (using) {
+            throw new RuntimeException("The entity is already in use");
+        }
+    }
+
     public static void checkExisting(boolean isExist) {
         if (!isExist) {
             throw new RuntimeException("Not exist with this id");
