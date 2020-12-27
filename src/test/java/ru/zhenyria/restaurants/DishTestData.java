@@ -25,10 +25,10 @@ public class DishTestData {
     public static final Dish dish10 = new Dish(FIRST_DISH_ID + 9, "Corny flakes", 60);
     public static final Dish dish11 = new Dish(FIRST_DISH_ID + 10, "Hamburger", 103);
 
-    public static final Dish dish12 = new Dish(NOT_USING_DISH_ID, "Sprite", 23);
+    public static final Dish notUsingDish = new Dish(NOT_USING_DISH_ID, "Sprite", 23);
 
     public static final List<Dish> dishes =
-            List.of(dish1, dish8, dish6, dish2, dish10, dish5, dish4, dish11, dish7, dish9, dish12, dish3);
+            List.of(dish1, dish8, dish6, dish2, dish10, dish5, dish4, dish11, dish7, dish9, notUsingDish, dish3);
 
     private DishTestData() {
     }
