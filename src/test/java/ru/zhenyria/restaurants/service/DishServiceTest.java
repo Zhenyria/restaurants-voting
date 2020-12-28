@@ -4,12 +4,15 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.transaction.TransactionSystemException;
+import ru.zhenyria.restaurants.MenuTestData;
 import ru.zhenyria.restaurants.model.Dish;
 
 import javax.validation.ConstraintViolationException;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static ru.zhenyria.restaurants.DishTestData.*;
+import static ru.zhenyria.restaurants.MenuTestData.FIRST_MENU_ID;
+import static ru.zhenyria.restaurants.MenuTestData.MENU_MATCHER;
 import static ru.zhenyria.restaurants.UserTestData.NOT_FOUND_ID;
 
 class DishServiceTest extends AbstractServiceTest {
@@ -75,12 +78,14 @@ class DishServiceTest extends AbstractServiceTest {
 
     @Test
     void addToMenu() {
-        //todo:
+        service.addToMenu(FIRST_MENU_ID, FIRST_DISH_ID + 1);
+        MENU_MATCHER.assertMatch(menuService.get(FIRST_MENU_ID), MenuTestData.getWithAddedDish());
     }
 
     @Test
     void deleteFromMenu() {
-        //todo:
+        service.deleteFromMenu(FIRST_MENU_ID, FIRST_DISH_ID);
+        MENU_MATCHER.assertMatch(menuService.get(FIRST_MENU_ID), MenuTestData.getWithoutDeletedDish());
     }
 
     @Test

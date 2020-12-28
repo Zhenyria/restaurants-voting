@@ -18,12 +18,12 @@ public interface CrudMenuRepository extends JpaRepository<Menu, Integer> {
     @Query("DELETE FROM Menu m WHERE m.id=:id")
     int delete(@Param("id") int id);
 
-    @Query("SELECT m FROM Menu m WHERE m.date=:date ORDER BY m.date DESC")
+    @Query("SELECT m FROM Menu m WHERE m.date=:date ORDER BY m.restaurant.name ASC")
     List<Menu> getAllByDate(@Param("date") LocalDate date);
 
     @Query("SELECT m FROM Menu m WHERE m.restaurant.id=:id ORDER BY m.date DESC")
     List<Menu> getAllForRestaurant(@Param("id") int id);
 
-    @Query("SELECT DISTINCT m FROM Menu m WHERE m.date=:date AND m.restaurant.id=:id ORDER BY m.date DESC")
+    @Query("SELECT DISTINCT m FROM Menu m WHERE m.date=:date AND m.restaurant.id=:id")
     Menu getForRestaurantByDate(@Param("id") int id, @Param("date") LocalDate date);
 }

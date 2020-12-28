@@ -25,7 +25,7 @@ public class Menu extends AbstractBaseEntity {
             joinColumns = @JoinColumn(name = "menu_id"),
             inverseJoinColumns = @JoinColumn(name = "dish_id")
     )
-    @OrderBy("name")
+    @OrderBy("name, price ASC")
     private List<Dish> dishes;
 
     @ManyToMany(fetch = FetchType.LAZY)
@@ -40,12 +40,20 @@ public class Menu extends AbstractBaseEntity {
     public Menu() {
     }
 
+    public Menu(Menu menu) {
+        this(menu.getId(), menu.getRestaurant(), menu.getDate(), menu.getDishes());
+    }
+
     public Menu(Restaurant restaurant, LocalDate date, List<Dish> dishes) {
-        this(restaurant, date, dishes, Collections.emptyList());
+        this(null, restaurant, date, dishes);
     }
 
     public Menu(Restaurant restaurant, LocalDate date, List<Dish> dishes, List<User> users) {
         this(null, restaurant, date, dishes, users);
+    }
+
+    public Menu(Integer id, Restaurant restaurant, LocalDate date, List<Dish> dishes) {
+        this(id, restaurant, date, dishes, Collections.emptyList());
     }
 
     public Menu(Integer id, Restaurant restaurant, LocalDate date, List<Dish> dishes, List<User> users) {
@@ -95,7 +103,6 @@ public class Menu extends AbstractBaseEntity {
                ", restaurant=" + restaurant +
                ", date=" + date +
                ", dishes=" + dishes +
-               ", users=" + users +
                '}';
     }
 }

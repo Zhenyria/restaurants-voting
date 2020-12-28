@@ -34,7 +34,6 @@ public class RestaurantService {
         checkExisting(repository.save(restaurant));
     }
 
-
     public void delete(int id) {
         checkExisting(repository.delete(id));
     }

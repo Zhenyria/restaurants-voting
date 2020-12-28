@@ -9,7 +9,9 @@ import java.util.List;
 
 @Repository
 public class MenuRepository {
-    private static final Sort SORT_DATE = Sort.by(Sort.Direction.DESC, "date");
+    private static final Sort SORT_DATE =
+            Sort.by(Sort.Direction.DESC, "date")
+                    .and(Sort.by(Sort.Direction.ASC, "restaurant.name"));
 
     private final CrudMenuRepository repository;
 

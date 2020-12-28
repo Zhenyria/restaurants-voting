@@ -18,7 +18,7 @@ import static ru.zhenyria.restaurants.util.ValidationUtil.checkExisting;
 
 @Service
 public class MenuService {
-    private static final String NULL_MENU_MSG = "MenuTo must be not null";
+    private static final String NULL_MENU_MSG = "Menu must be not null";
 
     private final MenuRepository repository;
     private final RestaurantRepository restaurantRepository;
@@ -36,8 +36,13 @@ public class MenuService {
         return checkExisting(repository.save(getFromTo(menu)));
     }
 
+    public Menu create(Menu menu) {
+        Assert.notNull(menu, NULL_MENU_MSG);
+        return checkExisting(repository.save(menu));
+    }
+
     public Menu get(int id) {
-        return repository.get(id);
+        return checkExisting(repository.get(id));
     }
 
     public Menu getActual(int id) {
@@ -70,18 +75,24 @@ public class MenuService {
         checkExisting(repository.save(getFromTo(menu)));
     }
 
+    public void update(Menu menu) {
+        Assert.notNull(menu, NULL_MENU_MSG);
+        checkExisting(repository.save(menu));
+    }
+
     public void delete(int id) {
         checkExisting(repository.delete(id));
     }
 
     /**
-     * Util method, works with restaurant and dish repository to get references objects for creating the menu
+     * Util method, works with restaurants and dishes repositories to get references objects for creating
      * and return the menu
      *
      * @param menu DTO menu
      */
     private Menu getFromTo(MenuTo menu) {
         return new Menu(
+                menu.getId(),
                 restaurantRepository.getReference(menu.getRestaurantId()),
                 menu.getDate(),
                 Arrays.stream(menu.getDishIds())
