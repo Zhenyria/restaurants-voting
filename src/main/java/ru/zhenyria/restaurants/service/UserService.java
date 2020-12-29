@@ -9,7 +9,7 @@ import ru.zhenyria.restaurants.to.UserTo;
 
 import java.util.List;
 
-import static ru.zhenyria.restaurants.util.EntityUtil.UserUtil.updateUserFromTo;
+import static ru.zhenyria.restaurants.util.UserUtil.updateUserFromTo;
 import static ru.zhenyria.restaurants.util.ValidationUtil.checkExisting;
 
 @Service

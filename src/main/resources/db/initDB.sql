@@ -55,9 +55,11 @@ CREATE INDEX dishes_name_idx ON dishes (name);
 
 CREATE TABLE votes
 (
-    user_id INTEGER NOT NULL,
-    menu_id INTEGER NOT NULL,
+    user_id INTEGER              NOT NULL,
+    menu_id INTEGER              NOT NULL,
+    date    DATE DEFAULT today() NOT NULL,
     CONSTRAINT votes_user_menu_idx UNIQUE (user_id, menu_id),
+    CONSTRAINT votes_user_date_idx UNIQUE (user_id, date),
     FOREIGN KEY (user_id) REFERENCES users (id),
     FOREIGN KEY (menu_id) REFERENCES menus (id)
 );
