@@ -33,6 +33,10 @@ public class RestaurantRepository {
         return repository.getOne(id);
     }
 
+    public boolean isExist(int id) {
+        return repository.existsById(id);
+    }
+
     public List<Restaurant> getAllWithActualMenu(LocalDate date) {
         return repository.getAllWithActualMenu(date);
     }
@@ -43,5 +47,25 @@ public class RestaurantRepository {
 
     public List<Restaurant> getAll() {
         return repository.findAll(SORT_NAME);
+    }
+
+    public Restaurant getWinnerByDate(LocalDate date) {
+        return repository.getWinnerByDate(date);
+    }
+
+    public int countVotesByDate(int id, LocalDate date) {
+        return repository.countVotesByDate(id, date);
+    }
+
+    public boolean isVoting(int id) {
+        return repository.countUserVotesToday(id) > 0;
+    }
+
+    public void vote(int id, int userId) {
+        repository.vote(id, userId);
+    }
+
+    public void reVote(int id, int userId) {
+        repository.reVote(id, userId);
     }
 }
