@@ -3,13 +3,20 @@ package ru.zhenyria.restaurants.web.user;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.validation.BindException;
+import org.springframework.validation.DataBinder;
+import org.springframework.validation.Validator;
+import ru.zhenyria.restaurants.HasId;
 import ru.zhenyria.restaurants.model.User;
 import ru.zhenyria.restaurants.service.UserService;
 import ru.zhenyria.restaurants.to.UserTo;
+import ru.zhenyria.restaurants.web.View;
 
 import java.util.List;
 
 import static ru.zhenyria.restaurants.util.UserUtil.getUserFromTo;
+import static ru.zhenyria.restaurants.util.ValidationUtil.assureIdConsistent;
 import static ru.zhenyria.restaurants.util.ValidationUtil.checkNew;
 
 public abstract class AbstractUserController {
@@ -17,6 +24,13 @@ public abstract class AbstractUserController {
 
     @Autowired
     protected UserService service;
+
+    @Autowired
+    @Qualifier("defaultValidator")
+    private Validator validator;
+
+    @Autowired
+    private UniqueMailValidator emailValidator;
 
     public User get(int id) {
         log.info("get user {}", id);
@@ -49,7 +63,7 @@ public abstract class AbstractUserController {
         service.update(user);
     }
 
-    public void update(User user) {
+    public void update(User user) throws BindException {
         log.info("update user with id {} from to", user.id());
         service.update(user);
     }
@@ -57,5 +71,15 @@ public abstract class AbstractUserController {
     public void delete(int id) {
         log.info("delete user with id {}", id);
         service.delete(id);
+    }
+
+    protected void validateBeforeUpdate(HasId user, int id) throws BindException {
+        assureIdConsistent(user, id);
+        DataBinder binder = new DataBinder(user);
+        binder.addValidators(emailValidator, validator);
+        binder.validate(View.Web.class);
+        if (binder.getBindingResult().hasErrors()) {
+            throw new BindException(binder.getBindingResult());
+        }
     }
 }
