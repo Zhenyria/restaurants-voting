@@ -1,6 +1,9 @@
 package ru.zhenyria.restaurants.model;
 
 import org.hibernate.annotations.BatchSize;
+import org.hibernate.validator.constraints.SafeHtml;
+import ru.zhenyria.restaurants.web.HasEmail;
+import ru.zhenyria.restaurants.web.View;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -10,9 +13,11 @@ import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.*;
 
+import static org.hibernate.validator.constraints.SafeHtml.WhiteListType.NONE;
+
 @Entity
 @Table(name = "users")
-public class User extends AbstractNamedEntity {
+public class User extends AbstractNamedEntity implements HasEmail {
     @Column(name = "password", nullable = false)
     @NotBlank
     @Size(min = 6, max = 30)
@@ -21,6 +26,7 @@ public class User extends AbstractNamedEntity {
     @Column(name = "email", nullable = false)
     @Email
     @NotBlank
+    @SafeHtml(groups = {View.Web.class}, whitelistType = NONE)
     private String email;
 
     @Column(name = "registered", nullable = false)

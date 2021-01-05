@@ -28,4 +28,6 @@
     </mvc:annotation-driven>
 
     <context:component-scan base-package="ru.zhenyria.restaurants.**.web"/>
+
+    <bean id="defaultValidator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean"/>
 </beans>

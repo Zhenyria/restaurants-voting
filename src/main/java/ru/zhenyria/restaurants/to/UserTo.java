@@ -2,6 +2,7 @@ package ru.zhenyria.restaurants.to;
 
 import org.hibernate.validator.constraints.SafeHtml;
 import ru.zhenyria.restaurants.model.User;
+import ru.zhenyria.restaurants.web.HasEmail;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -9,7 +10,7 @@ import javax.validation.constraints.Size;
 
 import static org.hibernate.validator.constraints.SafeHtml.WhiteListType.NONE;
 
-public class UserTo extends NamedTo {
+public class UserTo extends NamedTo implements HasEmail {
 
     @NotBlank
     @Email

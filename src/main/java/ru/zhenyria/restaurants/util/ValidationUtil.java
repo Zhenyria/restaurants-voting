@@ -1,5 +1,6 @@
 package ru.zhenyria.restaurants.util;
 
+import ru.zhenyria.restaurants.HasId;
 import ru.zhenyria.restaurants.model.AbstractBaseEntity;
 
 public class ValidationUtil {
@@ -29,6 +30,14 @@ public class ValidationUtil {
     public static void checkNew(AbstractBaseEntity entity) {
         if (!entity.isNew()) {
             throw new IllegalArgumentException(entity + " must be new (id=null)");
+        }
+    }
+
+    public static void assureIdConsistent(HasId bean, int id) {
+        if (bean.isNew()) {
+            bean.setId(id);
+        } else if (bean.id() != id) {
+            throw new IllegalArgumentException(bean + " must be with id=" + id);
         }
     }
 

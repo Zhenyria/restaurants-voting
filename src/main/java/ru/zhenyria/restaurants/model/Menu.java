@@ -1,5 +1,7 @@
 package ru.zhenyria.restaurants.model;
 
+import ru.zhenyria.restaurants.web.View;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
@@ -12,7 +14,7 @@ public class Menu extends AbstractBaseEntity {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "restaurant_id", nullable = false)
-    @NotNull
+    @NotNull(groups = View.Persist.class)
     private Restaurant restaurant;
 
     @Column(name = "date", nullable = false)
