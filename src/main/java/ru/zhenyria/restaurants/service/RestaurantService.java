@@ -66,6 +66,11 @@ public class RestaurantService {
         return checkExisting(repository.getWinnerByDate(LocalDate.now()));
     }
 
+    //todo: test for winner??
+    public Restaurant getWinner() {
+        return checkExisting(repository.getWinnerByDate(LocalDate.now().minusDays(1)));
+    }
+
     public Restaurant getWinnerByDate(LocalDate date) {
         return checkExisting(repository.getWinnerByDate(date));
     }
