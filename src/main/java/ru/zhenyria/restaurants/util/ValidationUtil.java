@@ -15,6 +15,13 @@ public class ValidationUtil {
         return entity;
     }
 
+    public static <T extends AbstractBaseEntity> T checkFound(T entity) {
+        if (entity == null) {
+            throw new RuntimeException("No matching object found");
+        }
+        return entity;
+    }
+
     public static void checkUsing(boolean using) {
         if (using) {
             throw new RuntimeException("The entity is already in use");

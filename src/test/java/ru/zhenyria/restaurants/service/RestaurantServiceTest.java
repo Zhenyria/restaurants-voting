@@ -115,6 +115,11 @@ class RestaurantServiceTest extends AbstractServiceTest {
     }
 
     @Test
+    void getWinner() {
+        RESTAURANT_MATCHER.assertMatch(service.getWinner(), restaurant2);
+    }
+
+    @Test
     void getWinnerByDate() {
         RESTAURANT_MATCHER.assertMatch(service.getWinnerByDate(MenuTestData.DATE_12_01), restaurant1);
     }
@@ -152,5 +157,16 @@ class RestaurantServiceTest extends AbstractServiceTest {
         service.vote(FIRST_RESTAURANT_ID + 1, ADMIN_ID);
         VOTE_MATCHER.assertMatch(service.countVotes(FIRST_RESTAURANT_ID + 1), SECOND_RESTAURANTS_ACTUAL_COUNTS + 1);
         assertThrows(RuntimeException.class, () -> service.vote(FIRST_RESTAURANT_ID + 2, ADMIN_ID));
+    }
+
+    @Test
+    void delete() {
+        service.delete(FIRST_RESTAURANT_ID);
+        RESTAURANT_MATCHER.assertMatch(service.getAll(), restaurant3, restaurant2);
+    }
+
+    @Test
+    void deleteNotExist() {
+        assertThrows(RuntimeException.class, () -> service.delete(NOT_FOUND_ID));
     }
 }

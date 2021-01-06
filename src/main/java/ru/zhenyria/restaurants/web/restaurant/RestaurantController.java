@@ -33,7 +33,6 @@ public class RestaurantController extends AbstractRestaurantController {
         return super.getWinning();
     }
 
-    //todo: mapping date
     @Override
     @GetMapping("/winner/{date}")
     public Restaurant getWinnerByDate(@PathVariable LocalDate date) {
@@ -52,7 +51,6 @@ public class RestaurantController extends AbstractRestaurantController {
         return super.countVotes(id);
     }
 
-    //todo: date mapping
     @Override
     @GetMapping("/{id}/rating/{date}")
     public int countVotesByDate(@PathVariable int id, @PathVariable LocalDate date) {

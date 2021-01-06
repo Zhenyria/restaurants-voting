@@ -60,8 +60,8 @@ CREATE TABLE votes
     date    DATE DEFAULT today() NOT NULL,
     CONSTRAINT votes_user_menu_idx UNIQUE (user_id, menu_id),
     CONSTRAINT votes_user_date_idx UNIQUE (user_id, date),
-    FOREIGN KEY (user_id) REFERENCES users (id),
-    FOREIGN KEY (menu_id) REFERENCES menus (id)
+    FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
+    FOREIGN KEY (menu_id) REFERENCES menus (id) ON DELETE CASCADE
 );
 
 CREATE TABLE menu_dishes

@@ -114,3 +114,16 @@ VALUES (100016, 100007),
        (100026, 100011),
        (100026, 100012),
        (100026, 100013);
+
+/* Test data for testing getWinner() */
+
+INSERT INTO MENUS (RESTAURANT_ID, DATE)
+VALUES (100004, DATEADD('day', -1, TODAY())),
+       (100005, DATEADD('day', -1, TODAY())),
+       (100006, DATEADD('day', -1, TODAY()));
+
+INSERT INTO VOTES (USER_ID, MENU_ID, DATE)
+VALUES (100000, 100028, DATEADD('day', -1, TODAY())),
+       (100001, 100029, DATEADD('day', -1, TODAY())),
+       (100002, 100029, DATEADD('day', -1, TODAY())),
+       (100003, 100030, DATEADD('day', -1, TODAY()));

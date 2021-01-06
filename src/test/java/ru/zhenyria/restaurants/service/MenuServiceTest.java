@@ -89,14 +89,15 @@ public class MenuServiceTest extends AbstractServiceTest {
     @Test
     void getAll() {
         MENU_MATCHER.assertMatch(service.getAll(),
-                List.of(actualMenu2, actualMenu1, menu3, menu2, menu7, menu5, menu1, menu6, menu4));
+                List.of(actualMenu2, actualMenu1, yesterdayMenu1, yesterdayMenu3, yesterdayMenu2,
+                        menu3, menu2, menu7, menu5, menu1, menu6, menu4));
     }
 
     @Test
     void getAllForRestaurant() {
-        MENU_MATCHER.assertMatch(service.getAllForRestaurant(FIRST_RESTAURANT_ID), List.of(menu3, menu2, menu1));
-        MENU_MATCHER.assertMatch(service.getAllForRestaurant(FIRST_RESTAURANT_ID + 1), List.of(actualMenu1, menu5, menu4));
-        MENU_MATCHER.assertMatch(service.getAllForRestaurant(FIRST_RESTAURANT_ID + 2), List.of(actualMenu2, menu7, menu6));
+        MENU_MATCHER.assertMatch(service.getAllForRestaurant(FIRST_RESTAURANT_ID), List.of(yesterdayMenu1, menu3, menu2, menu1));
+        MENU_MATCHER.assertMatch(service.getAllForRestaurant(FIRST_RESTAURANT_ID + 1), List.of(actualMenu1, yesterdayMenu2, menu5, menu4));
+        MENU_MATCHER.assertMatch(service.getAllForRestaurant(FIRST_RESTAURANT_ID + 2), List.of(actualMenu2, yesterdayMenu3, menu7, menu6));
     }
 
     @Test
