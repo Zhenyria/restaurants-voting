@@ -2,10 +2,10 @@ package ru.zhenyria.restaurants.util;
 
 import java.time.LocalTime;
 
-public class Util {
+public class VoteUtil {
     private static LocalTime endVoteTime = LocalTime.of(11, 0);
 
-    private Util() {
+    private VoteUtil() {
     }
 
     public static boolean isCanReVote() {

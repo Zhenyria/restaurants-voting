@@ -9,7 +9,7 @@ import ru.zhenyria.restaurants.repository.RestaurantRepository;
 import java.time.LocalDate;
 import java.util.List;
 
-import static ru.zhenyria.restaurants.util.Util.isCanReVote;
+import static ru.zhenyria.restaurants.util.VoteUtil.isCanReVote;
 import static ru.zhenyria.restaurants.util.ValidationUtil.checkExisting;
 
 @Service
@@ -67,6 +67,7 @@ public class RestaurantService {
         return checkExisting(repository.getWinnerByDate(LocalDate.now()));
     }
 
+    //todo: delete fix checkexisting
     //todo: test for winner??
     public Restaurant getWinner() {
         return checkExisting(repository.getWinnerByDate(LocalDate.now().minusDays(1)));

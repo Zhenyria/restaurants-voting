@@ -7,7 +7,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.transaction.TransactionSystemException;
 import ru.zhenyria.restaurants.MenuTestData;
 import ru.zhenyria.restaurants.model.Restaurant;
-import ru.zhenyria.restaurants.util.Util;
+import ru.zhenyria.restaurants.util.VoteUtil;
 
 import javax.validation.ConstraintViolationException;
 import java.time.LocalDate;
@@ -138,7 +138,7 @@ class RestaurantServiceTest extends AbstractServiceTest {
 
     @Test
     void reVote() {
-        Util.prepareEndVoteTimeForPassTests();
+        VoteUtil.prepareEndVoteTimeForPassTests();
         service.vote(FIRST_RESTAURANT_ID + 1, ADMIN_ID);
         VOTE_MATCHER.assertMatch(service.countVotes(FIRST_RESTAURANT_ID + 1), SECOND_RESTAURANTS_ACTUAL_COUNTS + 1);
         VOTE_MATCHER.assertMatch(service.countVotes(FIRST_RESTAURANT_ID + 2), THIRD_RESTAURANTS_ACTUAL_COUNTS);
@@ -148,7 +148,7 @@ class RestaurantServiceTest extends AbstractServiceTest {
 
     @Test
     void voteAndreVoteAfterElevenOClock() {
-        Util.prepareEndVoteTimeForFailTests();
+        VoteUtil.prepareEndVoteTimeForFailTests();
         service.vote(FIRST_RESTAURANT_ID + 1, ADMIN_ID);
         VOTE_MATCHER.assertMatch(service.countVotes(FIRST_RESTAURANT_ID + 1), SECOND_RESTAURANTS_ACTUAL_COUNTS + 1);
         assertThrows(RuntimeException.class, () -> service.vote(FIRST_RESTAURANT_ID + 2, ADMIN_ID));
