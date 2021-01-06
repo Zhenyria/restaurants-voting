@@ -41,7 +41,7 @@ public class DishRepository {
     }
 
     public boolean deleteFromMenu(int menuId, int id) {
-        return repository.deleteFormMenu(menuId, id) != 0;
+        return repository.deleteFromMenu(menuId, id) != 0;
     }
 
     public boolean delete(int id) {

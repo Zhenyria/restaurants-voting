@@ -26,7 +26,7 @@ public interface CrudDishRepository extends JpaRepository<Dish, Integer> {
     @Query(value = """
             DELETE FROM MENU_DISHES WHERE MENU_ID=:menuId AND DISH_ID=:id
             """, nativeQuery = true)
-    int deleteFormMenu(@Param("menuId") int menuId, @Param("id") int id);
+    int deleteFromMenu(@Param("menuId") int menuId, @Param("id") int id);
 
     @Transactional
     @Modifying

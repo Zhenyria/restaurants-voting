@@ -34,10 +34,6 @@ public class DishService {
         return repository.getAll();
     }
 
-    public Dish getReference(int id) {
-        return repository.getReference(id);
-    }
-
     public void addToMenu(int menuId, int id) {
         checkExisting(repository.addToMenu(menuId, id));
     }
