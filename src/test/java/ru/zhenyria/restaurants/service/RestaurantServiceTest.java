@@ -85,28 +85,28 @@ class RestaurantServiceTest extends AbstractServiceTest {
     }
 
     @Test
-    void getCount() {
-        VOTE_MATCHER.assertMatch(service.getCount(FIRST_RESTAURANT_ID), FIRST_RESTAURANTS_ACTUAL_COUNTS);
-        VOTE_MATCHER.assertMatch(service.getCount(FIRST_RESTAURANT_ID + 1), SECOND_RESTAURANTS_ACTUAL_COUNTS);
-        VOTE_MATCHER.assertMatch(service.getCount(FIRST_RESTAURANT_ID + 2), THIRD_RESTAURANTS_ACTUAL_COUNTS);
+    void countVotes() {
+        VOTE_MATCHER.assertMatch(service.countVotes(FIRST_RESTAURANT_ID), FIRST_RESTAURANTS_ACTUAL_COUNTS);
+        VOTE_MATCHER.assertMatch(service.countVotes(FIRST_RESTAURANT_ID + 1), SECOND_RESTAURANTS_ACTUAL_COUNTS);
+        VOTE_MATCHER.assertMatch(service.countVotes(FIRST_RESTAURANT_ID + 2), THIRD_RESTAURANTS_ACTUAL_COUNTS);
     }
 
     @Test
-    void getCountForNotExist() {
-        assertThrows(RuntimeException.class, () -> service.getCount(NOT_FOUND_ID));
+    void countVotesOfNotExist() {
+        assertThrows(RuntimeException.class, () -> service.countVotes(NOT_FOUND_ID));
     }
 
     @Test
-    void getCountByDate() {
-        VOTE_MATCHER.assertMatch(service.getCountByDate(FIRST_RESTAURANT_ID, MenuTestData.DATE_12_01), FIRST_RESTAURANT_COUNT_BY_2020_12_01);
-        VOTE_MATCHER.assertMatch(service.getCountByDate(FIRST_RESTAURANT_ID, MenuTestData.DATE_12_02), FIRST_RESTAURANT_COUNT_BY_2020_12_02);
-        VOTE_MATCHER.assertMatch(service.getCountByDate(FIRST_RESTAURANT_ID, MenuTestData.DATE_12_03), FIRST_RESTAURANT_COUNT_BY_2020_12_03);
-        VOTE_MATCHER.assertMatch(service.getCountByDate(FIRST_RESTAURANT_ID + 1, LocalDate.now()), SECOND_RESTAURANTS_ACTUAL_COUNTS);
+    void countVotesByDate() {
+        VOTE_MATCHER.assertMatch(service.countVotesByDate(FIRST_RESTAURANT_ID, MenuTestData.DATE_12_01), FIRST_RESTAURANT_COUNT_BY_2020_12_01);
+        VOTE_MATCHER.assertMatch(service.countVotesByDate(FIRST_RESTAURANT_ID, MenuTestData.DATE_12_02), FIRST_RESTAURANT_COUNT_BY_2020_12_02);
+        VOTE_MATCHER.assertMatch(service.countVotesByDate(FIRST_RESTAURANT_ID, MenuTestData.DATE_12_03), FIRST_RESTAURANT_COUNT_BY_2020_12_03);
+        VOTE_MATCHER.assertMatch(service.countVotesByDate(FIRST_RESTAURANT_ID + 1, LocalDate.now()), SECOND_RESTAURANTS_ACTUAL_COUNTS);
     }
 
     @Test
-    void getCountByDateForNotExist() {
-        assertThrows(RuntimeException.class, () -> service.getCountByDate(NOT_FOUND_ID, MenuTestData.DATE_12_02));
+    void countVotesByDateForNotExist() {
+        assertThrows(RuntimeException.class, () -> service.countVotesByDate(NOT_FOUND_ID, MenuTestData.DATE_12_02));
     }
 
     @Test
@@ -121,9 +121,9 @@ class RestaurantServiceTest extends AbstractServiceTest {
 
     @Test
     void vote() {
-        VOTE_MATCHER.assertMatch(service.getCount(FIRST_RESTAURANT_ID + 1), SECOND_RESTAURANTS_ACTUAL_COUNTS);
+        VOTE_MATCHER.assertMatch(service.countVotes(FIRST_RESTAURANT_ID + 1), SECOND_RESTAURANTS_ACTUAL_COUNTS);
         service.vote(FIRST_RESTAURANT_ID + 1, ADMIN_ID);
-        VOTE_MATCHER.assertMatch(service.getCount(FIRST_RESTAURANT_ID + 1), SECOND_RESTAURANTS_ACTUAL_COUNTS + 1);
+        VOTE_MATCHER.assertMatch(service.countVotes(FIRST_RESTAURANT_ID + 1), SECOND_RESTAURANTS_ACTUAL_COUNTS + 1);
     }
 
     @Test
@@ -140,17 +140,17 @@ class RestaurantServiceTest extends AbstractServiceTest {
     void reVote() {
         Util.prepareEndVoteTimeForPassTests();
         service.vote(FIRST_RESTAURANT_ID + 1, ADMIN_ID);
-        VOTE_MATCHER.assertMatch(service.getCount(FIRST_RESTAURANT_ID + 1), SECOND_RESTAURANTS_ACTUAL_COUNTS + 1);
-        VOTE_MATCHER.assertMatch(service.getCount(FIRST_RESTAURANT_ID + 2), THIRD_RESTAURANTS_ACTUAL_COUNTS);
+        VOTE_MATCHER.assertMatch(service.countVotes(FIRST_RESTAURANT_ID + 1), SECOND_RESTAURANTS_ACTUAL_COUNTS + 1);
+        VOTE_MATCHER.assertMatch(service.countVotes(FIRST_RESTAURANT_ID + 2), THIRD_RESTAURANTS_ACTUAL_COUNTS);
         service.vote(FIRST_RESTAURANT_ID + 2, ADMIN_ID);
-        VOTE_MATCHER.assertMatch(service.getCount(FIRST_RESTAURANT_ID + 2), THIRD_RESTAURANTS_ACTUAL_COUNTS + 1);
+        VOTE_MATCHER.assertMatch(service.countVotes(FIRST_RESTAURANT_ID + 2), THIRD_RESTAURANTS_ACTUAL_COUNTS + 1);
     }
 
     @Test
     void voteAndreVoteAfterElevenOClock() {
         Util.prepareEndVoteTimeForFailTests();
         service.vote(FIRST_RESTAURANT_ID + 1, ADMIN_ID);
-        VOTE_MATCHER.assertMatch(service.getCount(FIRST_RESTAURANT_ID + 1), SECOND_RESTAURANTS_ACTUAL_COUNTS + 1);
+        VOTE_MATCHER.assertMatch(service.countVotes(FIRST_RESTAURANT_ID + 1), SECOND_RESTAURANTS_ACTUAL_COUNTS + 1);
         assertThrows(RuntimeException.class, () -> service.vote(FIRST_RESTAURANT_ID + 2, ADMIN_ID));
     }
 }

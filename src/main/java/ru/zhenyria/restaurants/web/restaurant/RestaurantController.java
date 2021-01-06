@@ -42,8 +42,21 @@ public class RestaurantController extends AbstractRestaurantController {
 
     @Override
     @GetMapping
-    public List<Restaurant> getAll() {
-        return super.getAll();
+    public List<Restaurant> getAllWithActualMenu() {
+        return super.getAllWithActualMenu();
+    }
+
+    @Override
+    @GetMapping("/{id}/rating")
+    public int countVotes(@PathVariable int id) {
+        return super.countVotes(id);
+    }
+
+    //todo: date mapping
+    @Override
+    @GetMapping("/{id}/rating/{date}")
+    public int countVotesByDate(@PathVariable int id, @PathVariable LocalDate date) {
+        return super.countVotesByDate(id, date);
     }
 
     @PostMapping("/{id}/vote")

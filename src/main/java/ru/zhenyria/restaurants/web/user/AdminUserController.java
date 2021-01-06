@@ -14,7 +14,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping()
+@RequestMapping(value = AdminUserController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class AdminUserController extends AbstractUserController {
     static final String REST_URL = "rest/admin/users";
 
@@ -22,7 +22,8 @@ public class AdminUserController extends AbstractUserController {
     public ResponseEntity<User> createWithLocation(@Validated(View.Web.class) @RequestBody User user) {
         User created = super.create(user);
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path(REST_URL).build().toUri();
+                .path(REST_URL + "/{id}")
+                .buildAndExpand(created.id()).toUri();
         return ResponseEntity.created(uriOfNewResource).body(created);
     }
 
@@ -38,6 +39,7 @@ public class AdminUserController extends AbstractUserController {
         return super.get(id);
     }
 
+    //todo: how edit password??
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public void update(@RequestBody User user) throws BindException {
         validateBeforeUpdate(user, user.id());

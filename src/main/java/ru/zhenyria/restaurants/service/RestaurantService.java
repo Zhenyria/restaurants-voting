@@ -36,6 +36,7 @@ public class RestaurantService {
         checkExisting(repository.save(restaurant));
     }
 
+    //todo: test
     public void delete(int id) {
         checkExisting(repository.delete(id));
     }
@@ -52,12 +53,12 @@ public class RestaurantService {
         return repository.getAll();
     }
 
-    public int getCount(int id) {
+    public int countVotes(int id) {
         checkExisting(repository.isExist(id));
         return repository.countVotesByDate(id, LocalDate.now());
     }
 
-    public int getCountByDate(int id, LocalDate date) {
+    public int countVotesByDate(int id, LocalDate date) {
         checkExisting(repository.isExist(id));
         return repository.countVotesByDate(id, date);
     }

@@ -58,6 +58,16 @@ public abstract class AbstractRestaurantController {
         return service.getWinning();
     }
 
+    public int countVotes(int id) {
+        log.info("count votes for restaurant {}", id);
+        return service.countVotes(id);
+    }
+
+    public int countVotesByDate(int id, LocalDate date) {
+        log.info("count votes for restaurant {} by date {}", id, date);
+        return service.countVotesByDate(id, date);
+    }
+
     public void vote(int id, int userId) {
         log.info("vote by restaurant {}", id);
         service.vote(id, userId);
