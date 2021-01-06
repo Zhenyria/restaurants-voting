@@ -1,4 +1,4 @@
-package ru.zhenyria.restaurants.web;
+package ru.zhenyria.restaurants;
 
 import javax.validation.groups.Default;
 

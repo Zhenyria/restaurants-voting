@@ -1,6 +1,6 @@
 package ru.zhenyria.restaurants.model;
 
-import ru.zhenyria.restaurants.web.View;
+import ru.zhenyria.restaurants.View;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;

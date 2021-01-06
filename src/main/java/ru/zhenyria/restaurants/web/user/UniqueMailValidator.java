@@ -5,7 +5,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
 import ru.zhenyria.restaurants.model.User;
 import ru.zhenyria.restaurants.repository.UserRepository;
-import ru.zhenyria.restaurants.web.HasEmail;
+import ru.zhenyria.restaurants.HasEmail;
 
 @Component
 public class UniqueMailValidator implements org.springframework.validation.Validator {

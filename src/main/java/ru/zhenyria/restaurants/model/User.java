@@ -2,8 +2,8 @@ package ru.zhenyria.restaurants.model;
 
 import org.hibernate.annotations.BatchSize;
 import org.hibernate.validator.constraints.SafeHtml;
-import ru.zhenyria.restaurants.web.HasEmail;
-import ru.zhenyria.restaurants.web.View;
+import ru.zhenyria.restaurants.HasEmail;
+import ru.zhenyria.restaurants.View;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;

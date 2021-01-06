@@ -2,7 +2,7 @@ package ru.zhenyria.restaurants.to;
 
 import org.hibernate.validator.constraints.SafeHtml;
 import ru.zhenyria.restaurants.model.User;
-import ru.zhenyria.restaurants.web.HasEmail;
+import ru.zhenyria.restaurants.HasEmail;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;

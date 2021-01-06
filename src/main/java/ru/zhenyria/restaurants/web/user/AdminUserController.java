@@ -8,7 +8,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.zhenyria.restaurants.model.User;
-import ru.zhenyria.restaurants.web.View;
+import ru.zhenyria.restaurants.View;
 
 import java.net.URI;
 import java.util.List;

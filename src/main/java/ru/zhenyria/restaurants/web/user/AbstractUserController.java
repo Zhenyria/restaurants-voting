@@ -11,7 +11,7 @@ import ru.zhenyria.restaurants.HasId;
 import ru.zhenyria.restaurants.model.User;
 import ru.zhenyria.restaurants.service.UserService;
 import ru.zhenyria.restaurants.to.UserTo;
-import ru.zhenyria.restaurants.web.View;
+import ru.zhenyria.restaurants.View;
 
 import java.util.List;
 

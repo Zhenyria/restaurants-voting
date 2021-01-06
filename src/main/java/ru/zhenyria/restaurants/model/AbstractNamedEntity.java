@@ -1,7 +1,7 @@
 package ru.zhenyria.restaurants.model;
 
 import org.hibernate.validator.constraints.SafeHtml;
-import ru.zhenyria.restaurants.web.View;
+import ru.zhenyria.restaurants.View;
 
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;

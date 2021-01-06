@@ -10,9 +10,9 @@ import static ru.zhenyria.restaurants.TestMatcher.usingIgnoringFieldsComparator;
 
 public class UserTestData {
     public static final TestMatcher<User> USER_MATCHER =
-            usingIgnoringFieldsComparator(User.class, "menus", "registered");
+            usingIgnoringFieldsComparator(User.class, "menus", "registered", "password");
     public static final TestMatcher<User> USER_UPDATED_TO_MATCHER =
-            usingIgnoringFieldsComparator(User.class, "menus", "registered", "roles");
+            usingIgnoringFieldsComparator(User.class, "menus", "registered", "roles", "password");
 
     public static final int FIRST_USER_ID = 100000;
     public static final int ADMIN_ID = 100003;
