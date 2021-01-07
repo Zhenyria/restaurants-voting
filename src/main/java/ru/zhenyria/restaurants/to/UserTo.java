@@ -1,8 +1,8 @@
 package ru.zhenyria.restaurants.to;
 
 import org.hibernate.validator.constraints.SafeHtml;
-import ru.zhenyria.restaurants.model.User;
 import ru.zhenyria.restaurants.HasEmail;
+import ru.zhenyria.restaurants.model.User;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -19,7 +19,6 @@ public class UserTo extends NamedTo implements HasEmail {
 
     @NotBlank
     @Size(min = 6, max = 30)
-    @SafeHtml(whitelistType = NONE)
     private String password;
 
     public UserTo() {

@@ -1,5 +1,6 @@
 package ru.zhenyria.restaurants.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.BatchSize;
 import org.hibernate.validator.constraints.SafeHtml;
 import ru.zhenyria.restaurants.HasEmail;
@@ -20,7 +21,7 @@ import static org.hibernate.validator.constraints.SafeHtml.WhiteListType.NONE;
 public class User extends AbstractNamedEntity implements HasEmail {
     @Column(name = "password", nullable = false)
     @NotBlank
-    @Size(min = 6, max = 30)
+    @Size(min = 6, max = 100)
     private String password;
 
     @Column(name = "email", nullable = false)
@@ -42,6 +43,7 @@ public class User extends AbstractNamedEntity implements HasEmail {
     private Set<Role> roles;
 
     @ManyToMany(mappedBy = "users", fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<Menu> menus;
 
     public User() {

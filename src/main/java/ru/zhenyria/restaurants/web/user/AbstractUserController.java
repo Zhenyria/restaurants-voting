@@ -8,10 +8,10 @@ import org.springframework.validation.BindException;
 import org.springframework.validation.DataBinder;
 import org.springframework.validation.Validator;
 import ru.zhenyria.restaurants.HasId;
+import ru.zhenyria.restaurants.View;
 import ru.zhenyria.restaurants.model.User;
 import ru.zhenyria.restaurants.service.UserService;
 import ru.zhenyria.restaurants.to.UserTo;
-import ru.zhenyria.restaurants.View;
 
 import java.util.List;
 
