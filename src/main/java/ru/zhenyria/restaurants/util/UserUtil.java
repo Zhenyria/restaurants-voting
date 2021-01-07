@@ -13,7 +13,9 @@ public class UserUtil {
     public static User updateUserFromTo(User user, UserTo updated) {
         user.setName(updated.getName());
         user.setEmail(updated.getEmail());
-        user.setPassword(updated.getPassword());
+        if (updated.getPassword() != null) {
+            user.setPassword(updated.getPassword());
+        }
         return user;
     }
 

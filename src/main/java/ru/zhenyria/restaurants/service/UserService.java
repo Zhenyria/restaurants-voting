@@ -18,6 +18,7 @@ import static ru.zhenyria.restaurants.util.ValidationUtil.checkExisting;
 public class UserService {
     private static final String NULL_USER_MSG = "User must be not null";
     private static final String NULL_EMAIL_MSG = "Email must be not null";
+    private static final String NULL_PASSWORD_MSG = "Password must be not null";
 
     private final UserRepository repository;
     private final PasswordEncoder passwordEncoder;
@@ -37,6 +38,7 @@ public class UserService {
     }
 
     public User create(User user) {
+        Assert.notNull(user.getPassword(), NULL_PASSWORD_MSG);
         Assert.notNull(user, NULL_USER_MSG);
         return checkExisting(prepareAndSave(user));
     }
@@ -45,12 +47,13 @@ public class UserService {
     public void update(UserTo updated) {
         Assert.notNull(updated, NULL_USER_MSG);
         User user = get(updated.id());
-        checkExisting(prepareAndSave(updateUserFromTo(user, updated)));
+        checkExisting(prepareAndUpdate(updateUserFromTo(user, updated)));
     }
 
+    @Transactional
     public void update(User user) {
         Assert.notNull(user, NULL_USER_MSG);
-        checkExisting(prepareAndSave(user));
+        checkExisting(prepareAndUpdate(user));
     }
 
     public void delete(int id) {
@@ -59,6 +62,14 @@ public class UserService {
 
     public List<User> getAll() {
         return repository.getAll();
+    }
+
+    private User prepareAndUpdate(User user) {
+        if (user.getPassword() == null) {
+            user.setPassword(repository.get(user.id()).getPassword());
+            return repository.save(user);
+        }
+        return prepareAndSave(user);
     }
 
     private User prepareAndSave(User user) {

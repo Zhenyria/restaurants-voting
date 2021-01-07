@@ -1,6 +1,7 @@
 package ru.zhenyria.restaurants.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.BatchSize;
 import org.hibernate.validator.constraints.SafeHtml;
 import ru.zhenyria.restaurants.HasEmail;
@@ -20,8 +21,8 @@ import static org.hibernate.validator.constraints.SafeHtml.WhiteListType.NONE;
 @Table(name = "users")
 public class User extends AbstractNamedEntity implements HasEmail {
     @Column(name = "password", nullable = false)
-    @NotBlank
     @Size(min = 6, max = 100)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
     @Column(name = "email", nullable = false)

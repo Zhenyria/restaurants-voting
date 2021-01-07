@@ -7,8 +7,8 @@ import org.springframework.validation.BindException;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import ru.zhenyria.restaurants.model.User;
 import ru.zhenyria.restaurants.View;
+import ru.zhenyria.restaurants.model.User;
 
 import java.net.URI;
 import java.util.List;
@@ -39,7 +39,6 @@ public class AdminUserController extends AbstractUserController {
         return super.get(id);
     }
 
-    //todo: how edit password??
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public void update(@RequestBody User user) throws BindException {
         validateBeforeUpdate(user, user.id());
