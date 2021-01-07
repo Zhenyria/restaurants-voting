@@ -1,5 +1,8 @@
 package ru.zhenyria.restaurants.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Collections;
 import java.util.List;
@@ -10,6 +13,7 @@ public class Restaurant extends AbstractNamedEntity {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")
     @OrderBy("date DESC")
+    @JsonIgnore
     private List<Menu> menus;
 
     public Restaurant() {

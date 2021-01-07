@@ -1,5 +1,6 @@
 package ru.zhenyria.restaurants.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.*;
@@ -17,6 +18,7 @@ public class Dish extends AbstractNamedEntity {
     private Integer price;
 
     @ManyToMany(mappedBy = "dishes", fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<Menu> menus;
 
     public Dish() {

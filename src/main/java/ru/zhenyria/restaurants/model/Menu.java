@@ -1,5 +1,6 @@
 package ru.zhenyria.restaurants.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import ru.zhenyria.restaurants.View;
 
 import javax.persistence.*;
@@ -37,6 +38,7 @@ public class Menu extends AbstractBaseEntity {
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
     @OrderBy("name")
+    @JsonIgnore
     private List<User> users;
 
     public Menu() {
