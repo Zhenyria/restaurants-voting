@@ -6,6 +6,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.transaction.TransactionSystemException;
 import ru.zhenyria.restaurants.MenuTestData;
 import ru.zhenyria.restaurants.model.Dish;
+import ru.zhenyria.restaurants.util.exception.NotFoundException;
 
 import javax.validation.ConstraintViolationException;
 
@@ -55,7 +56,7 @@ class DishServiceTest extends AbstractServiceTest {
 
     @Test
     void getNotExist() {
-        assertThrows(RuntimeException.class, () -> service.get(NOT_FOUND_ID));
+        assertThrows(NotFoundException.class, () -> service.get(NOT_FOUND_ID));
     }
 
     @Test
@@ -91,16 +92,16 @@ class DishServiceTest extends AbstractServiceTest {
     @Test
     void delete() {
         service.delete(NOT_USING_DISH_ID);
-        assertThrows(RuntimeException.class, () -> service.get(NOT_USING_DISH_ID));
+        assertThrows(NotFoundException.class, () -> service.get(NOT_USING_DISH_ID));
     }
 
     @Test
     void deleteUsing() {
-        assertThrows(RuntimeException.class, () -> service.delete(FIRST_DISH_ID));
+        assertThrows(UnsupportedOperationException.class, () -> service.delete(FIRST_DISH_ID));
     }
 
     @Test
     void deleteNotFound() {
-        assertThrows(RuntimeException.class, () -> service.delete(NOT_FOUND_ID));
+        assertThrows(NotFoundException.class, () -> service.delete(NOT_FOUND_ID));
     }
 }

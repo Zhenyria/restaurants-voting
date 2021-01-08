@@ -8,6 +8,7 @@ import org.springframework.transaction.TransactionSystemException;
 import ru.zhenyria.restaurants.MenuTestData;
 import ru.zhenyria.restaurants.model.Restaurant;
 import ru.zhenyria.restaurants.util.VoteUtil;
+import ru.zhenyria.restaurants.util.exception.NotFoundException;
 
 import javax.validation.ConstraintViolationException;
 import java.time.LocalDate;
@@ -52,7 +53,7 @@ class RestaurantServiceTest extends AbstractServiceTest {
 
     @Test
     void getNotExist() {
-        assertThrows(RuntimeException.class, () -> service.get(NOT_FOUND_ID));
+        assertThrows(NotFoundException.class, () -> service.get(NOT_FOUND_ID));
     }
 
     @Test
@@ -93,7 +94,7 @@ class RestaurantServiceTest extends AbstractServiceTest {
 
     @Test
     void countVotesOfNotExist() {
-        assertThrows(RuntimeException.class, () -> service.countVotes(NOT_FOUND_ID));
+        assertThrows(NotFoundException.class, () -> service.countVotes(NOT_FOUND_ID));
     }
 
     @Test
@@ -106,7 +107,7 @@ class RestaurantServiceTest extends AbstractServiceTest {
 
     @Test
     void countVotesByDateForNotExist() {
-        assertThrows(RuntimeException.class, () -> service.countVotesByDate(NOT_FOUND_ID, MenuTestData.DATE_12_02));
+        assertThrows(NotFoundException.class, () -> service.countVotesByDate(NOT_FOUND_ID, MenuTestData.DATE_12_02));
     }
 
     @Test
@@ -152,11 +153,11 @@ class RestaurantServiceTest extends AbstractServiceTest {
     }
 
     @Test
-    void voteAndreVoteAfterElevenOClock() {
+    void voteAndreVoteAfterDeadLine() {
         VoteUtil.prepareEndVoteTimeForFailTests();
         service.vote(FIRST_RESTAURANT_ID + 1, ADMIN_ID);
         VOTE_MATCHER.assertMatch(service.countVotes(FIRST_RESTAURANT_ID + 1), SECOND_RESTAURANTS_ACTUAL_COUNTS + 1);
-        assertThrows(RuntimeException.class, () -> service.vote(FIRST_RESTAURANT_ID + 2, ADMIN_ID));
+        assertThrows(UnsupportedOperationException.class, () -> service.vote(FIRST_RESTAURANT_ID + 2, ADMIN_ID));
     }
 
     @Test
@@ -167,6 +168,6 @@ class RestaurantServiceTest extends AbstractServiceTest {
 
     @Test
     void deleteNotExist() {
-        assertThrows(RuntimeException.class, () -> service.delete(NOT_FOUND_ID));
+        assertThrows(NotFoundException.class, () -> service.delete(NOT_FOUND_ID));
     }
 }

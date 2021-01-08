@@ -7,6 +7,7 @@ import org.springframework.transaction.TransactionSystemException;
 import ru.zhenyria.restaurants.model.Role;
 import ru.zhenyria.restaurants.model.User;
 import ru.zhenyria.restaurants.to.UserTo;
+import ru.zhenyria.restaurants.util.exception.NotFoundException;
 
 import javax.validation.ConstraintViolationException;
 
@@ -51,7 +52,7 @@ class UserServiceTest extends AbstractServiceTest {
 
     @Test
     void getNotExist() {
-        assertThrows(RuntimeException.class, () -> service.get(NOT_FOUND_ID));
+        assertThrows(NotFoundException.class, () -> service.get(NOT_FOUND_ID));
     }
 
     @Test
@@ -62,7 +63,7 @@ class UserServiceTest extends AbstractServiceTest {
 
     @Test
     void getByEmailNotFound() {
-        assertThrows(RuntimeException.class, () -> service.getByEmail("notfound@mail.ru"));
+        assertThrows(NotFoundException.class, () -> service.getByEmail("notfound@mail.ru"));
     }
 
     @Test
@@ -96,12 +97,12 @@ class UserServiceTest extends AbstractServiceTest {
     @Test
     void delete() {
         service.delete(FIRST_USER_ID);
-        assertThrows(RuntimeException.class, () -> service.get(FIRST_USER_ID));
+        assertThrows(NotFoundException.class, () -> service.get(FIRST_USER_ID));
     }
 
     @Test
     void deleteNotFound() {
-        assertThrows(RuntimeException.class, () -> service.delete(NOT_FOUND_ID));
+        assertThrows(NotFoundException.class, () -> service.delete(NOT_FOUND_ID));
     }
 
     @Test

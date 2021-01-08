@@ -1,7 +1,12 @@
 package ru.zhenyria.restaurants.util;
 
+import ru.zhenyria.restaurants.util.exception.NotFoundException;
+import org.slf4j.Logger;
 import ru.zhenyria.restaurants.HasId;
 import ru.zhenyria.restaurants.model.AbstractBaseEntity;
+import ru.zhenyria.restaurants.util.exception.ErrorType;
+
+import javax.servlet.http.HttpServletRequest;
 
 public class ValidationUtil {
 
@@ -10,27 +15,20 @@ public class ValidationUtil {
 
     public static <T extends AbstractBaseEntity> T checkExisting(T entity) {
         if (entity == null) {
-            throw new RuntimeException("Not exist with this id");
-        }
-        return entity;
-    }
-
-    public static <T extends AbstractBaseEntity> T checkFound(T entity) {
-        if (entity == null) {
-            throw new RuntimeException("No matching object found");
+            throw new NotFoundException("Not exist with this id");
         }
         return entity;
     }
 
     public static void checkUsing(boolean using) {
         if (using) {
-            throw new RuntimeException("The entity is already in use");
+            throw new UnsupportedOperationException("The entity is already in use");
         }
     }
 
     public static void checkExisting(boolean isExist) {
         if (!isExist) {
-            throw new RuntimeException("Not exist with this id");
+            throw new NotFoundException("Not exist with this id");
         }
     }
 
@@ -57,5 +55,19 @@ public class ValidationUtil {
             result = cause;
         }
         return result;
+    }
+
+    public static String getMessage(Throwable e) {
+        return e.getLocalizedMessage() != null ? e.getLocalizedMessage() : e.getClass().getName();
+    }
+
+    public static Throwable logAndGetRootCause(Logger log, HttpServletRequest req, Exception e, boolean logStackTrace, ErrorType errorType) {
+        Throwable rootCause = ValidationUtil.getRootCause(e);
+        if (logStackTrace) {
+            log.error(errorType + " at request " + req.getRequestURL(), rootCause);
+        } else {
+            log.warn("{} at request  {}: {}", errorType, req.getRequestURL(), rootCause.toString());
+        }
+        return rootCause;
     }
 }

@@ -10,7 +10,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 import static ru.zhenyria.restaurants.util.ValidationUtil.checkExisting;
-import static ru.zhenyria.restaurants.util.ValidationUtil.checkFound;
 import static ru.zhenyria.restaurants.util.VoteUtil.isCanReVote;
 
 @Service
@@ -64,15 +63,15 @@ public class RestaurantService {
     }
 
     public Restaurant getWinning() {
-        return checkFound(repository.getWinnerByDate(LocalDate.now()));
+        return checkExisting(repository.getWinnerByDate(LocalDate.now()));
     }
 
     public Restaurant getWinner() {
-        return checkFound(repository.getWinnerByDate(LocalDate.now().minusDays(1)));
+        return checkExisting(repository.getWinnerByDate(LocalDate.now().minusDays(1)));
     }
 
     public Restaurant getWinnerByDate(LocalDate date) {
-        return checkFound(repository.getWinnerByDate(date));
+        return checkExisting(repository.getWinnerByDate(date));
     }
 
     @Transactional

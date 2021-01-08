@@ -7,6 +7,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.transaction.TransactionSystemException;
 import ru.zhenyria.restaurants.model.Menu;
 import ru.zhenyria.restaurants.to.MenuTo;
+import ru.zhenyria.restaurants.util.exception.NotFoundException;
 
 import java.util.List;
 
@@ -143,11 +144,11 @@ public class MenuServiceTest extends AbstractServiceTest {
     @Test
     void delete() {
         service.delete(FIRST_MENU_ID);
-        assertThrows(RuntimeException.class, () -> service.get(FIRST_MENU_ID));
+        assertThrows(NotFoundException.class, () -> service.get(FIRST_MENU_ID));
     }
 
     @Test
     void deleteNotFound() {
-        assertThrows(RuntimeException.class, () -> service.delete(NOT_FOUND_ID));
+        assertThrows(NotFoundException.class, () -> service.delete(NOT_FOUND_ID));
     }
 }

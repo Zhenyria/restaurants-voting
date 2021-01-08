@@ -27,7 +27,7 @@ public class UniqueMailValidator implements org.springframework.validation.Valid
         if (StringUtils.hasText(user.getEmail())) {
             User dbUser = repository.getByEmail(user.getEmail().toLowerCase());
             if (dbUser != null && !dbUser.getId().equals(user.getId())) {
-                errors.rejectValue("email", "error.duplicate.email");
+                errors.rejectValue("email", "error.duplicateEmail");
             }
         }
     }
