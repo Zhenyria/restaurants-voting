@@ -6,8 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import ru.zhenyria.restaurants.model.Restaurant;
 import ru.zhenyria.restaurants.View;
+import ru.zhenyria.restaurants.model.Restaurant;
 
 import java.net.URI;
 import java.util.List;
@@ -15,7 +15,7 @@ import java.util.List;
 @RestController
 @RequestMapping(value = AdminRestaurantController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class AdminRestaurantController extends AbstractRestaurantController {
-    static final String REST_URL = "rest/admin/restaurants";
+    static final String REST_URL = "/rest/admin/restaurants";
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Restaurant> createWithLocation(@Validated(View.Web.class) @RequestBody Restaurant restaurant) {

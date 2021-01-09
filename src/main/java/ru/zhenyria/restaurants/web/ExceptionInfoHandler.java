@@ -19,7 +19,6 @@ import ru.zhenyria.restaurants.util.exception.ErrorType;
 import ru.zhenyria.restaurants.util.exception.NotFoundException;
 
 import javax.servlet.http.HttpServletRequest;
-
 import java.util.Map;
 
 import static ru.zhenyria.restaurants.util.exception.ErrorType.*;
@@ -30,9 +29,11 @@ public class ExceptionInfoHandler {
     private static final Logger log = LoggerFactory.getLogger(ExceptionHandler.class);
 
     public static final String EXCEPTION_DUPLICATE_EMAIL = "error.duplicateEmail";
+    public static final String EXCEPTION_DUPLICATE_NAME = "error.duplicateName";
 
     private static final Map<String, String> CONSTRAINS_I18N_MAP = Map.of(
-            "user_email_idx", EXCEPTION_DUPLICATE_EMAIL);
+            "user_email_idx", EXCEPTION_DUPLICATE_EMAIL,
+            "restaurants_name_idx", EXCEPTION_DUPLICATE_NAME);
 
     private final MessageSourceAccessor messageSourceAccessor;
 
