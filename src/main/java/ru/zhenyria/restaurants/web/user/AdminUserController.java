@@ -16,7 +16,7 @@ import java.util.List;
 @RestController
 @RequestMapping(value = AdminUserController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class AdminUserController extends AbstractUserController {
-    static final String REST_URL = "rest/admin/users";
+    static final String REST_URL = "/rest/admin/users";
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<User> createWithLocation(@Validated(View.Web.class) @RequestBody User user) {
@@ -40,6 +40,7 @@ public class AdminUserController extends AbstractUserController {
     }
 
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void update(@RequestBody User user) throws BindException {
         validateBeforeUpdate(user, user.id());
         super.update(user);
