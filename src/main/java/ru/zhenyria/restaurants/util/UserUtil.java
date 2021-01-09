@@ -20,7 +20,7 @@ public class UserUtil {
     }
 
     public static User getUserFromTo(UserTo user) {
-        return new User(user.getName(), user.getPassword(), user.getEmail().toLowerCase(), Role.USER);
+        return new User(user.getId(), user.getName(), user.getPassword(), user.getEmail().toLowerCase(), Role.USER);
     }
 
     public static UserTo getToFromUser(User user) {

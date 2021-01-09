@@ -2,6 +2,7 @@ package ru.zhenyria.restaurants;
 
 import ru.zhenyria.restaurants.model.Role;
 import ru.zhenyria.restaurants.model.User;
+import ru.zhenyria.restaurants.to.UserTo;
 import ru.zhenyria.restaurants.util.JsonUtil;
 
 import java.util.EnumSet;
@@ -44,6 +45,10 @@ public class UserTestData {
         User user = getNew();
         user.setId(FIRST_USER_ID);
         return user;
+    }
+
+    public static String jsonWithPassword(UserTo user, String password) {
+        return JsonUtil.writeAdditionProps(user, "password", password);
     }
 
     public static String jsonWithPassword(User user, String password) {
