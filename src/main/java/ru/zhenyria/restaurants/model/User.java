@@ -33,7 +33,8 @@ public class User extends AbstractNamedEntity implements HasEmail {
 
     @Column(name = "registered", nullable = false)
     @NotNull
-    private LocalDateTime registered;
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private LocalDateTime registered = LocalDateTime.now();
 
     @Enumerated(EnumType.STRING)
     @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"),

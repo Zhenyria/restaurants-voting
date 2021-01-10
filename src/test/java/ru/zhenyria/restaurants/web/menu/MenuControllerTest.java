@@ -1,10 +1,8 @@
 package ru.zhenyria.restaurants.web.menu;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import ru.zhenyria.restaurants.service.MenuService;
 import ru.zhenyria.restaurants.util.exception.ErrorType;
 import ru.zhenyria.restaurants.web.AbstractControllerTest;
 

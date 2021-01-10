@@ -5,8 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 import ru.zhenyria.restaurants.model.Menu;
 import ru.zhenyria.restaurants.service.MenuService;
 import ru.zhenyria.restaurants.util.JsonUtil;
@@ -70,18 +68,6 @@ public class AdminMenuControllerTest extends AbstractControllerTest {
                 .andExpect(status().isNoContent());
 
         MENU_MATCHER.assertMatch(service.get(updated.id()), getUpdated());
-    }
-
-    @Test
-    @Transactional(propagation = Propagation.NEVER)
-    void updateInvalid() throws Exception {
-        Menu updated = new Menu(FIRST_MENU_ID, null, null, Collections.emptyList());
-        perform(MockMvcRequestBuilders.put(REST_URL)
-                .with(userHttpBasic(admin))
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(JsonUtil.writeValue(updated)))
-                .andExpect(status().isUnprocessableEntity())
-                .andExpect(errorType(ErrorType.OPERATION_FAILED));
     }
 
     @Test

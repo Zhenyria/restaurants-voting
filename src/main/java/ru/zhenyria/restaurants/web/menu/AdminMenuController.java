@@ -19,7 +19,7 @@ public class AdminMenuController extends AbstractMenuController {
     public ResponseEntity<Menu> createWithLocation(@Valid @RequestBody Menu menu) {
         Menu created = super.create(menu);
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path(REST_URL + "/menus/{id}")
+                .path(REST_URL + "/{id}")
                 .buildAndExpand(created.id()).toUri();
         return ResponseEntity.created(uriOfNewResource).body(created);
     }

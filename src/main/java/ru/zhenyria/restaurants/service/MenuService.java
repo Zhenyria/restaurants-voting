@@ -1,6 +1,7 @@
 package ru.zhenyria.restaurants.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import ru.zhenyria.restaurants.model.Menu;
 import ru.zhenyria.restaurants.repository.MenuRepository;
@@ -22,6 +23,8 @@ public class MenuService {
 
     public Menu create(Menu menu) {
         Assert.notNull(menu, NULL_MENU_MSG);
+        // it's must be because work with date is wrong
+        menu.setDate(LocalDate.now());
         return checkExisting(repository.save(menu));
     }
 
@@ -53,12 +56,19 @@ public class MenuService {
         return repository.getAllForRestaurant(id);
     }
 
+    @Transactional
     public void update(Menu menu) {
         Assert.notNull(menu, NULL_MENU_MSG);
-        checkExisting(repository.save(menu));
+        // it's must be because work with date is wrong
+        checkExisting(repository.save(updateFrom(menu, repository.get(menu.id()))));
     }
 
     public void delete(int id) {
         checkExisting(repository.delete(id));
+    }
+
+    private Menu updateFrom(Menu updated, Menu actual) {
+        actual.setDishes(updated.getDishes());
+        return actual;
     }
 }

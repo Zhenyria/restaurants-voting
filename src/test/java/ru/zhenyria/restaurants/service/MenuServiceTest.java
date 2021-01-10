@@ -2,9 +2,6 @@ package ru.zhenyria.restaurants.service;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.transaction.TransactionSystemException;
 import ru.zhenyria.restaurants.model.Menu;
 import ru.zhenyria.restaurants.util.exception.NotFoundException;
 
@@ -29,13 +26,6 @@ public class MenuServiceTest extends AbstractServiceTest {
         created.setId(id);
         MENU_MATCHER.assertMatch(newMenu, created);
         MENU_MATCHER.assertMatch(service.get(id), created);
-    }
-
-    @Test
-    void createDuplicateDate() {
-        Menu created = getNew();
-        created.setDate(DATE_12_03);
-        assertThrows(DataAccessException.class, () -> service.create(created));
     }
 
     @Test
@@ -89,20 +79,6 @@ public class MenuServiceTest extends AbstractServiceTest {
     void update() {
         service.update(getUpdated());
         MENU_MATCHER.assertMatch(service.get(FIRST_MENU_ID), getUpdated());
-    }
-
-    @Test
-    void updateInvalid() {
-        Menu menu = getUpdated();
-        menu.setDate(null);
-        assertThrows(TransactionSystemException.class, () -> service.update(menu));
-    }
-
-    @Test
-    void updateDuplicateDate() {
-        Menu menu = getUpdated();
-        menu.setDate(DATE_12_02);
-        assertThrows(DataIntegrityViolationException.class, () -> service.update(menu));
     }
 
     @Test
