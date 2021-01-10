@@ -40,7 +40,7 @@ public class MenuController extends AbstractMenuController {
     }
 
     @Override
-    @GetMapping("/menus/{date}")
+    @GetMapping("/menus/actual/{date}")
     public List<Menu> getAllByDate(@PathVariable LocalDate date) {
         return super.getAllByDate(date);
     }
