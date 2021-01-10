@@ -30,10 +30,12 @@ public class ExceptionInfoHandler {
 
     public static final String EXCEPTION_DUPLICATE_EMAIL = "error.duplicateEmail";
     public static final String EXCEPTION_DUPLICATE_NAME = "error.duplicateName";
+    public static final String EXCEPTION_DUPLICATE_NAME_PRICE = "error.duplicateNameAndPrice";
 
     private static final Map<String, String> CONSTRAINS_I18N_MAP = Map.of(
             "user_email_idx", EXCEPTION_DUPLICATE_EMAIL,
-            "restaurants_name_idx", EXCEPTION_DUPLICATE_NAME);
+            "restaurants_name_idx", EXCEPTION_DUPLICATE_NAME,
+            "dishes_name_price_idx", EXCEPTION_DUPLICATE_NAME_PRICE);
 
     private final MessageSourceAccessor messageSourceAccessor;
 

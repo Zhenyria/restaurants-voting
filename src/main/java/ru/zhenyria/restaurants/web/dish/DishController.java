@@ -10,15 +10,16 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.zhenyria.restaurants.model.Dish;
 import ru.zhenyria.restaurants.service.DishService;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 
 import static ru.zhenyria.restaurants.util.ValidationUtil.checkNew;
 
 @RestController
-@RequestMapping(value = DishController.REST_URL, consumes = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = DishController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class DishController {
-    static final String REST_URL = "rest/admin/restaurants/menus";
+    static final String REST_URL = "/rest/admin/restaurants/menus";
     static final String DISHES_URL = "/dishes";
     private final Logger log = LoggerFactory.getLogger(getClass());
     protected final DishService service;
@@ -28,8 +29,8 @@ public class DishController {
     }
 
     @PostMapping(DISHES_URL)
-    public ResponseEntity<Dish> createWithLocation(@RequestBody Dish dish) {
-        log.info("create dish {}", dish.id());
+    public ResponseEntity<Dish> createWithLocation(@RequestBody @Valid Dish dish) {
+        log.info("create dish {}", dish);
         checkNew(dish);
         Dish created = service.create(dish);
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
