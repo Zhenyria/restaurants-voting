@@ -6,17 +6,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.zhenyria.restaurants.model.Menu;
-import ru.zhenyria.restaurants.to.MenuTo;
 
+import javax.validation.Valid;
 import java.net.URI;
 
 @RestController
 @RequestMapping(value = AdminMenuController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class AdminMenuController extends AbstractMenuController {
-    static final String REST_URL = "rest/admin/restaurants/menus";
+    static final String REST_URL = "/rest/admin/restaurants/menus";
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Menu> createWithLocation(@RequestBody MenuTo menu) {
+    public ResponseEntity<Menu> createWithLocation(@Valid @RequestBody Menu menu) {
         Menu created = super.create(menu);
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(REST_URL + "/menus/{id}")
@@ -27,7 +27,7 @@ public class AdminMenuController extends AbstractMenuController {
     @Override
     @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@RequestBody MenuTo menu) {
+    public void update(@RequestBody Menu menu) {
         super.update(menu);
     }
 

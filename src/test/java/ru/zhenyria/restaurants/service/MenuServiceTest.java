@@ -6,7 +6,6 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.transaction.TransactionSystemException;
 import ru.zhenyria.restaurants.model.Menu;
-import ru.zhenyria.restaurants.to.MenuTo;
 import ru.zhenyria.restaurants.util.exception.NotFoundException;
 
 import java.util.List;
@@ -37,21 +36,6 @@ public class MenuServiceTest extends AbstractServiceTest {
         Menu created = getNew();
         created.setDate(DATE_12_03);
         assertThrows(DataAccessException.class, () -> service.create(created));
-    }
-
-    @Test
-    void createFromTo() {
-        int id = service.create(getNewTo()).id();
-        Menu created = getNew();
-        created.setId(id);
-        MENU_MATCHER.assertMatch(service.get(id), created);
-    }
-
-    @Test
-    void createDuplicateDateFromTo() {
-        MenuTo newMenu = getNewTo();
-        newMenu.setDate(DATE_12_03);
-        assertThrows(DataAccessException.class, () -> service.create(newMenu));
     }
 
     @Test
@@ -117,26 +101,6 @@ public class MenuServiceTest extends AbstractServiceTest {
     @Test
     void updateDuplicateDate() {
         Menu menu = getUpdated();
-        menu.setDate(DATE_12_02);
-        assertThrows(DataIntegrityViolationException.class, () -> service.update(menu));
-    }
-
-    @Test
-    void updateTo() {
-        service.update(getUpdatedTo());
-        MENU_MATCHER.assertMatch(service.get(FIRST_MENU_ID), getUpdated());
-    }
-
-    @Test
-    void updateToInvalid() {
-        MenuTo menu = getUpdatedTo();
-        menu.setDate(null);
-        assertThrows(TransactionSystemException.class, () -> service.update(menu));
-    }
-
-    @Test
-    void updateToDuplicateDate() {
-        MenuTo menu = getUpdatedTo();
         menu.setDate(DATE_12_02);
         assertThrows(DataIntegrityViolationException.class, () -> service.update(menu));
     }

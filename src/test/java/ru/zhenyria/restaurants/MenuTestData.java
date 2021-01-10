@@ -2,7 +2,6 @@ package ru.zhenyria.restaurants;
 
 import ru.zhenyria.restaurants.model.Dish;
 import ru.zhenyria.restaurants.model.Menu;
-import ru.zhenyria.restaurants.to.MenuTo;
 
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -57,25 +56,10 @@ public class MenuTestData {
         return menu;
     }
 
-    public static MenuTo getNewTo() {
-        MenuTo menu = getUpdatedTo();
-        menu.setId(null);
-        menu.setDate(LocalDate.now());
-        return menu;
-    }
-
     public static Menu getUpdated() {
         Menu menu = new Menu(menu1);
         menu.setDishes(sortDishes(dish1, dish2, dish3));
         return menu;
-    }
-
-    public static MenuTo getUpdatedTo() {
-        return new MenuTo(
-                FIRST_MENU_ID,
-                FIRST_RESTAURANT_ID,
-                new Integer[]{FIRST_DISH_ID, FIRST_DISH_ID + 1, FIRST_DISH_ID + 2},
-                DATE_12_01);
     }
 
     public static Menu getWithAddedDish() {

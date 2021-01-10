@@ -5,7 +5,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import ru.zhenyria.restaurants.model.Menu;
 import ru.zhenyria.restaurants.service.MenuService;
-import ru.zhenyria.restaurants.to.MenuTo;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -16,7 +15,7 @@ public abstract class AbstractMenuController {
     @Autowired
     protected MenuService service;
 
-    public Menu create(MenuTo menu) {
+    public Menu create(Menu menu) {
         log.info("create menu {}", menu);
         return service.create(menu);
     }
@@ -56,7 +55,7 @@ public abstract class AbstractMenuController {
         return service.getAll();
     }
 
-    public void update(MenuTo menu) {
+    public void update(Menu menu) {
         log.info("update menu {}", menu.id());
         service.update(menu);
     }
