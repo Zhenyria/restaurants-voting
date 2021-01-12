@@ -115,7 +115,7 @@ public class DishControllerTest extends AbstractControllerTest {
     @Test
     void update() throws Exception {
         Dish updated = getUpdated();
-        perform(MockMvcRequestBuilders.put(REST_URL + DISHES_URL)
+        perform(MockMvcRequestBuilders.put(REST_URL + DISHES_URL + "/" + updated.id())
                 .with(userHttpBasic(admin))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(updated)))
@@ -129,7 +129,7 @@ public class DishControllerTest extends AbstractControllerTest {
     @Transactional(propagation = Propagation.NEVER)
     void updateInvalid() throws Exception {
         Dish dish = new Dish(FIRST_DISH_ID, "  ", 0);
-        perform(MockMvcRequestBuilders.put(REST_URL + DISHES_URL)
+        perform(MockMvcRequestBuilders.put(REST_URL + DISHES_URL + "/" + dish.id())
                 .with(userHttpBasic(admin))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(dish)))

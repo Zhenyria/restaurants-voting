@@ -14,6 +14,7 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 
+import static ru.zhenyria.restaurants.util.ValidationUtil.assureIdConsistent;
 import static ru.zhenyria.restaurants.util.ValidationUtil.checkNew;
 
 @RestController
@@ -51,10 +52,11 @@ public class DishController {
         return service.getAll();
     }
 
-    @PutMapping(DISHES_URL)
+    @PutMapping(DISHES_URL + "/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@RequestBody Dish dish) {
-        log.info("update dish {}", dish.id());
+    public void update(@PathVariable int id, @RequestBody Dish dish) {
+        assureIdConsistent(dish, id);
+        log.info("update dish {}", id);
         service.update(dish);
     }
 
