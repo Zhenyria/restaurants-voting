@@ -46,9 +46,16 @@ public class MenuServiceTest extends AbstractServiceTest {
     }
 
     @Test
-    void getForRestaurantByDate() {
-        Menu menu = service.getForRestaurantByDate(FIRST_RESTAURANT_ID, DATE_12_01);
-        MENU_MATCHER.assertMatch(menu, menu1);
+    void getByRestaurant() {
+        List<Menu> menus = service.getByRestaurant(FIRST_RESTAURANT_ID, DATE_12_01);
+        MENU_MATCHER.assertMatch(menus, List.of(menu1));
+    }
+
+    @Test
+    void getByRestaurantWithNullDate() {
+        MENU_MATCHER.assertMatch(service.getByRestaurant(FIRST_RESTAURANT_ID, null), List.of(yesterdayMenu1, menu3, menu2, menu1));
+        MENU_MATCHER.assertMatch(service.getByRestaurant(FIRST_RESTAURANT_ID + 1, null), List.of(actualMenu1, yesterdayMenu2, menu5, menu4));
+        MENU_MATCHER.assertMatch(service.getByRestaurant(FIRST_RESTAURANT_ID + 2, null), List.of(actualMenu2, yesterdayMenu3, menu7, menu6));
     }
 
     @Test
@@ -57,22 +64,15 @@ public class MenuServiceTest extends AbstractServiceTest {
     }
 
     @Test
-    void getAllByDate() {
-        MENU_MATCHER.assertMatch(service.getAllByDate(DATE_12_01), List.of(menu1, menu6, menu4));
+    void getAll() {
+        MENU_MATCHER.assertMatch(service.getAll(DATE_12_01), List.of(menu1, menu6, menu4));
     }
 
     @Test
-    void getAll() {
-        MENU_MATCHER.assertMatch(service.getAll(),
+    void getAllWithNullDate() {
+        MENU_MATCHER.assertMatch(service.getAll(null),
                 List.of(actualMenu2, actualMenu1, yesterdayMenu1, yesterdayMenu3, yesterdayMenu2,
                         menu3, menu2, menu7, menu5, menu1, menu6, menu4));
-    }
-
-    @Test
-    void getAllForRestaurant() {
-        MENU_MATCHER.assertMatch(service.getAllForRestaurant(FIRST_RESTAURANT_ID), List.of(yesterdayMenu1, menu3, menu2, menu1));
-        MENU_MATCHER.assertMatch(service.getAllForRestaurant(FIRST_RESTAURANT_ID + 1), List.of(actualMenu1, yesterdayMenu2, menu5, menu4));
-        MENU_MATCHER.assertMatch(service.getAllForRestaurant(FIRST_RESTAURANT_ID + 2), List.of(actualMenu2, yesterdayMenu3, menu7, menu6));
     }
 
     @Test

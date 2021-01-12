@@ -31,16 +31,16 @@ public class MenuRepository {
         return repository.findAll(SORT_DATE);
     }
 
-    public Menu getForRestaurantByDate(int id, LocalDate date) {
-        return repository.getForRestaurantByDate(id, date);
+    public Menu getByRestaurantAndDate(int id, LocalDate date) {
+        return repository.getByRestaurantAndDate(id, date);
     }
 
     public List<Menu> getAllByDate(LocalDate date) {
         return repository.getAllByDate(date);
     }
 
-    public List<Menu> getAllForRestaurant(int id) {
-        return repository.getAllForRestaurant(id);
+    public List<Menu> getAllByRestaurant(int id) {
+        return repository.getAllByRestaurant(id);
     }
 
     public boolean delete(int id) {

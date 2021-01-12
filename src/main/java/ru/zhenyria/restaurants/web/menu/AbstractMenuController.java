@@ -30,9 +30,9 @@ public abstract class AbstractMenuController {
         return service.getActual(id);
     }
 
-    public Menu getForRestaurantByDate(int id, LocalDate date) {
+    public List<Menu> getByRestaurant(int id, LocalDate date) {
         log.info("get menu for restaurant {} by date {}", id, date);
-        return service.getForRestaurantByDate(id, date);
+        return service.getByRestaurant(id, date);
     }
 
     public List<Menu> getAllActual() {
@@ -40,19 +40,9 @@ public abstract class AbstractMenuController {
         return service.getAllActual();
     }
 
-    public List<Menu> getAllByDate(LocalDate date) {
+    public List<Menu> getAll(LocalDate date) {
         log.info("get all menus by date {}", date);
-        return service.getAllByDate(date);
-    }
-
-    public List<Menu> getAllForRestaurant(int id) {
-        log.info("get all menus for restaurant {}", id);
-        return service.getAllForRestaurant(id);
-    }
-
-    public List<Menu> getAll() {
-        log.info("get all menus");
-        return service.getAll();
+        return service.getAll(date);
     }
 
     public void update(Menu menu) {

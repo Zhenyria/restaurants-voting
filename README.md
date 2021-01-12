@@ -63,11 +63,9 @@ REST-service for organizing a restaurant voting system. In app exist two types o
 |--|--|--|
 | Get by id |GET|`curl --location --request GET 'http://localhost:8080/restaurants/rest/profile/restaurants/menus/100007' --user piter@gmail.com:password`|
 | Get actual for restaurant |GET|`curl --location --request GET 'http://localhost:8080/restaurants/rest/profile/restaurants/100006/menus/actual' --user piter@gmail.com:password`|
-| Get for restaurant by date |GET|`curl --location --request GET 'http://localhost:8080/restaurants/rest/profile/restaurants/100006/menus/2020-12-01' --user piter@gmail.com:password`|
 | Get all actual |GET|`curl --location --request GET 'http://localhost:8080/restaurants/rest/profile/restaurants/menus/actual' --user piter@gmail.com:password`|
-| Get all by date |GET|`curl --location --request GET 'http://localhost:8080/restaurants/rest/profile/restaurants/menus/actual/2020-12-01' --user piter@gmail.com:password`|
-| Get all for restaurant |GET|`curl --location --request GET 'http://localhost:8080/restaurants/rest/profile/restaurants/100006/menus' --user piter@gmail.com:password`|
-| Get all |GET|`curl --location --request GET 'http://localhost:8080/restaurants/rest/profile/restaurants/menus' --user piter@gmail.com:password`|
+| Get all for restaurant _(can used with param "date")_ |GET|`curl --location --request GET 'http://localhost:8080/restaurants/rest/profile/restaurants/100006/menus?date=2020-12-01' --user piter@gmail.com:password`|
+| Get all _(can used with param "date")_ |GET|`curl --location --request GET 'http://localhost:8080/restaurants/rest/profile/restaurants/menus?date=2020-12-01' --user piter@gmail.com:password`|
 ##### *FOR ADMIN*
 | description |method| curl |
 |--|--|--|
@@ -81,7 +79,7 @@ REST-service for organizing a restaurant voting system. In app exist two types o
 | Create new dish |POST|`curl --location --request POST 'http://localhost:8080/restaurants/rest/admin/restaurants/menus/dishes' --header 'Content-Type: application/json' --data-raw '{"id":null,"name":"Cheese cake","price":56 }' --user admin@gmail.com:password`|
 | Get by id |GET|`curl --location --request GET 'http://localhost:8080/restaurants/rest/admin/restaurants/menus/dishes/100016' --user admin@gmail.com:password`|
 | Get all |GET|`curl --location --request GET 'http://localhost:8080/restaurants/rest/admin/restaurants/menus/dishes' --user admin@gmail.com:password`|
-| Update dish |PUT|`curl --location --request PUT 'http://localhost:8080/restaurants/rest/admin/restaurants/menus/dishes' --header 'Content-Type: application/json' --data-raw '{"id":100016,"name":"Cheese cake","price":56 }' --user admin@gmail.com:password`|
+| Update dish |PUT|`curl --location --request PUT 'http://localhost:8080/restaurants/rest/admin/restaurants/menus/dishes/100016' --header 'Content-Type: application/json' --data-raw '{"id":100016,"name":"Cheese cake","price":56 }' --user admin@gmail.com:password`|
 | Add dish to menu |PUT|`curl --location --request PUT 'http://localhost:8080/restaurants/rest/admin/restaurants/menus/100007/dishes/100026' --user admin@gmail.com:password`|
 | Delete dish from menu |DELETE|`curl --location --request DELETE 'http://localhost:8080/restaurants/rest/admin/restaurants/menus/100007/dishes/100025' --user admin@gmail.com:password`|
 | Delete dish |DELETE|`curl --location --request DELETE 'http://localhost:8080/restaurants/rest/admin/restaurants/menus/dishes/100026' --user admin@gmail.com:password`|
