@@ -1,4 +1,5 @@
-# Restaurants Voting System
+# Restaurants Voting System [![Codacy Badge](https://app.codacy.com/project/badge/Grade/09c3308c5eae4f169e3ac884800e21cf)](https://www.codacy.com/gh/Zhenyria/restaurantsVotingSystem/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Zhenyria/restaurantsVotingSystem&amp;utm_campaign=Badge_Grade)
+
 REST-service for organizing a restaurant voting system. In app exist two types of users: ADMIN and USER. Admin can create restaurants, menu and dishes. User can vote for the liked restaurant or re-vote for other restaurant. Re-votings deadline is end at the eleven o'clock. At 00:00 will be selected winner.
 
 **Stack of used technologies:**
@@ -13,34 +14,39 @@ REST-service for organizing a restaurant voting system. In app exist two types o
 - Jackson
 - Cargo plugin _(you can run the application without any prior configuration)_
 
-### REST-API
+### Start the app
+For start the app you can use Cargo plugin. Do the following after build the app:
+
+`mvn clean package -DskipTests=true org.codehaus.cargo:cargo-maven2-plugin:1.8.2:run`
+
+## REST-API
 **WARNING:**
 - Sequence in DB start with 100000
 - Use date in path in format yyyy-MM-dd
 
-#### USERS
+### USERS
 ##### *FOR UNAUTHORIZED*
 | description |method| curl |
-|--|--|--|
+|--|:--:|--|
 | Register new user |POST|`curl --location --request POST 'http://localhost:8080/restaurants/rest/profile/register' --header 'Content-Type: application/json' --data-raw '{"name": "Kolya","email": "kolya@mail.ru","password": "password"}'`|
 ##### *FOR USER*
 | description |method| curl |
-|--|--|--|
+|--|:--:|--|
 | Get current user |GET|`curl --location --request GET 'http://localhost:8080/restaurants/rest/profile' --user piter@gmail.com:password`|
 | Update current user |PUT|`curl --location --request PUT 'http://localhost:8080/restaurants/rest/profile' --header 'Content-Type: application/json' --data-raw '{"id": 100000,"name": "Zhora","email": "pink@mail.ru","password": "abrakadabra"}' --user piter@gmail.com:password`|
 | Delete current user |DELETE|`curl --location --request DELETE 'http://localhost:8080/restaurants/rest/profile' --user piter@gmail.com:password`|
 ##### *FOR ADMIN*
 | description |method| curl |
-|--|--|--|
+|--|:--:|--|
 | Create new user |POST|`curl --location --request POST 'http://localhost:8080/restaurants/rest/admin/users' --header 'Content-Type: application/json' --data-raw '{"id": null,"name": "Zhora","email": "pink@mail.ru","password": "password","roles": ["USER"]}' --user admin@gmail.com:password`|
 | Get user by id |GET|`curl --location --request GET 'http://localhost:8080/restaurants/rest/admin/users/100000' --user admin@gmail.com:password`|
 | Get all users |GET|`curl --location --request GET 'http://localhost:8080/restaurants/rest/admin/users' --user admin@gmail.com:password`|
 | Update user |PUT|`curl --location --request PUT 'http://localhost:8080/restaurants/rest/admin/users/100000' --header 'Content-Type: application/json' --data-raw '{"id": 100000,"name": "Zhora","email": "pink@mail.ru","password": "abrakadabra"}' --user admin@gmail.com:password`|
 | Delete user |DELETE|`curl --location --request DELETE 'http://localhost:8080/restaurants/rest/admin/users/100000' --user admin@gmail.com:password`|
-#### RESTAURANTS
+### RESTAURANTS
 ##### *FOR USER*
 | description |method| curl |
-|--|--|--|
+|--|:--:|--|
 | Get by id |GET|`curl --location --request GET 'http://localhost:8080/restaurants/rest/profile/restaurants/100004' --user piter@gmail.com:password`|
 | Get winner _(can used with param "date")_ |GET|`curl --location --request GET 'http://localhost:8080/restaurants/rest/profile/restaurants/winner?date=2020-12-01' --user piter@gmail.com:password`|
 | Get winning |GET|`curl --location --request GET 'http://localhost:8080/restaurants/rest/profile/restaurants/winning' --user piter@gmail.com:password`|
@@ -49,16 +55,16 @@ REST-service for organizing a restaurant voting system. In app exist two types o
 | Vote |POST|`curl --location --request POST 'http://localhost:8080/restaurants/rest/profile/restaurants/100004/vote' --user piter@gmail.com:password`|
 ##### *FOR ADMIN*
 | description |method| curl |
-|--|--|--|
+|--|:--:|--|
 | Create new restaurant |POST|`curl --location --request POST 'http://localhost:8080/restaurants/rest/admin/restaurants' --header 'Content-Type: application/json' --data-raw '{"id":null,"name":"Golden apple"}' --user admin@gmail.com:password`|
 | Get all |GET|`curl --location --request GET 'http://localhost:8080/restaurants/rest/admin/restaurants' --user admin@gmail.com:password`|
 | Get all, which have not actual menu |GET|`curl --location --request GET 'http://localhost:8080/restaurants/rest/admin/restaurants/without_menu' --user admin@gmail.com:password`|
 | Rename restaurant |PUT|`curl --location --request PUT 'http://localhost:8080/restaurants/rest/admin/restaurants/100004' --header 'Content-Type: application/json' --data-raw '"\"Golden\""' --user admin@gmail.com:password`|
 | Delete restaurant |DELETE|`curl --location --request DELETE 'http://localhost:8080/restaurants/rest/admin/restaurants/100004' --user admin@gmail.com:password`|
-#### MENUS
+### MENUS
 ##### *FOR USER*
 | description |method| curl |
-|--|--|--|
+|--|:--:|--|
 | Get by id |GET|`curl --location --request GET 'http://localhost:8080/restaurants/rest/profile/restaurants/menus/100007' --user piter@gmail.com:password`|
 | Get actual for restaurant |GET|`curl --location --request GET 'http://localhost:8080/restaurants/rest/profile/restaurants/100006/menus/actual' --user piter@gmail.com:password`|
 | Get all actual |GET|`curl --location --request GET 'http://localhost:8080/restaurants/rest/profile/restaurants/menus/actual' --user piter@gmail.com:password`|
@@ -66,14 +72,14 @@ REST-service for organizing a restaurant voting system. In app exist two types o
 | Get all _(can used with param "date")_ |GET|`curl --location --request GET 'http://localhost:8080/restaurants/rest/profile/restaurants/menus?date=2020-12-01' --user piter@gmail.com:password`|
 ##### *FOR ADMIN*
 | description |method| curl |
-|--|--|--|
+|--|:--:|--|
 | Create new menu |POST|`curl --location --request POST 'http://localhost:8080/restaurants/rest/admin/restaurants/menus' --header 'Content-Type: application/json' --data-raw '{"id": null,"restaurant": {"id": 100004,"name": "Goldy"},"dishes": [{"id": 100017,"name": "Cola","price": 46 }, {"id": 100018,"name": "Zero cola","price": 47 }, {"id": 100019,"name": "Fish soup","price": 118 }]}' --user admin@gmail.com:password`|
 | Update menu |PUT|`curl --location --request PUT 'http://localhost:8080/restaurants/rest/admin/restaurants/menus/100007' --header 'Content-Type: application/json' --data-raw '{"id": 100007,"restaurant": {"id": 100004,"name": "Goldy"},"dishes": [{"id": 100017,"name": "Cola","price": 46 }, {"id": 100018,"name": "Zero cola","price": 47 }, {"id": 100019,"name": "Fish soup","price": 118 }]}' --user admin@gmail.com:password`|
 | Delete menu |DELETE|`curl --location --request DELETE 'http://localhost:8080/restaurants/rest/admin/restaurants/menus/100016' --user admin@gmail.com:password`|
-#### DISHES
+### DISHES
 ##### *FOR ADMIN*
 | description |method| curl |
-|--|--|--|
+|--|:--:|--|
 | Create new dish |POST|`curl --location --request POST 'http://localhost:8080/restaurants/rest/admin/restaurants/menus/dishes' --header 'Content-Type: application/json' --data-raw '{"id":null,"name":"Cheese cake","price":56 }' --user admin@gmail.com:password`|
 | Get by id |GET|`curl --location --request GET 'http://localhost:8080/restaurants/rest/admin/restaurants/menus/dishes/100016' --user admin@gmail.com:password`|
 | Get all |GET|`curl --location --request GET 'http://localhost:8080/restaurants/rest/admin/restaurants/menus/dishes' --user admin@gmail.com:password`|
