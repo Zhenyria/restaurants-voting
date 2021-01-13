@@ -1,4 +1,7 @@
 # Restaurants Voting System
+
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/a665c971b1d34b7aa181193e60c7f886)](https://app.codacy.com/gh/Zhenyria/restaurantsVotingSystem?utm_source=github.com&utm_medium=referral&utm_content=Zhenyria/restaurantsVotingSystem&utm_campaign=Badge_Grade)
+
 REST-service for organizing a restaurant voting system. In app exist two types of users: ADMIN and USER. Admin can create restaurants, menu and dishes. User can vote for the liked restaurant or re-vote for other restaurant. Re-votings deadline is end at the eleven o'clock. At 00:00 will be selected winner.
 
 **Stack of used technologies:**
