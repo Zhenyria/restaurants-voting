@@ -29,10 +29,6 @@ public class RestaurantRepository {
         return repository.findById(id).orElse(null);
     }
 
-    public Restaurant getReference(int id) {
-        return repository.getOne(id);
-    }
-
     public boolean isExist(int id) {
         return repository.existsById(id);
     }
@@ -53,8 +49,8 @@ public class RestaurantRepository {
         return repository.getWinnerByDate(date);
     }
 
-    public int countVotesByDate(int id, LocalDate date) {
-        return repository.countVotesByDate(id, date);
+    public int getVotesCountByDate(int id, LocalDate date) {
+        return repository.getVotesCountByDate(id, date);
     }
 
     public boolean isVoting(int id) {

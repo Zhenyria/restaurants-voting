@@ -10,6 +10,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.zhenyria.restaurants.View;
 import ru.zhenyria.restaurants.model.User;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 
@@ -39,10 +40,10 @@ public class AdminUserController extends AbstractUserController {
         return super.get(id);
     }
 
-    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@RequestBody User user) throws BindException {
-        validateBeforeUpdate(user, user.id());
+    public void update(@PathVariable int id, @Valid @RequestBody User user) throws BindException {
+        validateBeforeUpdate(user, id);
         super.update(user);
     }
 

@@ -9,6 +9,7 @@ import ru.zhenyria.restaurants.repository.RestaurantRepository;
 import java.time.LocalDate;
 import java.util.List;
 
+import static ru.zhenyria.restaurants.util.ValidationUtil.checkDate;
 import static ru.zhenyria.restaurants.util.ValidationUtil.checkExisting;
 import static ru.zhenyria.restaurants.util.VoteUtil.isCanReVote;
 
@@ -52,22 +53,18 @@ public class RestaurantService {
         return repository.getAll();
     }
 
-    public int countVotes(int id) {
+    public int getVotesCount(int id, LocalDate date) {
         checkExisting(repository.isExist(id));
-        return repository.countVotesByDate(id, LocalDate.now());
-    }
-
-    public int countVotesByDate(int id, LocalDate date) {
-        checkExisting(repository.isExist(id));
-        return repository.countVotesByDate(id, date);
+        return repository.getVotesCountByDate(id, date == null ? LocalDate.now() : date);
     }
 
     public Restaurant getWinning() {
         return checkExisting(repository.getWinnerByDate(LocalDate.now()));
     }
 
-    public Restaurant getWinner() {
-        return checkExisting(repository.getWinnerByDate(LocalDate.now().minusDays(1)));
+    public Restaurant getWinner(LocalDate date) {
+        checkDate(date);
+        return checkExisting(repository.getWinnerByDate(date == null ? LocalDate.now().minusDays(1) : date));
     }
 
     public Restaurant getWinnerByDate(LocalDate date) {

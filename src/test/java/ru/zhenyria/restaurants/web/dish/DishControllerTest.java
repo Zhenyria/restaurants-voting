@@ -126,7 +126,6 @@ public class DishControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    @Transactional(propagation = Propagation.NEVER)
     void updateInvalid() throws Exception {
         Dish dish = new Dish(FIRST_DISH_ID, "  ", 0);
         perform(MockMvcRequestBuilders.put(REST_URL + DISHES_URL + "/" + dish.id())
@@ -135,7 +134,7 @@ public class DishControllerTest extends AbstractControllerTest {
                 .content(JsonUtil.writeValue(dish)))
                 .andDo(print())
                 .andExpect(status().isUnprocessableEntity())
-                .andExpect(errorType(ErrorType.OPERATION_FAILED));
+                .andExpect(errorType(ErrorType.WRONG_DATA));
     }
 
     @Test

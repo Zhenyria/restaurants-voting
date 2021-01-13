@@ -10,6 +10,7 @@ import ru.zhenyria.restaurants.util.VoteUtil;
 import ru.zhenyria.restaurants.util.exception.ErrorType;
 import ru.zhenyria.restaurants.web.AbstractControllerTest;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -46,12 +47,40 @@ public class RestaurantControllerTest extends AbstractControllerTest {
 
     @Test
     void getWinner() throws Exception {
+        perform(MockMvcRequestBuilders.get(REST_URL + "winner?date=" + MenuTestData.DATE_12_01)
+                .with(userHttpBasic(user1)))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(RESTAURANT_MATCHER.contentJson(restaurant1));
+    }
+
+    @Test
+    void getWinnerByNullDate() throws Exception {
         perform(MockMvcRequestBuilders.get(REST_URL + "winner")
                 .with(userHttpBasic(user1)))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(RESTAURANT_MATCHER.contentJson(restaurant2));
+    }
+
+    @Test
+    void getWinnerByIllegalDate() throws Exception {
+        perform(MockMvcRequestBuilders.get(REST_URL + "winner?date=1")
+                .with(userHttpBasic(user1)))
+                .andDo(print())
+                .andExpect(status().isInternalServerError())
+                .andExpect(errorType(ErrorType.APP_ERROR));
+    }
+
+    @Test
+    void getWinnerByNotYetArrivedDate() throws Exception {
+        perform(MockMvcRequestBuilders.get(REST_URL + "winner?date=" + LocalDate.now())
+                .with(userHttpBasic(user1)))
+                .andDo(print())
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(errorType(ErrorType.WRONG_DATA));
     }
 
     @Test
@@ -65,25 +94,6 @@ public class RestaurantControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    void getWinnerByDate() throws Exception {
-        perform(MockMvcRequestBuilders.get(REST_URL + "winner/" + MenuTestData.DATE_12_01)
-                .with(userHttpBasic(user1)))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(RESTAURANT_MATCHER.contentJson(restaurant1));
-    }
-
-    @Test
-    void getWinnerByIllegalDate() throws Exception {
-        perform(MockMvcRequestBuilders.get(REST_URL + "winner/1")
-                .with(userHttpBasic(user1)))
-                .andDo(print())
-                .andExpect(status().isInternalServerError())
-                .andExpect(errorType(ErrorType.APP_ERROR));
-    }
-
-    @Test
     void getAllWithActualMenu() throws Exception {
         perform(MockMvcRequestBuilders.get(REST_URL)
                 .with(userHttpBasic(user1)))
@@ -94,7 +104,17 @@ public class RestaurantControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    void countVotes() throws Exception {
+    void getVotesCount() throws Exception {
+        perform(MockMvcRequestBuilders.get(REST_URL + FIRST_RESTAURANT_ID + "/rating?date=" + MenuTestData.DATE_12_01)
+                .with(userHttpBasic(user1)))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(VOTE_MATCHER.contentJson(FIRST_RESTAURANT_COUNT_BY_2020_12_01));
+    }
+
+    @Test
+    void getVotesCountByNullDate() throws Exception {
         perform(MockMvcRequestBuilders.get(REST_URL + (FIRST_RESTAURANT_ID + 1) + "/rating")
                 .with(userHttpBasic(user1)))
                 .andDo(print())
@@ -104,7 +124,7 @@ public class RestaurantControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    void countVotesForNotFound() throws Exception {
+    void getVotesCountByNotFound() throws Exception {
         perform(MockMvcRequestBuilders.get(REST_URL + NOT_FOUND_ID + "/rating")
                 .with(userHttpBasic(user1)))
                 .andDo(print())
@@ -113,18 +133,8 @@ public class RestaurantControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    void countVotesByDate() throws Exception {
-        perform(MockMvcRequestBuilders.get(REST_URL + FIRST_RESTAURANT_ID + "/rating/" + MenuTestData.DATE_12_01)
-                .with(userHttpBasic(user1)))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(VOTE_MATCHER.contentJson(FIRST_RESTAURANT_COUNT_BY_2020_12_01));
-    }
-
-    @Test
-    void countVotesByIllegalDate() throws Exception {
-        perform(MockMvcRequestBuilders.get(REST_URL + FIRST_RESTAURANT_ID + "/rating/1")
+    void getVotesCountByIllegalDate() throws Exception {
+        perform(MockMvcRequestBuilders.get(REST_URL + FIRST_RESTAURANT_ID + "/rating?date=1")
                 .with(userHttpBasic(user1)))
                 .andDo(print())
                 .andExpect(status().isInternalServerError())
@@ -139,7 +149,7 @@ public class RestaurantControllerTest extends AbstractControllerTest {
                 .andDo(print())
                 .andExpect(status().isNoContent());
 
-        VOTE_MATCHER.assertMatch(service.countVotes(FIRST_RESTAURANT_ID + 1), SECOND_RESTAURANTS_ACTUAL_COUNTS + 1);
+        VOTE_MATCHER.assertMatch(service.getVotesCount(FIRST_RESTAURANT_ID + 1, null), SECOND_RESTAURANTS_ACTUAL_COUNTS + 1);
     }
 
     @Test

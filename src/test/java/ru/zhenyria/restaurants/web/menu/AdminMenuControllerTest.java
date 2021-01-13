@@ -60,7 +60,7 @@ public class AdminMenuControllerTest extends AbstractControllerTest {
     @Test
     void update() throws Exception {
         Menu updated = getUpdated();
-        perform(MockMvcRequestBuilders.put(REST_URL)
+        perform(MockMvcRequestBuilders.put(REST_URL + "/" + FIRST_MENU_ID)
                 .with(userHttpBasic(admin))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(updated)))
@@ -68,6 +68,18 @@ public class AdminMenuControllerTest extends AbstractControllerTest {
                 .andExpect(status().isNoContent());
 
         MENU_MATCHER.assertMatch(service.get(updated.id()), getUpdated());
+    }
+
+    @Test
+    void updateInvalid() throws Exception {
+        Menu updated = new Menu(FIRST_MENU_ID, null, null, Collections.emptyList());
+        perform(MockMvcRequestBuilders.put(REST_URL + "/" + FIRST_MENU_ID)
+                .with(userHttpBasic(admin))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(updated)))
+                .andDo(print())
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(errorType(ErrorType.WRONG_DATA));
     }
 
     @Test

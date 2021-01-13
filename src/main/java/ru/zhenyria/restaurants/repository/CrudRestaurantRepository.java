@@ -27,7 +27,7 @@ public interface CrudRestaurantRepository extends JpaRepository<Restaurant, Inte
             SELECT COUNT(*) FROM VOTES AS VOTE
             WHERE EXISTS(SELECT * FROM MENUS WHERE ID=VOTE.MENU_ID AND DATE=:date AND RESTAURANT_ID=:id)
             """, nativeQuery = true)
-    int countVotesByDate(@Param("id") int id, @Param("date") LocalDate date);
+    int getVotesCountByDate(@Param("id") int id, @Param("date") LocalDate date);
 
     @Query(value = "SELECT COUNT(*) FROM VOTES WHERE USER_ID=:id AND DATE=TODAY()", nativeQuery = true)
     int countUserVotesToday(@Param("id") int id);

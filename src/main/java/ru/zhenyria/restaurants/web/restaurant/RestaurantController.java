@@ -2,6 +2,7 @@ package ru.zhenyria.restaurants.web.restaurant;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.lang.Nullable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import ru.zhenyria.restaurants.AuthorizedUser;
@@ -23,20 +24,14 @@ public class RestaurantController extends AbstractRestaurantController {
 
     @Override
     @GetMapping("/winner")
-    public Restaurant getWinner() {
-        return super.getWinner();
+    public Restaurant getWinner(@Nullable @RequestParam(value = "date") LocalDate date) {
+        return super.getWinner(date);
     }
 
     @Override
     @GetMapping("/winning")
     public Restaurant getWinning() {
         return super.getWinning();
-    }
-
-    @Override
-    @GetMapping("/winner/{date}")
-    public Restaurant getWinnerByDate(@PathVariable LocalDate date) {
-        return super.getWinnerByDate(date);
     }
 
     @Override
@@ -47,14 +42,8 @@ public class RestaurantController extends AbstractRestaurantController {
 
     @Override
     @GetMapping("/{id}/rating")
-    public int countVotes(@PathVariable int id) {
-        return super.countVotes(id);
-    }
-
-    @Override
-    @GetMapping("/{id}/rating/{date}")
-    public int countVotesByDate(@PathVariable int id, @PathVariable LocalDate date) {
-        return super.countVotesByDate(id, date);
+    public int getVotesCount(@PathVariable int id, @Nullable @RequestParam(name = "date") LocalDate date) {
+        return super.getVotesCount(id, date);
     }
 
     @PostMapping("/{id}/vote")

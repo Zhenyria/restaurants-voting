@@ -117,7 +117,7 @@ class AdminUserControllerTest extends AbstractControllerTest {
     @Test
     void update() throws Exception {
         User updated = getUpdated();
-        perform(MockMvcRequestBuilders.put(REST_URL)
+        perform(MockMvcRequestBuilders.put(REST_URL + "/" + FIRST_USER_ID)
                 .with(userHttpBasic(admin))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonWithPassword(updated, updated.getPassword())))
@@ -130,7 +130,7 @@ class AdminUserControllerTest extends AbstractControllerTest {
     @Test
     void updateInvalid() throws Exception {
         User updated = new User(FIRST_USER_ID, "  ", "  ", "  ", Role.USER);
-        perform(MockMvcRequestBuilders.put(REST_URL)
+        perform(MockMvcRequestBuilders.put(REST_URL + "/" + FIRST_USER_ID)
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(userHttpBasic(admin))
                 .content(jsonWithPassword(updated, "  ")))
@@ -144,7 +144,7 @@ class AdminUserControllerTest extends AbstractControllerTest {
     void updateWithDuplicateEmail() throws Exception {
         User updated = new User(user2);
         updated.setEmail(USER_EMAIL);
-        perform(MockMvcRequestBuilders.put(REST_URL)
+        perform(MockMvcRequestBuilders.put(REST_URL + "/" + (FIRST_USER_ID + 1))
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(userHttpBasic(admin))
                 .content(jsonWithPassword(updated, updated.getPassword())))

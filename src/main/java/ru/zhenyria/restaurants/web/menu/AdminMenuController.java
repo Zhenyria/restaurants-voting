@@ -10,6 +10,8 @@ import ru.zhenyria.restaurants.model.Menu;
 import javax.validation.Valid;
 import java.net.URI;
 
+import static ru.zhenyria.restaurants.util.ValidationUtil.assureIdConsistent;
+
 @RestController
 @RequestMapping(value = AdminMenuController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class AdminMenuController extends AbstractMenuController {
@@ -24,10 +26,10 @@ public class AdminMenuController extends AbstractMenuController {
         return ResponseEntity.created(uriOfNewResource).body(created);
     }
 
-    @Override
-    @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@RequestBody Menu menu) {
+    public void update(@PathVariable int id, @Valid @RequestBody Menu menu) {
+        assureIdConsistent(menu, id);
         super.update(menu);
     }
 

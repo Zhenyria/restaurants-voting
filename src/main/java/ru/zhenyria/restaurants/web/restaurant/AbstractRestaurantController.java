@@ -43,14 +43,9 @@ public abstract class AbstractRestaurantController {
         return service.getAllWithoutActualMenu();
     }
 
-    public Restaurant getWinner() {
-        log.info("get restaurant-winner");
-        return service.getWinner();
-    }
-
-    public Restaurant getWinnerByDate(LocalDate date) {
+    public Restaurant getWinner(LocalDate date) {
         log.info("get restaurant-winner by date {}", date);
-        return service.getWinnerByDate(date);
+        return service.getWinner(date);
     }
 
     public Restaurant getWinning() {
@@ -58,14 +53,9 @@ public abstract class AbstractRestaurantController {
         return service.getWinning();
     }
 
-    public int countVotes(int id) {
-        log.info("count votes for restaurant {}", id);
-        return service.countVotes(id);
-    }
-
-    public int countVotesByDate(int id, LocalDate date) {
+    public int getVotesCount(int id, LocalDate date) {
         log.info("count votes for restaurant {} by date {}", id, date);
-        return service.countVotesByDate(id, date);
+        return service.getVotesCount(id, date);
     }
 
     public void vote(int id, int userId) {

@@ -1,12 +1,13 @@
 package ru.zhenyria.restaurants.util;
 
-import ru.zhenyria.restaurants.util.exception.NotFoundException;
 import org.slf4j.Logger;
 import ru.zhenyria.restaurants.HasId;
 import ru.zhenyria.restaurants.model.AbstractBaseEntity;
 import ru.zhenyria.restaurants.util.exception.ErrorType;
+import ru.zhenyria.restaurants.util.exception.NotFoundException;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDate;
 
 public class ValidationUtil {
 
@@ -29,6 +30,12 @@ public class ValidationUtil {
     public static void checkExisting(boolean isExist) {
         if (!isExist) {
             throw new NotFoundException("Not exist with this id");
+        }
+    }
+
+    public static void checkDate(LocalDate date) {
+        if (date != null && date.isAfter(LocalDate.now().minusDays(1))) {
+            throw new IllegalArgumentException("This date has not yet arrived");
         }
     }
 

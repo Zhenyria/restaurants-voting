@@ -54,7 +54,7 @@ public class DishController {
 
     @PutMapping(DISHES_URL + "/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@PathVariable int id, @RequestBody Dish dish) {
+    public void update(@PathVariable int id, @Valid @RequestBody Dish dish) {
         assureIdConsistent(dish, id);
         log.info("update dish {}", id);
         service.update(dish);
