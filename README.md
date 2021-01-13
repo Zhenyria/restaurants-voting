@@ -1,4 +1,4 @@
-# Restaurants Voting System [![Codacy Badge](https://app.codacy.com/project/badge/Grade/09c3308c5eae4f169e3ac884800e21cf)](https://www.codacy.com/gh/Zhenyria/restaurantsVotingSystem/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Zhenyria/restaurantsVotingSystem&amp;utm_campaign=Badge_Grade)
+# Restaurants Voting System [![Codacy Badge](https://app.codacy.com/project/badge/Grade/09c3308c5eae4f169e3ac884800e21cf)](https://www.codacy.com/gh/Zhenyria/restaurantsVotingSystem/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Zhenyria/restaurantsVotingSystem&amp;utm_campaign=Badge_Grade) [![Build Status](https://travis-ci.org/Zhenyria/restaurantsVotingSystem.svg?branch=master)](https://travis-ci.org/Zhenyria/restaurantsVotingSystem)
 
 REST-service for organizing a restaurant voting system. In app exist two types of users: ADMIN and USER. Admin can create restaurants, menu and dishes. User can vote for the liked restaurant or re-vote for other restaurant. Re-votings deadline is end at the eleven o'clock. At 00:00 will be selected winner.
 
