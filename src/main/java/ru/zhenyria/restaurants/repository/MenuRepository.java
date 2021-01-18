@@ -27,6 +27,10 @@ public class MenuRepository {
         return repository.findById(id).orElse(null);
     }
 
+    public Menu getReference(int id) {
+        return repository.getOne(id);
+    }
+
     public List<Menu> getAll() {
         return repository.findAll(SORT_DATE);
     }

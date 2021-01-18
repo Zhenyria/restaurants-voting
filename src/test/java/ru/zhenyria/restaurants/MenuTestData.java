@@ -2,6 +2,7 @@ package ru.zhenyria.restaurants;
 
 import ru.zhenyria.restaurants.model.Dish;
 import ru.zhenyria.restaurants.model.Menu;
+import ru.zhenyria.restaurants.to.MenuTo;
 
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -13,6 +14,7 @@ import java.util.stream.Collectors;
 import static org.assertj.core.api.Assertions.assertThat;
 import static ru.zhenyria.restaurants.DishTestData.*;
 import static ru.zhenyria.restaurants.RestaurantTestData.*;
+import static ru.zhenyria.restaurants.util.MenuUtil.getToFromMenu;
 
 public class MenuTestData {
     public static final TestMatcher<Menu> MENU_MATCHER =
@@ -21,6 +23,10 @@ public class MenuTestData {
                             .ignoringFields("restaurant.menus", "dishes.menus", "users").isEqualTo(b),
                     (a, b) -> assertThat(a).usingRecursiveComparison()
                             .ignoringFields("restaurant.menus", "dishes.menus", "users").isEqualTo(b));
+
+    public static final TestMatcher<Menu> MENU_MATCHER_WITHOUT_DATE =
+            TestMatcher.usingIgnoringFieldsComparator(
+                    Menu.class, "restaurant.menus", "dishes.menus", "users", "date");
 
     public static final Integer FIRST_MENU_ID = 100007;
     public static final LocalDate DATE_12_01 = LocalDate.of(2020, 12, 1);
@@ -56,10 +62,18 @@ public class MenuTestData {
         return menu;
     }
 
+    public static MenuTo getNewTo() {
+        return getToFromMenu(getNew());
+    }
+
     public static Menu getUpdated() {
         Menu menu = new Menu(menu1);
         menu.setDishes(sortDishes(dish1, dish2, dish3));
         return menu;
+    }
+
+    public static MenuTo getUpdatedTo() {
+        return getToFromMenu(getUpdated());
     }
 
     public static Menu getWithAddedDish() {

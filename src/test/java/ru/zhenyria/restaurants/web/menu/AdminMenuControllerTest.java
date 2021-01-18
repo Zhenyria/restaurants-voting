@@ -1,18 +1,19 @@
 package ru.zhenyria.restaurants.web.menu;
 
+import org.hibernate.Hibernate;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import ru.zhenyria.restaurants.model.Menu;
+import ru.zhenyria.restaurants.model.Restaurant;
 import ru.zhenyria.restaurants.service.MenuService;
+import ru.zhenyria.restaurants.to.MenuTo;
 import ru.zhenyria.restaurants.util.JsonUtil;
 import ru.zhenyria.restaurants.util.exception.ErrorType;
 import ru.zhenyria.restaurants.util.exception.NotFoundException;
 import ru.zhenyria.restaurants.web.AbstractControllerTest;
-
-import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -31,27 +32,26 @@ public class AdminMenuControllerTest extends AbstractControllerTest {
 
     @Test
     void createWithLocation() throws Exception {
-        Menu menu = getNew();
         ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL)
                 .with(userHttpBasic(admin))
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(JsonUtil.writeValue(menu)))
+                .content(JsonUtil.writeValue(getNewTo())))
                 .andExpect(status().isCreated());
 
         Menu created = readFromJson(action, Menu.class);
+        Menu newMenu = getNew();
         int id = created.id();
-        menu.setId(id);
-        MENU_MATCHER.assertMatch(created, menu);
-        MENU_MATCHER.assertMatch(service.get(created.id()), menu);
+        newMenu.setId(id);
+        MENU_MATCHER.assertMatch(created, newMenu);
+        MENU_MATCHER.assertMatch(service.get(created.id()), newMenu);
     }
 
     @Test
     void createInvalid() throws Exception {
-        Menu menu = new Menu(null, null, Collections.emptyList());
         perform(MockMvcRequestBuilders.post(REST_URL)
                 .with(userHttpBasic(admin))
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(JsonUtil.writeValue(menu)))
+                .content(JsonUtil.writeValue(new MenuTo(null, null, null))))
                 .andDo(print())
                 .andExpect(status().isUnprocessableEntity())
                 .andExpect(errorType(ErrorType.WRONG_DATA));
@@ -59,24 +59,23 @@ public class AdminMenuControllerTest extends AbstractControllerTest {
 
     @Test
     void update() throws Exception {
-        Menu updated = getUpdated();
-        perform(MockMvcRequestBuilders.put(REST_URL + "/" + FIRST_MENU_ID)
+        MenuTo updated = getUpdatedTo();
+        perform(MockMvcRequestBuilders.put(REST_URL + FIRST_MENU_ID)
                 .with(userHttpBasic(admin))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(updated)))
                 .andDo(print())
                 .andExpect(status().isNoContent());
 
-        MENU_MATCHER.assertMatch(service.get(updated.id()), getUpdated());
+        MENU_MATCHER_WITHOUT_DATE.assertMatch(unproxyMenu(service.get(updated.id())), getUpdated());
     }
 
     @Test
     void updateInvalid() throws Exception {
-        Menu updated = new Menu(FIRST_MENU_ID, null, null, Collections.emptyList());
-        perform(MockMvcRequestBuilders.put(REST_URL + "/" + FIRST_MENU_ID)
+        perform(MockMvcRequestBuilders.put(REST_URL + FIRST_MENU_ID)
                 .with(userHttpBasic(admin))
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(JsonUtil.writeValue(updated)))
+                .content(JsonUtil.writeValue(new MenuTo(FIRST_MENU_ID, null, null))))
                 .andDo(print())
                 .andExpect(status().isUnprocessableEntity())
                 .andExpect(errorType(ErrorType.WRONG_DATA));
@@ -98,5 +97,12 @@ public class AdminMenuControllerTest extends AbstractControllerTest {
                 .andDo(print())
                 .andExpect(status().isNotFound())
                 .andExpect(errorType(ErrorType.NOT_FOUND));
+    }
+
+    // Unproxy is used because MenuService#update use menu and restaurant references in one transaction with test
+    // https://stackoverflow.com/questions/58509408/why-findbyid-returns-proxy-after-calling-getone-on-same-entity
+    private Menu unproxyMenu(Menu menu) {
+        menu.setRestaurant((Restaurant) Hibernate.unproxy(menu.getRestaurant()));
+        return (Menu) Hibernate.unproxy(menu);
     }
 }

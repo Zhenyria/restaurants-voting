@@ -5,8 +5,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import ru.zhenyria.restaurants.model.Menu;
 import ru.zhenyria.restaurants.repository.MenuRepository;
+import ru.zhenyria.restaurants.repository.RestaurantRepository;
+import ru.zhenyria.restaurants.to.MenuTo;
 
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 
 import static ru.zhenyria.restaurants.util.ValidationUtil.checkExisting;
@@ -17,15 +20,17 @@ public class MenuService {
 
     private final MenuRepository repository;
 
-    public MenuService(MenuRepository repository) {
+    private final RestaurantRepository restaurantRepository;
+
+    public MenuService(MenuRepository repository, RestaurantRepository restaurantRepository) {
         this.repository = repository;
+        this.restaurantRepository = restaurantRepository;
     }
 
-    public Menu create(Menu menu) {
+    @Transactional
+    public Menu create(MenuTo menu) {
         Assert.notNull(menu, NULL_MENU_MSG);
-        // it's must be because work with date is wrong
-        menu.setDate(LocalDate.now());
-        return checkExisting(repository.save(menu));
+        return checkExisting(saveFromTo(menu));
     }
 
     public Menu get(int id) {
@@ -55,18 +60,24 @@ public class MenuService {
     }
 
     @Transactional
-    public void update(Menu menu) {
+    public void update(MenuTo menu) {
         Assert.notNull(menu, NULL_MENU_MSG);
-        // it's must be because work with date is wrong
-        checkExisting(repository.save(updateFrom(menu, repository.get(menu.id()))));
+        checkExisting(saveFromTo(menu));
     }
 
     public void delete(int id) {
         checkExisting(repository.delete(id));
     }
 
-    private Menu updateFrom(Menu updated, Menu actual) {
-        actual.setDishes(updated.getDishes());
-        return actual;
+    private Menu saveFromTo(MenuTo menu) {
+        return repository.save(
+                new Menu(menu.getId(),
+                        menu.isNew() ?
+                                restaurantRepository.get(menu.getRestaurantId()) :
+                                restaurantRepository.getReference(menu.getRestaurantId()),
+                        menu.getDishes(),
+                        menu.isNew() ?
+                                Collections.emptyList() :
+                                repository.getReference(menu.getId()).getUsers()));
     }
 }

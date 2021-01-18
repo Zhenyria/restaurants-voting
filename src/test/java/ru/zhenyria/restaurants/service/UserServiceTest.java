@@ -70,6 +70,7 @@ class UserServiceTest extends AbstractServiceTest {
     void update() {
         service.update(getUpdated());
         USER_MATCHER.assertMatch(service.get(FIRST_USER_ID), getUpdated());
+        // todo: vote reset?
     }
 
     @Test

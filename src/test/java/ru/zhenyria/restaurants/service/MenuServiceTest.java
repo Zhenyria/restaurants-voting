@@ -2,7 +2,9 @@ package ru.zhenyria.restaurants.service;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import ru.zhenyria.restaurants.RestaurantTestData;
 import ru.zhenyria.restaurants.model.Menu;
+import ru.zhenyria.restaurants.to.MenuTo;
 import ru.zhenyria.restaurants.util.exception.NotFoundException;
 
 import java.util.List;
@@ -20,12 +22,18 @@ public class MenuServiceTest extends AbstractServiceTest {
 
     @Test
     void create() {
-        Menu created = getNew();
-        Menu newMenu = service.create(created);
-        int id = newMenu.id();
-        created.setId(id);
-        MENU_MATCHER.assertMatch(newMenu, created);
-        MENU_MATCHER.assertMatch(service.get(id), created);
+        Menu created = service.create(getNewTo());
+        int id = created.id();
+        Menu newMenu = getNew();
+        newMenu.setId(id);
+        MENU_MATCHER.assertMatch(created, newMenu);
+        MENU_MATCHER.assertMatch(service.get(id), newMenu);
+    }
+
+    @Test
+    void createInvalid() {
+        assertThrows(NullPointerException.class,
+                () -> service.create(new MenuTo(null, null, null)));
     }
 
     @Test
@@ -77,7 +85,15 @@ public class MenuServiceTest extends AbstractServiceTest {
 
     @Test
     void update() {
-        service.update(getUpdated());
+        service.update(getUpdatedTo());
+        MENU_MATCHER.assertMatch(service.get(FIRST_MENU_ID), getUpdated());
+    }
+
+    @Test
+    void updateWithOtherRestaurant() {
+        MenuTo menu = getUpdatedTo();
+        menu.setRestaurantId(RestaurantTestData.restaurant2.id());
+        service.update(menu);
         MENU_MATCHER.assertMatch(service.get(FIRST_MENU_ID), getUpdated());
     }
 

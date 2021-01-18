@@ -3,7 +3,10 @@ package ru.zhenyria.restaurants.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.validator.constraints.Range;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import java.util.Collections;
 import java.util.List;
@@ -17,7 +20,7 @@ public class Dish extends AbstractNamedEntity {
     @Range(min = 1)
     private Integer price;
 
-    @ManyToMany(mappedBy = "dishes", fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "dishes")
     @JsonIgnore
     private List<Menu> menus;
 
@@ -40,6 +43,7 @@ public class Dish extends AbstractNamedEntity {
         super(id, name);
         this.name = name;
         this.price = price;
+        this.menus = menus;
     }
 
     public Integer getPrice() {

@@ -1,7 +1,6 @@
 package ru.zhenyria.restaurants.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import ru.zhenyria.restaurants.View;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -14,13 +13,13 @@ import java.util.List;
 public class Menu extends AbstractBaseEntity {
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "restaurant_id", nullable = false)
-    @NotNull(groups = View.Persist.class)
+    @JoinColumn(name = "restaurant_id", nullable = false, updatable = false)
+    @NotNull
     private Restaurant restaurant;
 
-    @Column(name = "date", nullable = false)
+    @Column(name = "date", nullable = false, updatable = false)
     @NotNull
-    private LocalDate date;
+    private LocalDate date = LocalDate.now();
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -31,7 +30,7 @@ public class Menu extends AbstractBaseEntity {
     @OrderBy("name, price ASC")
     private List<Dish> dishes;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany
     @JoinTable(
             name = "votes",
             joinColumns = @JoinColumn(name = "menu_id"),
@@ -44,8 +43,12 @@ public class Menu extends AbstractBaseEntity {
     public Menu() {
     }
 
+    public Menu(Integer id, Restaurant restaurant, List<Dish> dishes, List<User> users) {
+        this(id, restaurant, LocalDate.now(), dishes, users);
+    }
+
     public Menu(Menu menu) {
-        this(menu.getId(), menu.getRestaurant(), menu.getDate(), menu.getDishes());
+        this(menu.getId(), menu.getRestaurant(), menu.getDate(), menu.getDishes(), menu.getUsers());
     }
 
     public Menu(Restaurant restaurant, LocalDate date, List<Dish> dishes) {
