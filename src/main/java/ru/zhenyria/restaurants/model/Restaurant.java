@@ -2,7 +2,10 @@ package ru.zhenyria.restaurants.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
+import javax.persistence.Table;
 import java.util.Collections;
 import java.util.List;
 
@@ -10,7 +13,7 @@ import java.util.List;
 @Table(name = "restaurants")
 public class Restaurant extends AbstractNamedEntity {
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")
+    @OneToMany(mappedBy = "restaurant")
     @OrderBy("date DESC")
     @JsonIgnore
     private List<Menu> menus;

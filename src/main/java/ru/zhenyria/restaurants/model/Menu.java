@@ -23,7 +23,7 @@ public class Menu extends AbstractBaseEntity {
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
-            name = "menu_dishes",
+            name = "menus_dishes",
             joinColumns = @JoinColumn(name = "menu_id"),
             inverseJoinColumns = @JoinColumn(name = "dish_id")
     )

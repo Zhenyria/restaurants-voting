@@ -13,14 +13,14 @@ public class VoteUtil {
     }
 
     public static void prepareEndVoteTimeForPassTests() {
-        if (LocalTime.now().getHour() >= endVoteTime.getHour()) {
+        if (LocalTime.now().isAfter(endVoteTime)) {
             endVoteTime = LocalTime.of(23, 59);
         }
     }
 
     public static void prepareEndVoteTimeForFailTests() {
-        if (LocalTime.now().getHour() < endVoteTime.getHour()) {
-            endVoteTime = LocalTime.of(0, 1);
+        if (LocalTime.now().isBefore(endVoteTime)) {
+            endVoteTime = LocalTime.of(0, 0);
         }
     }
 }

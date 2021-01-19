@@ -37,8 +37,8 @@ public class User extends AbstractNamedEntity implements HasEmail {
     private LocalDateTime registered = LocalDateTime.now();
 
     @Enumerated(EnumType.STRING)
-    @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"),
-            uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "role"}, name = "user_roles_unique_idx")})
+    @CollectionTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id"),
+            uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "role"}, name = "users_roles_unique_idx")})
     @Column(name = "role")
     @ElementCollection(fetch = FetchType.EAGER)
     @BatchSize(size = 200)

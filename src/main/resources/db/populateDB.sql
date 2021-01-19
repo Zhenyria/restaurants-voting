@@ -1,5 +1,5 @@
 DELETE
-FROM MENU_DISHES;
+FROM MENUS_DISHES;
 DELETE
 FROM DISHES;
 DELETE
@@ -9,7 +9,7 @@ FROM MENUS;
 DELETE
 FROM RESTAURANTS;
 DELETE
-FROM USER_ROLES;
+FROM USERS_ROLES;
 DELETE
 FROM USERS;
 ALTER SEQUENCE GLOBAL_SEQ RESTART WITH 100000;
@@ -20,7 +20,7 @@ VALUES ('Piter', '{noop}password', 'piter@gmail.com'),
        ('Petr', '{noop}password', 'petr@mail.ru'),
        ('Admin', '{noop}admin', 'admin@gmail.com');
 
-INSERT INTO USER_ROLES (USER_ID, ROLE)
+INSERT INTO USERS_ROLES (USER_ID, ROLE)
 VALUES (100000, 'USER'),
        (100001, 'USER'),
        (100002, 'USER'),
@@ -74,7 +74,7 @@ VALUES ('Beef', 154),
        ('Hamburger', 103),
        ('Sprite', 23);
 
-INSERT INTO MENU_DISHES (DISH_ID, MENU_ID)
+INSERT INTO MENUS_DISHES (DISH_ID, MENU_ID)
 VALUES (100016, 100007),
        (100016, 100010),
        (100016, 100011),

@@ -10,13 +10,13 @@ import ru.zhenyria.restaurants.model.Dish;
 @Transactional(readOnly = true)
 public interface CrudDishRepository extends JpaRepository<Dish, Integer> {
 
-    @Query(value = "SELECT COUNT(*) FROM MENU_DISHES WHERE DISH_ID=:id", nativeQuery = true)
+    @Query(value = "SELECT COUNT(*) FROM MENUS_DISHES WHERE DISH_ID=:id", nativeQuery = true)
     int countUsing(@Param("id") int id);
 
     @Transactional
     @Modifying
     @Query(value = """
-            INSERT INTO MENU_DISHES (DISH_ID, MENU_ID) 
+            INSERT INTO MENUS_DISHES (DISH_ID, MENU_ID) 
             VALUES (:id, :menuId)
             """, nativeQuery = true)
     int addToMenu(@Param("menuId") int menuId, @Param("id") int id);
@@ -24,7 +24,7 @@ public interface CrudDishRepository extends JpaRepository<Dish, Integer> {
     @Transactional
     @Modifying
     @Query(value = """
-            DELETE FROM MENU_DISHES WHERE MENU_ID=:menuId AND DISH_ID=:id
+            DELETE FROM MENUS_DISHES WHERE MENU_ID=:menuId AND DISH_ID=:id
             """, nativeQuery = true)
     int deleteFromMenu(@Param("menuId") int menuId, @Param("id") int id);
 

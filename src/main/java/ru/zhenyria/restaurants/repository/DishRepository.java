@@ -24,10 +24,6 @@ public class DishRepository {
         return repository.findById(id).orElse(null);
     }
 
-    public Dish getReference(int id) {
-        return repository.getOne(id);
-    }
-
     public List<Dish> getAll() {
         return repository.findAll(SORT_NAME_PRICE);
     }

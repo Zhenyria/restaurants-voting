@@ -1,9 +1,9 @@
-DROP TABLE menu_dishes IF EXISTS;
+DROP TABLE menus_dishes IF EXISTS;
 DROP TABLE votes IF EXISTS;
 DROP TABLE dishes IF EXISTS;
 DROP TABLE menus IF EXISTS;
 DROP TABLE restaurants IF EXISTS;
-DROP TABLE user_roles IF EXISTS;
+DROP TABLE users_roles IF EXISTS;
 DROP TABLE users IF EXISTS;
 DROP SEQUENCE global_seq IF EXISTS;
 
@@ -19,11 +19,11 @@ CREATE TABLE users
     CONSTRAINT user_email_idx UNIQUE (email)
 );
 
-CREATE TABLE user_roles
+CREATE TABLE users_roles
 (
     user_id INTEGER      NOT NULL,
     role    VARCHAR(255) NOT NULL,
-    CONSTRAINT user_roles_idx UNIQUE (user_id, role),
+    CONSTRAINT users_roles_unique_idx UNIQUE (user_id, role),
     FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
 );
 
@@ -64,7 +64,7 @@ CREATE TABLE votes
     FOREIGN KEY (menu_id) REFERENCES menus (id) ON DELETE CASCADE
 );
 
-CREATE TABLE menu_dishes
+CREATE TABLE menus_dishes
 (
     dish_id INTEGER NOT NULL,
     menu_id INTEGER NOT NULL,
