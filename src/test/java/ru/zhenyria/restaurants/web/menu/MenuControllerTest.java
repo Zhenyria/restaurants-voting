@@ -17,14 +17,13 @@ import static ru.zhenyria.restaurants.RestaurantTestData.restaurant3;
 import static ru.zhenyria.restaurants.TestUtil.userHttpBasic;
 import static ru.zhenyria.restaurants.UserTestData.NOT_FOUND_ID;
 import static ru.zhenyria.restaurants.UserTestData.user1;
-import static ru.zhenyria.restaurants.web.menu.MenuController.MENU_URL;
 
 public class MenuControllerTest extends AbstractControllerTest {
-    private static final String REST_URL = MenuController.REST_URL + "/";
+    private static final String REST_URL = MenuController.REST_URL + MenuController.MENUS_URL + "/";
 
     @Test
     void get() throws Exception {
-        perform(MockMvcRequestBuilders.get(REST_URL + "menus/" + FIRST_MENU_ID)
+        perform(MockMvcRequestBuilders.get(REST_URL + FIRST_MENU_ID)
                 .with(userHttpBasic(user1)))
                 .andExpect(status().isOk())
                 .andDo(print())
@@ -34,7 +33,7 @@ public class MenuControllerTest extends AbstractControllerTest {
 
     @Test
     void getNotFound() throws Exception {
-        perform(MockMvcRequestBuilders.get(REST_URL + "menus/" + NOT_FOUND_ID)
+        perform(MockMvcRequestBuilders.get(REST_URL + NOT_FOUND_ID)
                 .with(userHttpBasic(user1)))
                 .andDo(print())
                 .andExpect(status().isNotFound())
@@ -43,7 +42,8 @@ public class MenuControllerTest extends AbstractControllerTest {
 
     @Test
     void getActual() throws Exception {
-        perform(MockMvcRequestBuilders.get(REST_URL + restaurant3.id() + "/menus/actual")
+        perform(MockMvcRequestBuilders.get(
+                MenuController.REST_URL + "/restaurants/" + restaurant3.id() + "/menus/actual")
                 .with(userHttpBasic(user1)))
                 .andExpect(status().isOk())
                 .andDo(print())
@@ -52,28 +52,8 @@ public class MenuControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    void getByRestaurant() throws Exception {
-        perform(MockMvcRequestBuilders.get(REST_URL + FIRST_RESTAURANT_ID + MENU_URL + "?date=" + DATE_12_01)
-                .with(userHttpBasic(user1)))
-                .andExpect(status().isOk())
-                .andDo(print())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(MENU_MATCHER.contentJson(List.of(menu1)));
-    }
-
-    @Test
-    void getByRestaurantWithNullDate() throws Exception {
-        perform(MockMvcRequestBuilders.get(REST_URL + FIRST_RESTAURANT_ID + MENU_URL)
-                .with(userHttpBasic(user1)))
-                .andExpect(status().isOk())
-                .andDo(print())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(MENU_MATCHER.contentJson(List.of(yesterdayMenu1, menu3, menu2, menu1)));
-    }
-
-    @Test
     void getAllActual() throws Exception {
-        perform(MockMvcRequestBuilders.get(REST_URL + "/menus/actual")
+        perform(MockMvcRequestBuilders.get(REST_URL + "actual")
                 .with(userHttpBasic(user1)))
                 .andExpect(status().isOk())
                 .andDo(print())
@@ -83,7 +63,18 @@ public class MenuControllerTest extends AbstractControllerTest {
 
     @Test
     void getAll() throws Exception {
-        perform(MockMvcRequestBuilders.get(REST_URL + "/menus?date=" + DATE_12_01)
+        perform(MockMvcRequestBuilders.get(
+                REST_URL + "?date=" + DATE_12_01 + "&restaurantId=" + FIRST_RESTAURANT_ID)
+                .with(userHttpBasic(user1)))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(MENU_MATCHER.contentJson(List.of(menu1)));
+    }
+
+    @Test
+    void getAllWithNullRestaurantId() throws Exception {
+        perform(MockMvcRequestBuilders.get(REST_URL + "?date=" + DATE_12_01)
                 .with(userHttpBasic(user1)))
                 .andExpect(status().isOk())
                 .andDo(print())
@@ -93,7 +84,17 @@ public class MenuControllerTest extends AbstractControllerTest {
 
     @Test
     void getAllWithNullDate() throws Exception {
-        perform(MockMvcRequestBuilders.get(REST_URL + "/menus")
+        perform(MockMvcRequestBuilders.get(REST_URL + "?restaurantId=" + FIRST_RESTAURANT_ID)
+                .with(userHttpBasic(user1)))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(MENU_MATCHER.contentJson(List.of(yesterdayMenu1, menu3, menu2, menu1)));
+    }
+
+    @Test
+    void getAllWithNullDateAndNullRestaurantId() throws Exception {
+        perform(MockMvcRequestBuilders.get(REST_URL)
                 .with(userHttpBasic(user1)))
                 .andExpect(status().isOk())
                 .andDo(print())

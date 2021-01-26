@@ -31,19 +31,14 @@ public abstract class AbstractMenuController {
         return service.getActual(id);
     }
 
-    public List<Menu> getByRestaurant(int id, LocalDate date) {
-        log.info("get menu for restaurant {} by date {}", id, date);
-        return service.getByRestaurant(id, date);
-    }
-
     public List<Menu> getAllActual() {
         log.info("get all actual menus");
         return service.getAllActual();
     }
 
-    public List<Menu> getAll(LocalDate date) {
-        log.info("get all menus by date {}", date);
-        return service.getAll(date);
+    public List<Menu> getAll(LocalDate date, Integer restaurantId) {
+        log.info("get all menus by date {} for restaurant {}", date, restaurantId);
+        return service.getAll(date, restaurantId);
     }
 
     public void update(MenuTo menu) {

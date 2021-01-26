@@ -11,36 +11,31 @@ import java.util.List;
 @RestController
 @RequestMapping(value = MenuController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class MenuController extends AbstractMenuController {
-    static final String REST_URL = "/rest/profile/restaurants";
-    static final String MENU_URL = "/menus";
+    static final String REST_URL = "/rest";
+    static final String MENUS_URL = "/menus";
 
     @Override
-    @GetMapping(MENU_URL + "/{id}")
+    @GetMapping(MENUS_URL + "/{id}")
     public Menu get(@PathVariable int id) {
         return super.get(id);
     }
 
     @Override
-    @GetMapping("/{id}" + MENU_URL + "/actual")
+    @GetMapping("/restaurants/{id}" + MENUS_URL + "/actual")
     public Menu getActual(@PathVariable int id) {
         return super.getActual(id);
     }
 
     @Override
-    @GetMapping("/{id}" + MENU_URL)
-    public List<Menu> getByRestaurant(@PathVariable int id, @Nullable @RequestParam(value = "date") LocalDate date) {
-        return super.getByRestaurant(id, date);
-    }
-
-    @Override
-    @GetMapping(MENU_URL + "/actual")
+    @GetMapping(MENUS_URL + "/actual")
     public List<Menu> getAllActual() {
         return super.getAllActual();
     }
 
     @Override
-    @GetMapping(MENU_URL)
-    public List<Menu> getAll(@Nullable @RequestParam(value = "date") LocalDate date) {
-        return super.getAll(date);
+    @GetMapping(MENUS_URL)
+    public List<Menu> getAll(@Nullable @RequestParam(value = "date") LocalDate date,
+                             @Nullable @RequestParam(value = "restaurantId") Integer id) {
+        return super.getAll(date, id);
     }
 }

@@ -17,7 +17,7 @@ import static ru.zhenyria.restaurants.util.ValidationUtil.checkNew;
 @RestController
 @RequestMapping(value = AdminMenuController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class AdminMenuController extends AbstractMenuController {
-    static final String REST_URL = "/rest/admin/restaurants/menus";
+    static final String REST_URL = "/rest/admin/menus";
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Menu> createWithLocation(@Valid @RequestBody MenuTo menu) {

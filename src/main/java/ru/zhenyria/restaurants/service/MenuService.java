@@ -41,22 +41,24 @@ public class MenuService {
         return repository.getByRestaurantAndDate(id, LocalDate.now());
     }
 
-    public List<Menu> getByRestaurant(int id, LocalDate date) {
-        if (date == null) {
-            return repository.getAllByRestaurant(id);
-        }
-        return List.of(checkExisting(repository.getByRestaurantAndDate(id, date)));
-    }
-
     public List<Menu> getAllActual() {
         return repository.getAllByDate(LocalDate.now());
     }
 
-    public List<Menu> getAll(LocalDate date) {
-        if (date == null) {
+    public List<Menu> getAll(LocalDate date, Integer restaurantId) {
+        final boolean isRestaurantIdNull = restaurantId == null;
+        final boolean isDateNull = date == null;
+
+        if (isDateNull && isRestaurantIdNull) {
             return repository.getAll();
         }
-        return repository.getAllByDate(date);
+        if (isRestaurantIdNull) {
+            return repository.getAllByDate(date);
+        }
+        if (isDateNull) {
+            return repository.getAllByRestaurant(restaurantId);
+        }
+        return List.of(checkExisting(repository.getByRestaurantAndDate(restaurantId, date)));
     }
 
     @Transactional

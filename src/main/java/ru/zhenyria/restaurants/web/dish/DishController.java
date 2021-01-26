@@ -20,8 +20,9 @@ import static ru.zhenyria.restaurants.util.ValidationUtil.checkNew;
 @RestController
 @RequestMapping(value = DishController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class DishController {
-    static final String REST_URL = "/rest/admin/restaurants/menus";
+    static final String REST_URL = "/rest/admin";
     static final String DISHES_URL = "/dishes";
+    static final String MENUS_URL = "/menus";
     private final Logger log = LoggerFactory.getLogger(getClass());
     protected final DishService service;
 
@@ -35,7 +36,7 @@ public class DishController {
         checkNew(dish);
         Dish created = service.create(dish);
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path(REST_URL + DISHES_URL + "/{id}")
+                .path(REST_URL + "/{id}")
                 .buildAndExpand(dish.id()).toUri();
         return ResponseEntity.created(uriOfNewResource).body(created);
     }
@@ -60,16 +61,16 @@ public class DishController {
         service.update(dish);
     }
 
-    @PutMapping("/{menuId}" + DISHES_URL + "/{id}")
+    @PostMapping(MENUS_URL + "/{menuId}" + DISHES_URL + "/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void addToMenu(@PathVariable int menuId, @PathVariable int id) {
+    public void addToMenu(@PathVariable int id, @PathVariable int menuId) {
         log.info("add dish {} to menu {}", id, menuId);
         service.addToMenu(menuId, id);
     }
 
-    @DeleteMapping("/{menuId}" + DISHES_URL + "/{id}")
+    @DeleteMapping(MENUS_URL + "/{menuId}" + DISHES_URL + "/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteFromMenu(@PathVariable int menuId, @PathVariable int id) {
+    public void deleteFromMenu(@PathVariable int id, @PathVariable int menuId) {
         log.info("delete dish {} from menu {}", id, menuId);
         service.deleteFromMenu(menuId, id);
     }
