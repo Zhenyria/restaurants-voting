@@ -1,11 +1,11 @@
 package ru.zhenyria.restaurants.service;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import ru.zhenyria.restaurants.model.Menu;
 import ru.zhenyria.restaurants.repository.MenuRepository;
-import ru.zhenyria.restaurants.repository.RestaurantRepository;
 import ru.zhenyria.restaurants.to.MenuTo;
 
 import java.time.LocalDate;
@@ -17,14 +17,17 @@ import static ru.zhenyria.restaurants.util.ValidationUtil.checkExisting;
 @Service
 public class MenuService {
     private static final String NULL_MENU_MSG = "Menu must be not null";
+    private static final Sort SORT_DATE =
+            Sort.by(Sort.Direction.DESC, "date")
+                    .and(Sort.by(Sort.Direction.ASC, "restaurant.name"));
 
     private final MenuRepository repository;
 
-    private final RestaurantRepository restaurantRepository;
+    private final RestaurantService restaurantService;
 
-    public MenuService(MenuRepository repository, RestaurantRepository restaurantRepository) {
+    public MenuService(MenuRepository repository, RestaurantService restaurantService) {
         this.repository = repository;
-        this.restaurantRepository = restaurantRepository;
+        this.restaurantService = restaurantService;
     }
 
     @Transactional
@@ -34,7 +37,7 @@ public class MenuService {
     }
 
     public Menu get(int id) {
-        return checkExisting(repository.get(id));
+        return checkExisting(repository.findById(id).orElse(null));
     }
 
     public Menu getActual(int id) {
@@ -50,7 +53,7 @@ public class MenuService {
         final boolean isDateNull = date == null;
 
         if (isDateNull && isRestaurantIdNull) {
-            return repository.getAll();
+            return repository.findAll(SORT_DATE);
         }
         if (isRestaurantIdNull) {
             return repository.getAllByDate(date);
@@ -68,18 +71,18 @@ public class MenuService {
     }
 
     public void delete(int id) {
-        checkExisting(repository.delete(id));
+        checkExisting(repository.delete(id) != 0);
     }
 
     private Menu saveFromTo(MenuTo menu) {
         return repository.save(
                 new Menu(menu.getId(),
                         menu.isNew() ?
-                                restaurantRepository.get(menu.getRestaurantId()) :
-                                restaurantRepository.getReference(menu.getRestaurantId()),
+                                restaurantService.get(menu.getRestaurantId()) :
+                                restaurantService.getReference(menu.getRestaurantId()),
                         menu.getDishes(),
                         menu.isNew() ?
                                 Collections.emptyList() :
-                                repository.getReference(menu.getId()).getUsers()));
+                                repository.getOne(menu.getId()).getUsers()));
     }
 }

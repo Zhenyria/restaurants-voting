@@ -1,5 +1,6 @@
 package ru.zhenyria.restaurants.service;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +20,7 @@ public class UserService {
     private static final String NULL_USER_MSG = "User must be not null";
     private static final String NULL_EMAIL_MSG = "Email must be not null";
     private static final String NULL_PASSWORD_MSG = "Password must be not null";
+    private static final Sort SORT_NAME = Sort.by(Sort.Direction.ASC, "name");
 
     private final UserRepository repository;
     private final PasswordEncoder passwordEncoder;
@@ -29,7 +31,7 @@ public class UserService {
     }
 
     public User get(int id) {
-        return checkExisting(repository.get(id));
+        return checkExisting(repository.findById(id).orElse(null));
     }
 
     public User getByEmail(String email) {
@@ -57,16 +59,16 @@ public class UserService {
     }
 
     public void delete(int id) {
-        checkExisting(repository.delete(id));
+        checkExisting(repository.delete(id) != 0);
     }
 
     public List<User> getAll() {
-        return repository.getAll();
+        return repository.findAll(SORT_NAME);
     }
 
     private User prepareAndUpdate(User user) {
         if (user.getPassword() == null) {
-            user.setPassword(repository.get(user.id()).getPassword());
+            user.setPassword(repository.getPassword(user.id()));
             return repository.save(user);
         }
         return prepareAndSave(user);

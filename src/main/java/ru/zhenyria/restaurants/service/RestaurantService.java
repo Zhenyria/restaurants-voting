@@ -1,5 +1,6 @@
 package ru.zhenyria.restaurants.service;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -16,6 +17,7 @@ import static ru.zhenyria.restaurants.util.VoteUtil.isCanReVote;
 @Service
 public class RestaurantService {
     private static final String NULL_RESTAURANT_MSG = "Restaurant must be not null";
+    private static final Sort SORT_NAME = Sort.by(Sort.Direction.ASC, "name");
 
     private final RestaurantRepository repository;
 
@@ -29,7 +31,11 @@ public class RestaurantService {
     }
 
     public Restaurant get(int id) {
-        return checkExisting(repository.get(id));
+        return checkExisting(repository.findById(id).orElse(null));
+    }
+
+    public Restaurant getReference(int id) {
+        return repository.getOne(id);
     }
 
     public void update(Restaurant restaurant) {
@@ -38,7 +44,7 @@ public class RestaurantService {
     }
 
     public void delete(int id) {
-        checkExisting(repository.delete(id));
+        checkExisting(repository.delete(id) != 0);
     }
 
     public List<Restaurant> getAllWithActualMenu() {
@@ -50,11 +56,11 @@ public class RestaurantService {
     }
 
     public List<Restaurant> getAll() {
-        return repository.getAll();
+        return repository.findAll(SORT_NAME);
     }
 
     public int getVotesCount(int id, LocalDate date) {
-        checkExisting(repository.isExist(id));
+        checkExisting(repository.existsById(id));
         return repository.getVotesCountByDate(id, date == null ? LocalDate.now() : date);
     }
 
@@ -73,7 +79,7 @@ public class RestaurantService {
 
     @Transactional
     public void vote(int id, int userId) {
-        if (!repository.isVoting(userId)) {
+        if (repository.countUserVotesToday(userId) <= 0) {
             repository.vote(id, userId);
         } else {
             if (isCanReVote()) {

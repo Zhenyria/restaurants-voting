@@ -1,53 +1,31 @@
 package ru.zhenyria.restaurants.repository;
 
-import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import ru.zhenyria.restaurants.model.Menu;
 
 import java.time.LocalDate;
 import java.util.List;
 
 @Repository
-public class MenuRepository {
-    private static final Sort SORT_DATE =
-            Sort.by(Sort.Direction.DESC, "date")
-                    .and(Sort.by(Sort.Direction.ASC, "restaurant.name"));
+@Transactional(readOnly = true)
+public interface MenuRepository extends JpaRepository<Menu, Integer> {
 
-    private final CrudMenuRepository repository;
+    @Transactional
+    @Modifying
+    @Query("DELETE FROM Menu m WHERE m.id=:id")
+    int delete(@Param("id") int id);
 
-    public MenuRepository(CrudMenuRepository repository) {
-        this.repository = repository;
-    }
+    @Query("SELECT m FROM Menu m WHERE m.date=:date ORDER BY m.restaurant.name ASC")
+    List<Menu> getAllByDate(@Param("date") LocalDate date);
 
-    public Menu save(Menu menu) {
-        return repository.save(menu);
-    }
+    @Query("SELECT m FROM Menu m WHERE m.restaurant.id=:id ORDER BY m.date DESC")
+    List<Menu> getAllByRestaurant(@Param("id") int id);
 
-    public Menu get(int id) {
-        return repository.findById(id).orElse(null);
-    }
-
-    public Menu getReference(int id) {
-        return repository.getOne(id);
-    }
-
-    public List<Menu> getAll() {
-        return repository.findAll(SORT_DATE);
-    }
-
-    public Menu getByRestaurantAndDate(int id, LocalDate date) {
-        return repository.getByRestaurantAndDate(id, date);
-    }
-
-    public List<Menu> getAllByDate(LocalDate date) {
-        return repository.getAllByDate(date);
-    }
-
-    public List<Menu> getAllByRestaurant(int id) {
-        return repository.getAllByRestaurant(id);
-    }
-
-    public boolean delete(int id) {
-        return repository.delete(id) != 0;
-    }
+    @Query("SELECT DISTINCT m FROM Menu m WHERE m.date=:date AND m.restaurant.id=:id")
+    Menu getByRestaurantAndDate(@Param("id") int id, @Param("date") LocalDate date);
 }

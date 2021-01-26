@@ -1,5 +1,6 @@
 package ru.zhenyria.restaurants.service;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -14,6 +15,7 @@ import static ru.zhenyria.restaurants.util.ValidationUtil.checkUsing;
 @Service
 public class DishService {
     private static final String NULL_DISH_MSG = "Dish must be not null";
+    private static final Sort SORT_NAME_PRICE = Sort.by(Sort.Direction.ASC, "name", "price");
 
     private final DishRepository repository;
 
@@ -27,19 +29,19 @@ public class DishService {
     }
 
     public Dish get(int id) {
-        return checkExisting(repository.get(id));
+        return checkExisting(repository.findById(id).orElse(null));
     }
 
     public List<Dish> getAll() {
-        return repository.getAll();
+        return repository.findAll(SORT_NAME_PRICE);
     }
 
     public void addToMenu(int menuId, int id) {
-        checkExisting(repository.addToMenu(menuId, id));
+        checkExisting(repository.addToMenu(menuId, id) != 0);
     }
 
     public void deleteFromMenu(int menuId, int id) {
-        checkExisting(repository.deleteFromMenu(menuId, id));
+        checkExisting(repository.deleteFromMenu(menuId, id) != 0);
     }
 
     public void update(Dish dish) {
@@ -49,7 +51,7 @@ public class DishService {
 
     @Transactional
     public void delete(int id) {
-        checkUsing(repository.isUsing(id));
-        checkExisting(repository.delete(id));
+        checkUsing(repository.countUsing(id) > 0);
+        checkExisting(repository.delete(id) != 0);
     }
 }

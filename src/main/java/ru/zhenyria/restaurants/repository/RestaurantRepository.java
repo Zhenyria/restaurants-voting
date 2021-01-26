@@ -1,71 +1,79 @@
 package ru.zhenyria.restaurants.repository;
 
-import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import ru.zhenyria.restaurants.model.Restaurant;
 
 import java.time.LocalDate;
 import java.util.List;
 
 @Repository
-public class RestaurantRepository {
-    private static final Sort SORT_NAME = Sort.by(Sort.Direction.ASC, "name");
+@Transactional(readOnly = true)
+public interface RestaurantRepository extends JpaRepository<Restaurant, Integer> {
 
-    private final CrudRestaurantRepository repository;
+    @Query(value = """
+            SELECT DISTINCT * FROM RESTAURANTS WHERE ID IN 
+            (SELECT RESTAURANT_ID FROM (
+                     SELECT RESTAURANT_ID, COUNT(*) AS REST_COUNT
+                     FROM VOTES AS VOTE, MENUS AS MENU, RESTAURANTS AS RESTAURANT
+                     WHERE VOTE.MENU_ID=MENU.ID AND MENU.RESTAURANT_ID=RESTAURANT.ID AND MENU.DATE=:date
+                     GROUP BY RESTAURANT_ID ORDER BY REST_COUNT DESC LIMIT 1))
+                        """, nativeQuery = true)
+    Restaurant getWinnerByDate(@Param("date") LocalDate date);
 
-    public RestaurantRepository(CrudRestaurantRepository repository) {
-        this.repository = repository;
-    }
+    @Query(value = """
+            SELECT COUNT(*) FROM VOTES AS VOTE
+            WHERE EXISTS(SELECT * FROM MENUS WHERE ID=VOTE.MENU_ID AND DATE=:date AND RESTAURANT_ID=:id)
+            """, nativeQuery = true)
+    int getVotesCountByDate(@Param("id") int id, @Param("date") LocalDate date);
 
-    public Restaurant save(Restaurant restaurant) {
-        return repository.save(restaurant);
-    }
+    @Query(value = "SELECT COUNT(*) FROM VOTES WHERE USER_ID=:id AND DATE=TODAY()", nativeQuery = true)
+    int countUserVotesToday(@Param("id") int id);
 
-    public boolean delete(int id) {
-        return repository.delete(id) != 0;
-    }
+    @Transactional
+    @Modifying
+    @Query(value = """
+            INSERT INTO VOTES (USER_ID, MENU_ID)
+            VALUES (:userId, (SELECT DISTINCT MENU.ID
+                              FROM MENUS as MENU
+                              WHERE MENU.RESTAURANT_ID = :id
+                                AND MENU.DATE = TODAY()))
+            """, nativeQuery = true)
+    void vote(@Param("id") int id, @Param("userId") int userId);
 
-    public Restaurant get(int id) {
-        return repository.findById(id).orElse(null);
-    }
+    @Transactional
+    @Modifying
+    @Query(value = """
+            UPDATE VOTES
+            SET MENU_ID = (SELECT DISTINCT MENU.ID
+                           FROM MENUS as MENU
+                           WHERE MENU.RESTAURANT_ID = :id
+                             AND MENU.DATE = TODAY())
+            WHERE USER_ID = :userId
+              AND DATE = TODAY()
+            """, nativeQuery = true)
+    void reVote(@Param("id") int id, @Param("userId") int userId);
 
-    public Restaurant getReference(int id) {
-        return repository.getOne(id);
-    }
+    @Query("""
+            SELECT r FROM Restaurant r WHERE EXISTS 
+            (SELECT r FROM Menu m WHERE m.restaurant.id=r.id AND m.date=:date) 
+            ORDER BY r.name
+            """)
+    List<Restaurant> getAllWithActualMenu(@Param("date") LocalDate date);
 
-    public boolean isExist(int id) {
-        return repository.existsById(id);
-    }
+    @Query("""
+            SELECT r FROM Restaurant r WHERE NOT EXISTS 
+            (SELECT r FROM Menu m WHERE m.restaurant.id=r.id AND m.date=:date) 
+            ORDER BY r.name
+            """)
+    List<Restaurant> getAllWithoutActualMenu(@Param("date") LocalDate date);
 
-    public List<Restaurant> getAllWithActualMenu(LocalDate date) {
-        return repository.getAllWithActualMenu(date);
-    }
-
-    public List<Restaurant> getAllWithoutActualMenu(LocalDate date) {
-        return repository.getAllWithoutActualMenu(date);
-    }
-
-    public List<Restaurant> getAll() {
-        return repository.findAll(SORT_NAME);
-    }
-
-    public Restaurant getWinnerByDate(LocalDate date) {
-        return repository.getWinnerByDate(date);
-    }
-
-    public int getVotesCountByDate(int id, LocalDate date) {
-        return repository.getVotesCountByDate(id, date);
-    }
-
-    public boolean isVoting(int id) {
-        return repository.countUserVotesToday(id) > 0;
-    }
-
-    public void vote(int id, int userId) {
-        repository.vote(id, userId);
-    }
-
-    public void reVote(int id, int userId) {
-        repository.reVote(id, userId);
-    }
+    @Transactional
+    @Modifying
+    @Query("DELETE FROM Restaurant r WHERE r.id=:id")
+    int delete(@Param("id") int id);
 }
