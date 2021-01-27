@@ -1,11 +1,8 @@
 package ru.zhenyria.restaurants.web.restaurant;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.lang.Nullable;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import ru.zhenyria.restaurants.AuthorizedUser;
 import ru.zhenyria.restaurants.model.Restaurant;
 
 import java.time.LocalDate;
@@ -38,17 +35,5 @@ public class RestaurantController extends AbstractRestaurantController {
     @GetMapping
     public List<Restaurant> getAllWithActualMenu() {
         return super.getAllWithActualMenu();
-    }
-
-    @Override
-    @GetMapping("/{id}/rating")
-    public int getVotesCount(@PathVariable int id, @Nullable @RequestParam(name = "date") LocalDate date) {
-        return super.getVotesCount(id, date);
-    }
-
-    @PostMapping("/{id}/vote")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void vote(@PathVariable int id, @AuthenticationPrincipal AuthorizedUser authUser) {
-        super.vote(id, authUser.getId());
     }
 }
