@@ -3,7 +3,7 @@ package ru.zhenyria.restaurants.to;
 import ru.zhenyria.restaurants.model.Dish;
 
 import javax.validation.constraints.NotNull;
-import java.util.List;
+import java.util.Set;
 
 public class MenuTo extends BaseTo {
 
@@ -11,17 +11,17 @@ public class MenuTo extends BaseTo {
     private Integer restaurantId;
 
     @NotNull
-    private List<Dish> dishes;
+    private Set<Dish> dishes;
 
     public MenuTo() {
     }
 
-    public MenuTo(Integer restaurantId, List<Dish> dishes) {
+    public MenuTo(Integer restaurantId, Set<Dish> dishes) {
         this.restaurantId = restaurantId;
         this.dishes = dishes;
     }
 
-    public MenuTo(Integer id, Integer restaurantId, List<Dish> dishes) {
+    public MenuTo(Integer id, Integer restaurantId, Set<Dish> dishes) {
         super(id);
         this.restaurantId = restaurantId;
         this.dishes = dishes;
@@ -35,11 +35,11 @@ public class MenuTo extends BaseTo {
         this.restaurantId = restaurantId;
     }
 
-    public List<Dish> getDishes() {
+    public Set<Dish> getDishes() {
         return dishes;
     }
 
-    public void setDishes(List<Dish> dishes) {
+    public void setDishes(Set<Dish> dishes) {
         this.dishes = dishes;
     }
 

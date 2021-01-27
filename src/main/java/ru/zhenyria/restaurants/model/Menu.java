@@ -3,7 +3,7 @@ package ru.zhenyria.restaurants.model;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "menus")
@@ -25,7 +25,7 @@ public class Menu extends AbstractBaseEntity {
             inverseJoinColumns = @JoinColumn(name = "dish_id")
     )
     @OrderBy("name, price ASC")
-    private List<Dish> dishes;
+    private Set<Dish> dishes;
 
     public Menu() {
     }
@@ -34,15 +34,15 @@ public class Menu extends AbstractBaseEntity {
         this(menu.getId(), menu.getRestaurant(), menu.getDate(), menu.getDishes());
     }
 
-    public Menu(Restaurant restaurant, LocalDate date, List<Dish> dishes) {
+    public Menu(Restaurant restaurant, LocalDate date, Set<Dish> dishes) {
         this(null, restaurant, date, dishes);
     }
 
-    public Menu(Integer id, Restaurant restaurant, List<Dish> dishes) {
+    public Menu(Integer id, Restaurant restaurant, Set<Dish> dishes) {
         this(id, restaurant, LocalDate.now(), dishes);
     }
 
-    public Menu(Integer id, Restaurant restaurant, LocalDate date, List<Dish> dishes) {
+    public Menu(Integer id, Restaurant restaurant, LocalDate date, Set<Dish> dishes) {
         super(id);
         this.restaurant = restaurant;
         this.date = date;
@@ -65,11 +65,11 @@ public class Menu extends AbstractBaseEntity {
         this.restaurant = restaurant;
     }
 
-    public List<Dish> getDishes() {
+    public Set<Dish> getDishes() {
         return dishes;
     }
 
-    public void setDishes(List<Dish> dishes) {
+    public void setDishes(Set<Dish> dishes) {
         this.dishes = dishes;
     }
 

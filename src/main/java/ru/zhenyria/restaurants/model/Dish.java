@@ -9,7 +9,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import java.util.Collections;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "dishes")
@@ -22,7 +22,7 @@ public class Dish extends AbstractNamedEntity {
 
     @ManyToMany(mappedBy = "dishes")
     @JsonIgnore
-    private List<Menu> menus;
+    private Set<Menu> menus;
 
     public Dish() {
     }
@@ -32,14 +32,14 @@ public class Dish extends AbstractNamedEntity {
     }
 
     public Dish(Integer id, String name, Integer price) {
-        this(id, name, price, Collections.emptyList());
+        this(id, name, price, Collections.emptySet());
     }
 
-    public Dish(String name, Integer price, List<Menu> menus) {
+    public Dish(String name, Integer price, Set<Menu> menus) {
         this(null, name, price, menus);
     }
 
-    public Dish(Integer id, String name, Integer price, List<Menu> menus) {
+    public Dish(Integer id, String name, Integer price, Set<Menu> menus) {
         super(id, name);
         this.name = name;
         this.price = price;
@@ -54,11 +54,11 @@ public class Dish extends AbstractNamedEntity {
         this.price = price;
     }
 
-    public List<Menu> getMenus() {
+    public Set<Menu> getMenus() {
         return menus;
     }
 
-    public void setMenus(List<Menu> menu) {
+    public void setMenus(Set<Menu> menu) {
         this.menus = menu;
     }
 
