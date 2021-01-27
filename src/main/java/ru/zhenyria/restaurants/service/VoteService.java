@@ -24,7 +24,7 @@ public class VoteService {
 
     @Transactional
     public void vote(int id, int userId) {
-        if (repository.countUserVotesToday(userId) <= 0) {
+        if (repository.isVotedToday(userId).isEmpty()) {
             repository.vote(id, userId);
         } else {
             if (isCanReVote()) {

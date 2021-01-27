@@ -12,6 +12,8 @@ import ru.zhenyria.restaurants.model.User;
 @Transactional(readOnly = true)
 public interface UserRepository extends JpaRepository<User, Integer> {
 
+    User getById(int id);
+
     @Transactional
     @Modifying
     @Query("DELETE FROM User u WHERE u.id=:id")

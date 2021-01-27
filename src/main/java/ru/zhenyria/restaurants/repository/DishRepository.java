@@ -8,12 +8,23 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.zhenyria.restaurants.model.Dish;
 
+import java.util.Optional;
+
 @Repository
 @Transactional(readOnly = true)
 public interface DishRepository extends JpaRepository<Dish, Integer> {
 
-    @Query(value = "SELECT COUNT(*) FROM MENUS_DISHES WHERE DISH_ID=:id", nativeQuery = true)
-    int countUsing(@Param("id") int id);
+    Dish getById(int id);
+
+    /**
+     * Determine if the current dish is in use or not
+     *
+     * @param id of current dish
+     * @return Optional<Integer>. That Optional object has value 1 if current dish is in use
+     * or null, if current dish is not in use
+     */
+    @Query(value = "SELECT 1 FROM MENUS_DISHES WHERE DISH_ID=:id LIMIT 1", nativeQuery = true)
+    Optional<Integer> isUsed(@Param("id") int id);
 
     @Transactional
     @Modifying

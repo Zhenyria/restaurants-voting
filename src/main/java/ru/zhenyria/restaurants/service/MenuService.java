@@ -37,7 +37,7 @@ public class MenuService {
     }
 
     public Menu get(int id) {
-        return checkExisting(repository.findById(id).orElse(null));
+        return checkExisting(repository.getById(id));
     }
 
     public Menu getActual(int id) {

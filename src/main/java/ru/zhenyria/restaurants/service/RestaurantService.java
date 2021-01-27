@@ -29,7 +29,7 @@ public class RestaurantService {
     }
 
     public Restaurant get(int id) {
-        return checkExisting(repository.findById(id).orElse(null));
+        return checkExisting(repository.getById(id));
     }
 
     public Restaurant getReference(int id) {

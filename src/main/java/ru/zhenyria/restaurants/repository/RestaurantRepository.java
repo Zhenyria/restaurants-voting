@@ -10,10 +10,13 @@ import ru.zhenyria.restaurants.model.Restaurant;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @Transactional(readOnly = true)
 public interface RestaurantRepository extends JpaRepository<Restaurant, Integer> {
+
+    Restaurant getById(int id);
 
     @Query(value = """
             SELECT DISTINCT * FROM RESTAURANTS WHERE ID IN 
@@ -31,8 +34,15 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Integer>
             """, nativeQuery = true)
     int getVotesCountByDate(@Param("id") int id, @Param("date") LocalDate date);
 
-    @Query(value = "SELECT COUNT(*) FROM VOTES WHERE USER_ID=:id AND DATE=TODAY()", nativeQuery = true)
-    int countUserVotesToday(@Param("id") int id);
+    /**
+     * Determine if the current user is voted today or not
+     *
+     * @param id of current user
+     * @return Optional<Integer>. That Optional object has value 1 if current user voted
+     * or null, if current user not voted today
+     */
+    @Query(value = "SELECT 1 FROM VOTES WHERE USER_ID=:id AND DATE=TODAY() LIMIT 1", nativeQuery = true)
+    Optional<Integer> isVotedToday(@Param("id") int id);
 
     @Transactional
     @Modifying

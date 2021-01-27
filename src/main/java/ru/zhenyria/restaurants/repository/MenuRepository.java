@@ -15,6 +15,8 @@ import java.util.List;
 @Transactional(readOnly = true)
 public interface MenuRepository extends JpaRepository<Menu, Integer> {
 
+    Menu getById(int id);
+
     @Transactional
     @Modifying
     @Query("DELETE FROM Menu m WHERE m.id=:id")

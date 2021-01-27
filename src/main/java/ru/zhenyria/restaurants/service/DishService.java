@@ -29,7 +29,7 @@ public class DishService {
     }
 
     public Dish get(int id) {
-        return checkExisting(repository.findById(id).orElse(null));
+        return checkExisting(repository.getById(id));
     }
 
     public List<Dish> getAll() {
@@ -51,7 +51,7 @@ public class DishService {
 
     @Transactional
     public void delete(int id) {
-        checkUsing(repository.countUsing(id) > 0);
+        checkUsing(repository.isUsed(id).isPresent());
         checkExisting(repository.delete(id) != 0);
     }
 }
