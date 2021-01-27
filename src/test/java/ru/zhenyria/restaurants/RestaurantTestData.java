@@ -8,7 +8,7 @@ import static ru.zhenyria.restaurants.TestMatcher.usingIgnoringFieldsComparator;
 
 public class RestaurantTestData {
     public static final TestMatcher<Restaurant> RESTAURANT_MATCHER =
-            usingIgnoringFieldsComparator(Restaurant.class, "menus");
+            usingIgnoringFieldsComparator(Restaurant.class, "menus", "users");
     public static final TestMatcher<Integer> VOTE_MATCHER = TestMatcher.usingEqualsComparator(Integer.class);
 
     public static final int FIRST_RESTAURANT_ID = 100004;

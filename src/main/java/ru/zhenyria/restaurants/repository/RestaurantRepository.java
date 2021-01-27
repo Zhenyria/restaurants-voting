@@ -19,18 +19,18 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Integer>
     Restaurant getById(int id);
 
     @Query(value = """
-            SELECT DISTINCT * FROM RESTAURANTS WHERE ID IN 
-            (SELECT RESTAURANT_ID FROM (
-                     SELECT RESTAURANT_ID, COUNT(*) AS REST_COUNT
-                     FROM VOTES AS VOTE, MENUS AS MENU, RESTAURANTS AS RESTAURANT
-                     WHERE VOTE.MENU_ID=MENU.ID AND MENU.RESTAURANT_ID=RESTAURANT.ID AND MENU.DATE=:date
-                     GROUP BY RESTAURANT_ID ORDER BY REST_COUNT DESC LIMIT 1))
+            SELECT DISTINCT * FROM restaurants WHERE id IN
+                (SELECT restaurant_id FROM (
+                    SELECT restaurant_id, COUNT(*) AS votes_count
+                    FROM votes AS vote, restaurants AS restaurant
+                    WHERE vote.restaurant_id=restaurant.id AND vote.date=:date
+                    GROUP BY restaurant_id ORDER BY votes_count DESC LIMIT 1))
                         """, nativeQuery = true)
     Restaurant getWinnerByDate(@Param("date") LocalDate date);
 
     @Query(value = """
-            SELECT COUNT(*) FROM VOTES AS VOTE
-            WHERE EXISTS(SELECT * FROM MENUS WHERE ID=VOTE.MENU_ID AND DATE=:date AND RESTAURANT_ID=:id)
+            SELECT COUNT(*) FROM votes AS vote
+            WHERE vote.date=:date AND vote.restaurant_id=:id
             """, nativeQuery = true)
     int getVotesCountByDate(@Param("id") int id, @Param("date") LocalDate date);
 
@@ -41,30 +41,23 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Integer>
      * @return Optional<Integer>. That Optional object has value 1 if current user voted
      * or null, if current user not voted today
      */
-    @Query(value = "SELECT 1 FROM VOTES WHERE USER_ID=:id AND DATE=TODAY() LIMIT 1", nativeQuery = true)
+    @Query(value = "SELECT 1 FROM votes WHERE user_id=:id AND date=TODAY() LIMIT 1", nativeQuery = true)
     Optional<Integer> isVotedToday(@Param("id") int id);
 
     @Transactional
     @Modifying
     @Query(value = """
-            INSERT INTO VOTES (USER_ID, MENU_ID)
-            VALUES (:userId, (SELECT DISTINCT MENU.ID
-                              FROM MENUS as MENU
-                              WHERE MENU.RESTAURANT_ID = :id
-                                AND MENU.DATE = TODAY()))
+            INSERT INTO votes (USER_ID, RESTAURANT_ID)
+            VALUES (:userId, :id)
             """, nativeQuery = true)
     void vote(@Param("id") int id, @Param("userId") int userId);
 
     @Transactional
     @Modifying
     @Query(value = """
-            UPDATE VOTES
-            SET MENU_ID = (SELECT DISTINCT MENU.ID
-                           FROM MENUS as MENU
-                           WHERE MENU.RESTAURANT_ID = :id
-                             AND MENU.DATE = TODAY())
-            WHERE USER_ID = :userId
-              AND DATE = TODAY()
+            UPDATE votes
+            SET restaurant_id=:id
+            WHERE user_id=:userId AND date=TODAY()
             """, nativeQuery = true)
     void reVote(@Param("id") int id, @Param("userId") int userId);
 

@@ -13,7 +13,10 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.EnumSet;
+import java.util.Set;
 
 import static org.hibernate.validator.constraints.SafeHtml.WhiteListType.NONE;
 
@@ -46,7 +49,7 @@ public class User extends AbstractNamedEntity implements HasEmail {
 
     @ManyToMany(mappedBy = "users", fetch = FetchType.LAZY)
     @JsonIgnore
-    private List<Menu> menus;
+    private Set<Restaurant> restaurants;
 
     public User() {
     }
@@ -63,8 +66,8 @@ public class User extends AbstractNamedEntity implements HasEmail {
         this(id, name, password, email, roles.toArray(new Role[0]));
     }
 
-    public User(String name, String password, String email, LocalDateTime registered, Set<Role> roles, List<Menu> menus) {
-        this(null, name, password, email, registered, roles, menus);
+    public User(String name, String password, String email, LocalDateTime registered, Set<Role> roles, Set<Restaurant> restaurants) {
+        this(null, name, password, email, registered, roles, restaurants);
     }
 
     public User(Integer id, String name, String password, String email, Role... roles) {
@@ -76,14 +79,15 @@ public class User extends AbstractNamedEntity implements HasEmail {
         this.roles = Set.of(roles);
     }
 
-    public User(Integer id, String name, String password, String email, LocalDateTime registered, Set<Role> roles, List<Menu> menus) {
+    public User(Integer id, String name, String password, String email, LocalDateTime registered,
+                Set<Role> roles, Set<Restaurant> restaurants) {
         super(id, name);
         this.name = name;
         this.password = password;
         this.email = email;
         this.registered = registered;
         this.roles = roles;
-        this.menus = menus;
+        this.restaurants = restaurants;
     }
 
     public String getPassword() {
@@ -118,12 +122,12 @@ public class User extends AbstractNamedEntity implements HasEmail {
         this.roles = roles == null || roles.isEmpty() ? Collections.emptySet() : EnumSet.copyOf(roles);
     }
 
-    public List<Menu> getMenus() {
-        return menus == null || menus.isEmpty() ? Collections.emptyList() : List.copyOf(menus);
+    public Set<Restaurant> getRestaurants() {
+        return restaurants == null || restaurants.isEmpty() ? Collections.emptySet() : Set.copyOf(restaurants);
     }
 
-    public void setMenus(List<Menu> menus) {
-        this.menus = menus == null || menus.isEmpty() ? Collections.emptyList() : List.copyOf(menus);
+    public void setRestaurants(Set<Restaurant> menus) {
+        this.restaurants = menus == null || menus.isEmpty() ? Collections.emptySet() : Set.copyOf(menus);
     }
 
     @Override

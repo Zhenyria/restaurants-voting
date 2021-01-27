@@ -9,7 +9,6 @@ import ru.zhenyria.restaurants.repository.MenuRepository;
 import ru.zhenyria.restaurants.to.MenuTo;
 
 import java.time.LocalDate;
-import java.util.Collections;
 import java.util.List;
 
 import static ru.zhenyria.restaurants.util.ValidationUtil.checkExisting;
@@ -80,9 +79,6 @@ public class MenuService {
                         menu.isNew() ?
                                 restaurantService.get(menu.getRestaurantId()) :
                                 restaurantService.getReference(menu.getRestaurantId()),
-                        menu.getDishes(),
-                        menu.isNew() ?
-                                Collections.emptyList() :
-                                repository.getOne(menu.getId()).getUsers()));
+                        menu.getDishes()));
     }
 }

@@ -59,7 +59,7 @@ For start the app you can use Cargo plugin. Do the following after build the app
 | Create new restaurant |POST|`curl --location --request POST 'http://localhost:8080/restaurants/rest/admin/restaurants' --header 'Content-Type: application/json' --data-raw '{"id":null,"name":"Golden apple"}' --user admin@gmail.com:admin`|
 | Get all |GET|`curl --location --request GET 'http://localhost:8080/restaurants/rest/admin/restaurants' --user admin@gmail.com:admin`|
 | Get all, which have not actual menu |GET|`curl --location --request GET 'http://localhost:8080/restaurants/rest/admin/restaurants/without_menu' --user admin@gmail.com:admin`|
-| Rename restaurant |PUT|`curl --location --request PUT 'http://localhost:8080/restaurants/rest/admin/restaurants/100004' --header 'Content-Type: application/json' --data-raw '"\"Golden\""' --user admin@gmail.com:admin`|
+| Rename restaurant |PUT|`curl --location --request PUT 'http://localhost:8080/restaurants/rest/admin/restaurants/100004' --header 'Content-Type: application/json' --data-raw '"Golden"' --user admin@gmail.com:admin`|
 | Delete restaurant |DELETE|`curl --location --request DELETE 'http://localhost:8080/restaurants/rest/admin/restaurants/100004' --user admin@gmail.com:admin`|
 ### MENUS
 ##### *FOR USER*

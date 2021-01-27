@@ -1,38 +1,38 @@
 DELETE
-FROM MENUS_DISHES;
+FROM menus_dishes;
 DELETE
-FROM DISHES;
+FROM dishes;
 DELETE
-FROM VOTES;
+FROM votes;
 DELETE
-FROM MENUS;
+FROM menus;
 DELETE
-FROM RESTAURANTS;
+FROM restaurants;
 DELETE
-FROM USERS_ROLES;
+FROM users_roles;
 DELETE
-FROM USERS;
-ALTER SEQUENCE GLOBAL_SEQ RESTART WITH 100000;
+FROM users;
+ALTER SEQUENCE global_seq RESTART WITH 100000;
 
-INSERT INTO USERS (NAME, PASSWORD, EMAIL)
+INSERT INTO users (NAME, PASSWORD, EMAIL)
 VALUES ('Piter', '{noop}password', 'piter@gmail.com'),
        ('Nikolas', '{noop}password', 'nikolas@gmail.com'),
        ('Petr', '{noop}password', 'petr@mail.ru'),
        ('Admin', '{noop}admin', 'admin@gmail.com');
 
-INSERT INTO USERS_ROLES (USER_ID, ROLE)
+INSERT INTO users_roles (USER_ID, ROLE)
 VALUES (100000, 'USER'),
        (100001, 'USER'),
        (100002, 'USER'),
        (100003, 'USER'),
        (100003, 'ADMIN');
 
-INSERT INTO RESTAURANTS (NAME)
+INSERT INTO restaurants (NAME)
 VALUES ('Goldy'),
        ('Siberian eggs'),
        ('Moscow Palace 1992');
 
-INSERT INTO MENUS (RESTAURANT_ID, DATE)
+INSERT INTO menus (RESTAURANT_ID, DATE)
 VALUES (100004, '2020-12-01'),
        (100004, '2020-12-02'),
        (100004, '2020-12-03'),
@@ -41,26 +41,26 @@ VALUES (100004, '2020-12-01'),
        (100006, '2020-12-01'),
        (100006, '2020-12-02');
 
-INSERT INTO MENUS (RESTAURANT_ID)
+INSERT INTO menus (RESTAURANT_ID)
 VALUES (100005),
        (100006);
 
-INSERT INTO VOTES (USER_ID, MENU_ID, DATE)
-VALUES (100000, 100007, '2020-12-01'),
-       (100000, 100011, '2020-12-02'),
-       (100000, 100009, '2020-12-03'),
-       (100001, 100007, '2020-12-01'),
-       (100001, 100013, '2020-12-02'),
-       (100002, 100010, '2020-12-01'),
-       (100002, 100009, '2020-12-03'),
-       (100002, 100013, '2020-12-02');
+INSERT INTO votes (USER_ID, RESTAURANT_ID, DATE)
+VALUES (100000, 100004, '2020-12-01'),
+       (100000, 100005, '2020-12-02'),
+       (100000, 100004, '2020-12-03'),
+       (100001, 100004, '2020-12-01'),
+       (100001, 100006, '2020-12-02'),
+       (100002, 100005, '2020-12-01'),
+       (100002, 100004, '2020-12-03'),
+       (100002, 100006, '2020-12-02');
 
-INSERT INTO VOTES (USER_ID, MENU_ID)
-VALUES (100000, 100014),
-       (100001, 100014),
-       (100002, 100015);
+INSERT INTO votes (USER_ID, RESTAURANT_ID)
+VALUES (100000, 100005),
+       (100001, 100005),
+       (100002, 100006);
 
-INSERT INTO DISHES (NAME, PRICE)
+INSERT INTO dishes (NAME, PRICE)
 VALUES ('Beef', 154),
        ('Cola', 46),
        ('Zero Cola', 47),
@@ -74,7 +74,7 @@ VALUES ('Beef', 154),
        ('Hamburger', 103),
        ('Sprite', 23);
 
-INSERT INTO MENUS_DISHES (DISH_ID, MENU_ID)
+INSERT INTO menus_dishes (DISH_ID, MENU_ID)
 VALUES (100016, 100007),
        (100016, 100010),
        (100016, 100011),
@@ -117,13 +117,13 @@ VALUES (100016, 100007),
 
 /* Test data for testing getWinner() */
 
-INSERT INTO MENUS (RESTAURANT_ID, DATE)
+INSERT INTO menus (RESTAURANT_ID, DATE)
 VALUES (100004, DATEADD('day', -1, TODAY())),
        (100005, DATEADD('day', -1, TODAY())),
        (100006, DATEADD('day', -1, TODAY()));
 
-INSERT INTO VOTES (USER_ID, MENU_ID, DATE)
-VALUES (100000, 100028, DATEADD('day', -1, TODAY())),
-       (100001, 100029, DATEADD('day', -1, TODAY())),
-       (100002, 100029, DATEADD('day', -1, TODAY())),
-       (100003, 100030, DATEADD('day', -1, TODAY()));
+INSERT INTO votes (USER_ID, RESTAURANT_ID, DATE)
+VALUES (100000, 100004, DATEADD('day', -1, TODAY())),
+       (100001, 100005, DATEADD('day', -1, TODAY())),
+       (100002, 100005, DATEADD('day', -1, TODAY())),
+       (100003, 100006, DATEADD('day', -1, TODAY()));

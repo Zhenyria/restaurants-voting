@@ -20,13 +20,13 @@ public class MenuTestData {
     public static final TestMatcher<Menu> MENU_MATCHER =
             TestMatcher.usingAssertions(Menu.class,
                     (a, b) -> assertThat(a).usingRecursiveComparison()
-                            .ignoringFields("restaurant.menus", "dishes.menus", "users").isEqualTo(b),
+                            .ignoringFields("restaurant.menus", "restaurant.users", "dishes.menus").isEqualTo(b),
                     (a, b) -> assertThat(a).usingRecursiveComparison()
-                            .ignoringFields("restaurant.menus", "dishes.menus", "users").isEqualTo(b));
+                            .ignoringFields("restaurant.menus", "restaurant.users", "dishes.menus").isEqualTo(b));
 
     public static final TestMatcher<Menu> MENU_MATCHER_WITHOUT_DATE =
             TestMatcher.usingIgnoringFieldsComparator(
-                    Menu.class, "restaurant.menus", "dishes.menus", "users", "date");
+                    Menu.class, "restaurant.menus", "restaurant.users", "dishes.menus", "date");
 
     public static final Integer FIRST_MENU_ID = 100007;
     public static final LocalDate DATE_12_01 = LocalDate.of(2020, 12, 1);

@@ -1,5 +1,6 @@
 package ru.zhenyria.restaurants.web.restaurant;
 
+import org.hibernate.Hibernate;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -105,7 +106,10 @@ public class AdminRestaurantControllerTest extends AbstractControllerTest {
 
         Restaurant restaurant = new Restaurant(restaurant1);
         restaurant.setName(newName);
-        RESTAURANT_MATCHER.assertMatch(service.get(FIRST_RESTAURANT_ID), restaurant);
+
+        // Unproxy is used because RestaurantService#update use restaurant reference in one transaction with test
+        // https://stackoverflow.com/questions/58509408/why-findbyid-returns-proxy-after-calling-getone-on-same-entity
+        RESTAURANT_MATCHER.assertMatch((Restaurant) Hibernate.unproxy(service.get(FIRST_RESTAURANT_ID)), restaurant);
     }
 
     @Test
