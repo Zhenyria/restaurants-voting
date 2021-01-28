@@ -1,6 +1,5 @@
 package ru.zhenyria.restaurants.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.BatchSize;
 import org.hibernate.validator.constraints.SafeHtml;
@@ -13,10 +12,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.EnumSet;
-import java.util.Set;
+import java.util.*;
 
 import static org.hibernate.validator.constraints.SafeHtml.WhiteListType.NONE;
 
@@ -47,10 +43,6 @@ public class User extends AbstractNamedEntity implements HasEmail {
     @BatchSize(size = 200)
     private Set<Role> roles;
 
-    @ManyToMany(mappedBy = "users", fetch = FetchType.LAZY)
-    @JsonIgnore
-    private Set<Restaurant> restaurants;
-
     public User() {
     }
 
@@ -66,28 +58,21 @@ public class User extends AbstractNamedEntity implements HasEmail {
         this(id, name, password, email, roles.toArray(new Role[0]));
     }
 
-    public User(String name, String password, String email, LocalDateTime registered, Set<Role> roles, Set<Restaurant> restaurants) {
-        this(null, name, password, email, registered, roles, restaurants);
+    public User(String name, String password, String email, LocalDateTime registered, Set<Role> roles) {
+        this(null, name, password, email, registered, roles);
     }
 
     public User(Integer id, String name, String password, String email, Role... roles) {
-        super(id, name);
-        this.name = name;
-        this.password = password;
-        this.email = email;
-        this.registered = LocalDateTime.now();
-        this.roles = Set.of(roles);
+        this(id, name, password, email, LocalDateTime.now(), new HashSet<>(Arrays.asList(roles)));
     }
 
-    public User(Integer id, String name, String password, String email, LocalDateTime registered,
-                Set<Role> roles, Set<Restaurant> restaurants) {
+    public User(Integer id, String name, String password, String email, LocalDateTime registered, Set<Role> roles) {
         super(id, name);
         this.name = name;
         this.password = password;
         this.email = email;
         this.registered = registered;
         this.roles = roles;
-        this.restaurants = restaurants;
     }
 
     public String getPassword() {
@@ -120,14 +105,6 @@ public class User extends AbstractNamedEntity implements HasEmail {
 
     public void setRoles(Collection<Role> roles) {
         this.roles = roles == null || roles.isEmpty() ? Collections.emptySet() : EnumSet.copyOf(roles);
-    }
-
-    public Set<Restaurant> getRestaurants() {
-        return restaurants == null || restaurants.isEmpty() ? Collections.emptySet() : Set.copyOf(restaurants);
-    }
-
-    public void setRestaurants(Set<Restaurant> menus) {
-        this.restaurants = menus == null || menus.isEmpty() ? Collections.emptySet() : Set.copyOf(menus);
     }
 
     @Override

@@ -2,10 +2,12 @@ package ru.zhenyria.restaurants.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
+import javax.persistence.Table;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "restaurants")
@@ -16,21 +18,11 @@ public class Restaurant extends AbstractNamedEntity {
     @JsonIgnore
     private List<Menu> menus;
 
-    @ManyToMany
-    @JoinTable(
-            name = "votes",
-            joinColumns = @JoinColumn(name = "restaurant_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id")
-    )
-    @OrderBy("name")
-    @JsonIgnore
-    private Set<User> users;
-
     public Restaurant() {
     }
 
     public Restaurant(Restaurant restaurant) {
-        this(restaurant.getId(), restaurant.getName(), restaurant.getMenus(), restaurant.getUsers());
+        this(restaurant.getId(), restaurant.getName(), restaurant.getMenus());
     }
 
     public Restaurant(String name) {
@@ -38,17 +30,16 @@ public class Restaurant extends AbstractNamedEntity {
     }
 
     public Restaurant(Integer id, String name) {
-        this(id, name, Collections.emptyList(), Collections.emptySet());
+        this(id, name, Collections.emptyList());
     }
 
     public Restaurant(String name, List<Menu> menus) {
-        this(null, name, menus, Collections.emptySet());
+        this(null, name, menus);
     }
 
-    public Restaurant(Integer id, String name, List<Menu> menus, Set<User> users) {
+    public Restaurant(Integer id, String name, List<Menu> menus) {
         super(id, name);
         this.menus = menus;
-        this.users = users;
     }
 
     public List<Menu> getMenus() {
@@ -57,14 +48,6 @@ public class Restaurant extends AbstractNamedEntity {
 
     public void setMenus(List<Menu> menus) {
         this.menus = menus;
-    }
-
-    public Set<User> getUsers() {
-        return users;
-    }
-
-    public void setUsers(Set<User> users) {
-        this.users = users;
     }
 
     @Override

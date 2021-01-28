@@ -8,7 +8,6 @@ import ru.zhenyria.restaurants.model.Restaurant;
 import ru.zhenyria.restaurants.repository.RestaurantRepository;
 
 import java.time.LocalDate;
-import java.util.Collections;
 import java.util.List;
 
 import static ru.zhenyria.restaurants.util.ValidationUtil.checkDate;
@@ -28,7 +27,7 @@ public class RestaurantService {
     @Transactional
     public Restaurant create(Restaurant restaurant) {
         Assert.notNull(restaurant, NULL_RESTAURANT_MSG);
-        return prepareAndSave(restaurant);
+        return checkExisting(repository.save(restaurant));
     }
 
     public Restaurant get(int id) {
@@ -42,7 +41,7 @@ public class RestaurantService {
     @Transactional
     public void update(Restaurant restaurant) {
         Assert.notNull(restaurant, NULL_RESTAURANT_MSG);
-        prepareAndSave(restaurant);
+        checkExisting(repository.save(restaurant));
     }
 
     public void delete(int id) {
@@ -72,10 +71,5 @@ public class RestaurantService {
 
     public Restaurant getWinnerByDate(LocalDate date) {
         return checkExisting(repository.getWinnerByDate(date));
-    }
-
-    private Restaurant prepareAndSave(Restaurant restaurant) {
-        restaurant.setUsers(restaurant.isNew() ? Collections.emptySet() : getReference(restaurant.id()).getUsers());
-        return checkExisting(repository.save(restaurant));
     }
 }

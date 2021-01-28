@@ -9,7 +9,7 @@ import java.util.Set;
 @Table(name = "menus")
 public class Menu extends AbstractBaseEntity {
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "restaurant_id", nullable = false, updatable = false)
     @NotNull
     private Restaurant restaurant;
@@ -47,6 +47,18 @@ public class Menu extends AbstractBaseEntity {
         this.restaurant = restaurant;
         this.date = date;
         this.dishes = dishes;
+    }
+
+    // https://thorben-janssen.com/best-practices-for-many-to-many-associations-with-hibernate-and-jpa/
+
+    public void addDish(Dish dish) {
+        this.dishes.add(dish);
+        dish.getMenus().add(this);
+    }
+
+    public void deleteDish(Dish dish) {
+        this.dishes.remove(dish);
+        dish.getMenus().remove(this);
     }
 
     public LocalDate getDate() {

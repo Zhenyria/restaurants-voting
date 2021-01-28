@@ -153,8 +153,8 @@ public class DishControllerTest extends AbstractControllerTest {
                 MENUS_URL + NOT_FOUND_ID + DishController.DISHES_URL + "/" + FIRST_DISH_ID)
                 .with(userHttpBasic(admin)))
                 .andDo(print())
-                .andExpect(status().isUnprocessableEntity())
-                .andExpect(errorType(ErrorType.WRONG_DATA));
+                .andExpect(status().isNotFound())
+                .andExpect(errorType(ErrorType.NOT_FOUND));
     }
 
     @Test
@@ -163,8 +163,8 @@ public class DishControllerTest extends AbstractControllerTest {
                 MENUS_URL + FIRST_MENU_ID + DishController.DISHES_URL + "/" + NOT_FOUND_ID)
                 .with(userHttpBasic(admin)))
                 .andDo(print())
-                .andExpect(status().isUnprocessableEntity())
-                .andExpect(errorType(ErrorType.WRONG_DATA));
+                .andExpect(status().isNotFound())
+                .andExpect(errorType(ErrorType.NOT_FOUND));
     }
 
     @Test

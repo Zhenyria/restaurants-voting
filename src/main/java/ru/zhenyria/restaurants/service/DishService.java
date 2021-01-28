@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import ru.zhenyria.restaurants.model.Dish;
+import ru.zhenyria.restaurants.model.Menu;
 import ru.zhenyria.restaurants.repository.DishRepository;
 
 import java.util.List;
@@ -19,8 +20,11 @@ public class DishService {
 
     private final DishRepository repository;
 
-    public DishService(DishRepository repository) {
+    private final MenuService menuService;
+
+    public DishService(DishRepository repository, MenuService menuService) {
         this.repository = repository;
+        this.menuService = menuService;
     }
 
     public Dish create(Dish dish) {
@@ -36,12 +40,20 @@ public class DishService {
         return repository.findAll(SORT_NAME_PRICE);
     }
 
+    @Transactional
     public void addToMenu(int menuId, int id) {
-        checkExisting(repository.addToMenu(menuId, id) != 0);
+        Dish dish = get(id);
+        Menu menu = menuService.get(menuId);
+        menu.addDish(dish);
+        menuService.update(menu);
     }
 
+    @Transactional
     public void deleteFromMenu(int menuId, int id) {
-        checkExisting(repository.deleteFromMenu(menuId, id) != 0);
+        Dish dish = get(id);
+        Menu menu = menuService.get(menuId);
+        menu.deleteDish(dish);
+        menuService.update(menu);
     }
 
     public void update(Dish dish) {

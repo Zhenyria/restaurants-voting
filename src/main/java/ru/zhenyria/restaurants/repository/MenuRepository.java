@@ -15,7 +15,8 @@ import java.util.List;
 @Transactional(readOnly = true)
 public interface MenuRepository extends JpaRepository<Menu, Integer> {
 
-    Menu getById(int id);
+    @Query("SELECT m FROM Menu m JOIN FETCH m.restaurant WHERE m.id=:id")
+    Menu get(@Param("id") int id);
 
     @Transactional
     @Modifying

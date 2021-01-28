@@ -36,7 +36,7 @@ public class MenuService {
     }
 
     public Menu get(int id) {
-        return checkExisting(repository.getById(id));
+        return checkExisting(repository.get(id));
     }
 
     public Menu getActual(int id) {
@@ -61,6 +61,11 @@ public class MenuService {
             return repository.getAllByRestaurant(restaurantId);
         }
         return List.of(checkExisting(repository.getByRestaurantAndDate(restaurantId, date)));
+    }
+
+    public void update(Menu menu) {
+        Assert.notNull(menu, NULL_MENU_MSG);
+        checkExisting(repository.save(menu));
     }
 
     @Transactional
