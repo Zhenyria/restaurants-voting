@@ -4,7 +4,9 @@ import org.slf4j.Logger;
 import ru.zhenyria.restaurants.HasId;
 import ru.zhenyria.restaurants.model.AbstractBaseEntity;
 import ru.zhenyria.restaurants.util.exception.ErrorType;
+import ru.zhenyria.restaurants.util.exception.NotAvailableOperationException;
 import ru.zhenyria.restaurants.util.exception.NotFoundException;
+import ru.zhenyria.restaurants.util.exception.WrongDataException;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
@@ -23,7 +25,7 @@ public class ValidationUtil {
 
     public static void checkUsing(boolean using) {
         if (using) {
-            throw new UnsupportedOperationException("The entity is already in use");
+            throw new NotAvailableOperationException("The entity is already in use");
         }
     }
 
@@ -35,13 +37,13 @@ public class ValidationUtil {
 
     public static void checkDate(LocalDate date) {
         if (date != null && date.isAfter(LocalDate.now().minusDays(1))) {
-            throw new IllegalArgumentException("This date has not yet arrived");
+            throw new WrongDataException("This date has not yet arrived");
         }
     }
 
     public static void checkNew(HasId entity) {
         if (!entity.isNew()) {
-            throw new IllegalArgumentException(entity + " must be new (id=null)");
+            throw new WrongDataException(entity + " must be new (id=null)");
         }
     }
 
@@ -49,7 +51,7 @@ public class ValidationUtil {
         if (bean.isNew()) {
             bean.setId(id);
         } else if (bean.id() != id) {
-            throw new IllegalArgumentException(bean + " must be with id=" + id);
+            throw new WrongDataException(bean + " must be with id=" + id);
         }
     }
 

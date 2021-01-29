@@ -14,9 +14,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import ru.zhenyria.restaurants.util.ValidationUtil;
-import ru.zhenyria.restaurants.util.exception.ErrorInfo;
-import ru.zhenyria.restaurants.util.exception.ErrorType;
-import ru.zhenyria.restaurants.util.exception.NotFoundException;
+import ru.zhenyria.restaurants.util.exception.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
@@ -43,8 +41,13 @@ public class ExceptionInfoHandler {
         this.messageSourceAccessor = messageSourceAccessor;
     }
 
-    @ExceptionHandler(UnsupportedOperationException.class)
-    public ResponseEntity<ErrorInfo> forbiddenError(HttpServletRequest req, UnsupportedOperationException e) {
+    @ExceptionHandler(VotingException.class)
+    public ResponseEntity<ErrorInfo> votingError(HttpServletRequest req, VotingException e) {
+        return logAndGetErrorInfo(req, e, false, VOTING_ERROR);
+    }
+
+    @ExceptionHandler({UnsupportedOperationException.class, NotAvailableOperationException.class})
+    public ResponseEntity<ErrorInfo> forbiddenError(HttpServletRequest req, Exception e) {
         return logAndGetErrorInfo(req, e, false, FORBIDDEN_OPERATION);
     }
 
@@ -67,7 +70,7 @@ public class ExceptionInfoHandler {
         return logAndGetErrorInfo(req, e, true, WRONG_DATA);
     }
 
-    @ExceptionHandler({IllegalArgumentException.class, DataAccessException.class})
+    @ExceptionHandler({IllegalArgumentException.class, DataAccessException.class, WrongDataException.class})
     public ResponseEntity<ErrorInfo> dataError(HttpServletRequest req, Exception e) {
         return logAndGetErrorInfo(req, e, false, WRONG_DATA);
     }

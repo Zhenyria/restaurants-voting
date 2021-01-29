@@ -7,6 +7,7 @@ import org.springframework.transaction.TransactionSystemException;
 import ru.zhenyria.restaurants.MenuTestData;
 import ru.zhenyria.restaurants.model.Restaurant;
 import ru.zhenyria.restaurants.util.exception.NotFoundException;
+import ru.zhenyria.restaurants.util.exception.WrongDataException;
 
 import javax.validation.ConstraintViolationException;
 import java.time.LocalDate;
@@ -99,7 +100,7 @@ class RestaurantServiceTest extends AbstractServiceTest {
 
     @Test
     void getWinnerByNotYetArrivedDate() {
-        assertThrows(IllegalArgumentException.class, () -> service.getWinner(LocalDate.now()));
+        assertThrows(WrongDataException.class, () -> service.getWinner(LocalDate.now()));
     }
 
     @Test

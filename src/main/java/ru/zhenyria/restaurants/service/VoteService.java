@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.zhenyria.restaurants.repository.RestaurantRepository;
 import ru.zhenyria.restaurants.util.VoteUtil;
+import ru.zhenyria.restaurants.util.exception.VotingException;
 
 import java.time.LocalDate;
 
@@ -35,7 +36,7 @@ public class VoteService {
             if (isCanReVote()) {
                 repository.reVote(id, userId);
             } else {
-                throw new UnsupportedOperationException(
+                throw new VotingException(
                         String.format("Re-voting after %d hours is impossible", VoteUtil.DEADLINE_HOURS));
             }
         }

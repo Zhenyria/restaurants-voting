@@ -93,6 +93,6 @@ public class VoteControllerTest extends AbstractControllerTest {
                 .with(userHttpBasic(user1)))
                 .andDo(print())
                 .andExpect(status().isForbidden())
-                .andExpect(errorType(ErrorType.FORBIDDEN_OPERATION));
+                .andExpect(errorType(ErrorType.VOTING_ERROR));
     }
 }

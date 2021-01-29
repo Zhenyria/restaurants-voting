@@ -6,6 +6,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import ru.zhenyria.restaurants.MenuTestData;
 import ru.zhenyria.restaurants.util.VoteUtil;
 import ru.zhenyria.restaurants.util.exception.NotFoundException;
+import ru.zhenyria.restaurants.util.exception.VotingException;
 
 import java.time.LocalDate;
 
@@ -71,6 +72,6 @@ class VoteServiceTest extends AbstractServiceTest {
         VoteUtil.prepareEndVoteTimeForFailTests();
         service.vote(FIRST_RESTAURANT_ID + 1, ADMIN_ID);
         VOTE_MATCHER.assertMatch(service.getVotesCount(FIRST_RESTAURANT_ID + 1, null), SECOND_RESTAURANTS_ACTUAL_COUNTS + 1);
-        assertThrows(UnsupportedOperationException.class, () -> service.vote(FIRST_RESTAURANT_ID + 2, ADMIN_ID));
+        assertThrows(VotingException.class, () -> service.vote(FIRST_RESTAURANT_ID + 2, ADMIN_ID));
     }
 }
