@@ -1,5 +1,8 @@
 package ru.zhenyria.restaurants.service;
 
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,12 +27,17 @@ public class RestaurantService {
         this.repository = repository;
     }
 
+    @Caching(evict = {
+            @CacheEvict(value = "restaurantsList", allEntries = true),
+            @CacheEvict(value = "restaurants", allEntries = true)
+    })
     @Transactional
     public Restaurant create(Restaurant restaurant) {
         Assert.notNull(restaurant, NULL_RESTAURANT_MSG);
         return checkExisting(repository.save(restaurant));
     }
 
+    @Cacheable("restaurants")
     public Restaurant get(int id) {
         return checkExisting(repository.getById(id));
     }
@@ -38,16 +46,25 @@ public class RestaurantService {
         return repository.getOne(id);
     }
 
+    @Caching(evict = {
+            @CacheEvict(value = "restaurantsList", allEntries = true),
+            @CacheEvict(value = "restaurants", allEntries = true)
+    })
     @Transactional
     public void update(Restaurant restaurant) {
         Assert.notNull(restaurant, NULL_RESTAURANT_MSG);
         checkExisting(repository.save(restaurant));
     }
 
+    @Caching(evict = {
+            @CacheEvict(value = "restaurantsList", allEntries = true),
+            @CacheEvict(value = "restaurants", allEntries = true)
+    })
     public void delete(int id) {
         checkExisting(repository.delete(id) != 0);
     }
 
+    @Cacheable("restaurantsList")
     public List<Restaurant> getAllWithActualMenu() {
         return repository.getAllWithActualMenu(LocalDate.now());
     }
@@ -60,10 +77,12 @@ public class RestaurantService {
         return repository.findAll(SORT_NAME);
     }
 
+    @Cacheable("restaurants")
     public Restaurant getWinning() {
         return checkExisting(repository.getWinnerByDate(LocalDate.now()));
     }
 
+    @Cacheable("restaurants")
     public Restaurant getWinner(LocalDate date) {
         checkDate(date);
         return checkExisting(repository.getWinnerByDate(date == null ? LocalDate.now().minusDays(1) : date));

@@ -1,8 +1,11 @@
 package ru.zhenyria.restaurants.service;
 
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.zhenyria.restaurants.repository.RestaurantRepository;
+import ru.zhenyria.restaurants.util.VoteUtil;
 
 import java.time.LocalDate;
 
@@ -17,11 +20,13 @@ public class VoteService {
         this.repository = repository;
     }
 
+    @Cacheable("votes")
     public int getVotesCount(int id, LocalDate date) {
         checkExisting(repository.existsById(id));
         return repository.getVotesCountByDate(id, date == null ? LocalDate.now() : date);
     }
 
+    @CacheEvict(value = "votes", allEntries = true)
     @Transactional
     public void vote(int id, int userId) {
         if (repository.isVotedToday(userId).isEmpty()) {
@@ -30,7 +35,8 @@ public class VoteService {
             if (isCanReVote()) {
                 repository.reVote(id, userId);
             } else {
-                throw new UnsupportedOperationException("Re-voting after 11:00 is impossible");
+                throw new UnsupportedOperationException(
+                        String.format("Re-voting after %d hours is impossible", VoteUtil.DEADLINE_HOURS));
             }
         }
     }

@@ -1,5 +1,8 @@
 package ru.zhenyria.restaurants.service;
 
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,6 +32,10 @@ public class MenuService {
         this.restaurantService = restaurantService;
     }
 
+    @Caching(evict = {
+            @CacheEvict(value = "menusList", allEntries = true),
+            @CacheEvict(value = "menus", allEntries = true)
+    })
     @Transactional
     public Menu create(MenuTo menu) {
         Assert.notNull(menu, NULL_MENU_MSG);
@@ -39,10 +46,12 @@ public class MenuService {
         return checkExisting(repository.get(id));
     }
 
+    @Cacheable("menus")
     public Menu getActual(int id) {
         return repository.getByRestaurantAndDate(id, LocalDate.now());
     }
 
+    @Cacheable("menusList")
     public List<Menu> getAllActual() {
         return repository.getAllByDate(LocalDate.now());
     }
@@ -63,17 +72,29 @@ public class MenuService {
         return List.of(checkExisting(repository.getByRestaurantAndDate(restaurantId, date)));
     }
 
+    @Caching(evict = {
+            @CacheEvict(value = "menusList", allEntries = true),
+            @CacheEvict(value = "menus", allEntries = true)
+    })
     public void update(Menu menu) {
         Assert.notNull(menu, NULL_MENU_MSG);
         checkExisting(repository.save(menu));
     }
 
+    @Caching(evict = {
+            @CacheEvict(value = "menusList", allEntries = true),
+            @CacheEvict(value = "menus", allEntries = true)
+    })
     @Transactional
     public void update(MenuTo menu) {
         Assert.notNull(menu, NULL_MENU_MSG);
         checkExisting(saveFromTo(menu));
     }
 
+    @Caching(evict = {
+            @CacheEvict(value = "menusList", allEntries = true),
+            @CacheEvict(value = "menus", allEntries = true)
+    })
     public void delete(int id) {
         checkExisting(repository.delete(id) != 0);
     }

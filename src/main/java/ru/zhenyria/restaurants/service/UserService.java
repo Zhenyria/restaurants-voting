@@ -1,5 +1,8 @@
 package ru.zhenyria.restaurants.service;
 
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -34,17 +37,26 @@ public class UserService {
         return checkExisting(repository.getById(id));
     }
 
+    @Cacheable("users")
     public User getByEmail(String email) {
         Assert.notNull(email, NULL_EMAIL_MSG);
         return checkExisting(repository.getByEmail(email));
     }
 
+    @Caching(evict = {
+            @CacheEvict(value = "usersList", allEntries = true),
+            @CacheEvict(value = "users", allEntries = true)
+    })
     public User create(User user) {
         Assert.notNull(user.getPassword(), NULL_PASSWORD_MSG);
         Assert.notNull(user, NULL_USER_MSG);
         return checkExisting(prepareAndSave(user));
     }
 
+    @Caching(evict = {
+            @CacheEvict(value = "usersList", allEntries = true),
+            @CacheEvict(value = "users", allEntries = true)
+    })
     @Transactional
     public void update(UserTo updated) {
         Assert.notNull(updated, NULL_USER_MSG);
@@ -52,16 +64,25 @@ public class UserService {
         checkExisting(prepareAndUpdate(updateUserFromTo(user, updated)));
     }
 
+    @Caching(evict = {
+            @CacheEvict(value = "usersList", allEntries = true),
+            @CacheEvict(value = "users", allEntries = true)
+    })
     @Transactional
     public void update(User user) {
         Assert.notNull(user, NULL_USER_MSG);
         checkExisting(prepareAndUpdate(user));
     }
 
+    @Caching(evict = {
+            @CacheEvict(value = "usersList", allEntries = true),
+            @CacheEvict(value = "users", allEntries = true)
+    })
     public void delete(int id) {
         checkExisting(repository.delete(id) != 0);
     }
 
+    @Cacheable("usersList")
     public List<User> getAll() {
         return repository.findAll(SORT_NAME);
     }
