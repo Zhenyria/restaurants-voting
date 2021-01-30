@@ -51,8 +51,6 @@ For start the app you can use Cargo plugin. Do the following after build the app
 | Get winner _(can used with param "date")_ |GET|`curl --location --request GET 'http://localhost:8080/restaurants/rest/restaurants/winner?date=2020-12-01' --user piter@gmail.com:password`|
 | Get winning _(return restaurant with the must chance of winning)_ |GET|`curl --location --request GET 'http://localhost:8080/restaurants/rest/restaurants/winning' --user piter@gmail.com:password`|
 | Get all restaurants, which have actual menu |GET|`curl --location --request GET 'http://localhost:8080/restaurants/rest/restaurants' --user piter@gmail.com:password`|
-| Get votes count of restaurant _(can used with param "date")_ |GET|`curl --location --request GET 'http://localhost:8080/restaurants/rest/restaurants/100004/rating?date=2020-12-01' --user piter@gmail.com:password`|
-| Vote |POST|`curl --location --request POST 'http://localhost:8080/restaurants/rest/restaurants/100004/vote' --user piter@gmail.com:password`|
 ##### *FOR ADMIN*
 | description |method| curl |
 |--|:--:|--|
@@ -86,3 +84,8 @@ For start the app you can use Cargo plugin. Do the following after build the app
 | Add dish to menu |POST|`curl --location --request PUT 'http://localhost:8080/restaurants/rest/admin/menus/100007/dishes/100026' --user admin@gmail.com:admin`|
 | Delete dish from menu |DELETE|`curl --location --request DELETE 'http://localhost:8080/restaurants/rest/admin/menus/100007/dishes/100025' --user admin@gmail.com:admin`|
 | Delete dish |DELETE|`curl --location --request DELETE 'http://localhost:8080/restaurants/rest/admin/dishes/100026' --user admin@gmail.com:admin`|
+### VOTES
+| description |method| curl |
+|--|:--:|--|
+| Get votes count of restaurant _(can used with param "date")_ |GET|`curl --location --request GET 'http://localhost:8080/restaurants/rest/restaurants/100004/votes?date=2020-12-01' --user piter@gmail.com:password`|
+| Vote |POST|`curl --location --request POST 'http://localhost:8080/restaurants/rest/restaurants/100004/votes' --user piter@gmail.com:password`|
