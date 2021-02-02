@@ -14,6 +14,7 @@ import ru.zhenyria.restaurants.to.MenuTo;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static ru.zhenyria.restaurants.util.ValidationUtil.checkExisting;
 
@@ -25,7 +26,6 @@ public class MenuService {
                     .and(Sort.by(Sort.Direction.ASC, "restaurant.name"));
 
     private final MenuRepository repository;
-
     private final RestaurantService restaurantService;
     private final DishService dishService;
 
@@ -42,7 +42,10 @@ public class MenuService {
     @Transactional
     public Menu create(MenuTo menu) {
         Assert.notNull(menu, NULL_MENU_MSG);
-        return checkExisting(saveFromTo(menu));
+        return repository.save(
+                new Menu(menu.getId(),
+                        restaurantService.get(menu.getRestaurantId()),
+                        menu.getDishIds().stream().map(dishService::get).collect(Collectors.toSet())));
     }
 
     public Menu get(int id) {
@@ -60,8 +63,8 @@ public class MenuService {
     }
 
     public List<Menu> getAll(LocalDate date, Integer restaurantId) {
-        final boolean isRestaurantIdNull = restaurantId == null;
-        final boolean isDateNull = date == null;
+        final boolean isRestaurantIdNull = (restaurantId == null);
+        final boolean isDateNull = (date == null);
 
         if (isDateNull && isRestaurantIdNull) {
             return repository.findAll(SORT_DATE);
@@ -79,19 +82,12 @@ public class MenuService {
             @CacheEvict(value = "menusList", allEntries = true),
             @CacheEvict(value = "menus", allEntries = true)
     })
-    public void update(Menu menu) {
-        Assert.notNull(menu, NULL_MENU_MSG);
-        checkExisting(repository.save(menu));
-    }
-
-    @Caching(evict = {
-            @CacheEvict(value = "menusList", allEntries = true),
-            @CacheEvict(value = "menus", allEntries = true)
-    })
     @Transactional
-    public void update(MenuTo menu) {
-        Assert.notNull(menu, NULL_MENU_MSG);
-        checkExisting(saveFromTo(menu));
+    public void update(MenuTo updated) {
+        Assert.notNull(updated, NULL_MENU_MSG);
+        Menu menu = get(updated.id());
+        menu.setDishes(updated.getDishIds().stream().map(dishService::getReference).collect(Collectors.toSet()));
+        repository.save(menu);
     }
 
     @Caching(evict = {
@@ -103,7 +99,7 @@ public class MenuService {
         Dish dish = dishService.get(dishId);
         Menu menu = get(id);
         menu.addDish(dish);
-        update(menu);
+        checkExisting(repository.save(menu));
     }
 
     @Caching(evict = {
@@ -115,7 +111,7 @@ public class MenuService {
         Dish dish = dishService.get(dishId);
         Menu menu = get(id);
         menu.deleteDish(dish);
-        update(menu);
+        checkExisting(repository.save(menu));
     }
 
     @Caching(evict = {
@@ -124,14 +120,5 @@ public class MenuService {
     })
     public void delete(int id) {
         checkExisting(repository.delete(id) != 0);
-    }
-
-    private Menu saveFromTo(MenuTo menu) {
-        return repository.save(
-                new Menu(menu.getId(),
-                        menu.isNew() ?
-                                restaurantService.get(menu.getRestaurantId()) :
-                                restaurantService.getReference(menu.getRestaurantId()),
-                        menu.getDishes()));
     }
 }

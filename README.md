@@ -70,8 +70,10 @@ For start the app you can use Cargo plugin. Do the following after build the app
 ##### *FOR ADMIN*
 | description |method| curl |
 |--|:--:|--|
-| Create new menu |POST|`curl --location --request POST 'http://localhost:8080/restaurants/rest/admin/menus' --header 'Content-Type: application/json' --data-raw '{"id": null,"restaurant": 100004,"dishes": [{"id": 100017,"name": "Cola","price": 46 }, {"id": 100018,"name": "Zero cola","price": 47 }, {"id": 100019,"name": "Fish soup","price": 118 }]}' --user admin@gmail.com:admin`|
-| Update menu |PUT|`curl --location --request PUT 'http://localhost:8080/restaurants/rest/admin/menus/100007' --header 'Content-Type: application/json' --data-raw '{"id": 100007,"restaurantId": 100004,"dishes": [{"id": 100017,"name": "Cola","price": 46 }, {"id": 100018,"name": "Zero cola","price": 47 }, {"id": 100019,"name": "Fish soup","price": 118 }]}' --user admin@gmail.com:admin`|
+| Create new menu |POST|`curl --location --request POST 'http://localhost:8080/restaurants/rest/admin/menus' --header 'Content-Type: application/json' --data-raw '{"id": null,"restaurant": 100004,"dishes": [100017, 100018, 100019]}' --user admin@gmail.com:admin`|
+| Update menu |PUT|`curl --location --request PUT 'http://localhost:8080/restaurants/rest/admin/menus/100007' --header 'Content-Type: application/json' --data-raw '{"id": 100007,"restaurantId": 100004,"dishes": [100017, 100018, 100019]}' --user admin@gmail.com:admin`|
+| Add dish to menu |PUT|`curl --location --request PUT 'http://localhost:8080/restaurants/rest/admin/menus/100007/dishes/100026' --user admin@gmail.com:admin`|
+| Delete dish from menu |DELETE|`curl --location --request DELETE 'http://localhost:8080/restaurants/rest/admin/menus/100007/dishes/100025' --user admin@gmail.com:admin`|
 | Delete menu |DELETE|`curl --location --request DELETE 'http://localhost:8080/restaurants/rest/admin/menus/100016' --user admin@gmail.com:admin`|
 ### DISHES
 ##### *FOR ADMIN*
@@ -81,8 +83,6 @@ For start the app you can use Cargo plugin. Do the following after build the app
 | Get by id |GET|`curl --location --request GET 'http://localhost:8080/restaurants/rest/admin/dishes/100016' --user admin@gmail.com:admin`|
 | Get all |GET|`curl --location --request GET 'http://localhost:8080/restaurants/rest/admin/dishes' --user admin@gmail.com:admin`|
 | Update dish |PUT|`curl --location --request PUT 'http://localhost:8080/restaurants/rest/admin/dishes/100016' --header 'Content-Type: application/json' --data-raw '{"id":100016,"name":"Cheese cake","price":56 }' --user admin@gmail.com:admin`|
-| Add dish to menu |POST|`curl --location --request PUT 'http://localhost:8080/restaurants/rest/admin/menus/100007/dishes/100026' --user admin@gmail.com:admin`|
-| Delete dish from menu |DELETE|`curl --location --request DELETE 'http://localhost:8080/restaurants/rest/admin/menus/100007/dishes/100025' --user admin@gmail.com:admin`|
 | Delete dish |DELETE|`curl --location --request DELETE 'http://localhost:8080/restaurants/rest/admin/dishes/100026' --user admin@gmail.com:admin`|
 ### VOTES
 | description |method| curl |

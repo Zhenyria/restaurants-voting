@@ -32,6 +32,10 @@ public class DishService {
         return checkExisting(repository.getById(id));
     }
 
+    public Dish getReference(int id) {
+        return repository.getOne(id);
+    }
+
     public List<Dish> getAll() {
         return repository.findAll(SORT_NAME_PRICE);
     }

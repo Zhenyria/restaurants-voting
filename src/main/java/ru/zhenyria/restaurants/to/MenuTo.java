@@ -1,7 +1,5 @@
 package ru.zhenyria.restaurants.to;
 
-import ru.zhenyria.restaurants.model.Dish;
-
 import javax.validation.constraints.NotNull;
 import java.util.Set;
 
@@ -11,20 +9,20 @@ public class MenuTo extends BaseTo {
     private Integer restaurantId;
 
     @NotNull
-    private Set<Dish> dishes;
+    private Set<Integer> dishIds;
 
     public MenuTo() {
     }
 
-    public MenuTo(Integer restaurantId, Set<Dish> dishes) {
+    public MenuTo(Integer restaurantId, Set<Integer> dishIds) {
         this.restaurantId = restaurantId;
-        this.dishes = dishes;
+        this.dishIds = dishIds;
     }
 
-    public MenuTo(Integer id, Integer restaurantId, Set<Dish> dishes) {
+    public MenuTo(Integer id, Integer restaurantId, Set<Integer> dishIds) {
         super(id);
         this.restaurantId = restaurantId;
-        this.dishes = dishes;
+        this.dishIds = dishIds;
     }
 
     public Integer getRestaurantId() {
@@ -35,12 +33,12 @@ public class MenuTo extends BaseTo {
         this.restaurantId = restaurantId;
     }
 
-    public Set<Dish> getDishes() {
-        return dishes;
+    public Set<Integer> getDishIds() {
+        return dishIds;
     }
 
-    public void setDishes(Set<Dish> dishes) {
-        this.dishes = dishes;
+    public void setDishIds(Set<Integer> dishIds) {
+        this.dishIds = dishIds;
     }
 
     @Override
@@ -48,7 +46,7 @@ public class MenuTo extends BaseTo {
         return "MenuTo{" +
                "id=" + id +
                ", restaurantId=" + restaurantId +
-               ", dishes=" + dishes +
+               ", dishIds=" + dishIds +
                '}';
     }
 }

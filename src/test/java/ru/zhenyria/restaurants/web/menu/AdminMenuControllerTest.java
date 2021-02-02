@@ -7,14 +7,16 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import ru.zhenyria.restaurants.MenuTestData;
+import ru.zhenyria.restaurants.model.Dish;
 import ru.zhenyria.restaurants.model.Menu;
-import ru.zhenyria.restaurants.model.Restaurant;
 import ru.zhenyria.restaurants.service.MenuService;
 import ru.zhenyria.restaurants.to.MenuTo;
 import ru.zhenyria.restaurants.util.JsonUtil;
 import ru.zhenyria.restaurants.util.exception.ErrorType;
 import ru.zhenyria.restaurants.util.exception.NotFoundException;
 import ru.zhenyria.restaurants.web.AbstractControllerTest;
+
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -156,10 +158,10 @@ public class AdminMenuControllerTest extends AbstractControllerTest {
                 .andExpect(errorType(ErrorType.NOT_FOUND));
     }
 
-    // Unproxy is used because MenuService#update use menu and restaurant references in one transaction with test
+    // Unproxy is used because MenuService#update use dishes references in one transaction with test
     // https://stackoverflow.com/questions/58509408/why-findbyid-returns-proxy-after-calling-getone-on-same-entity
     private Menu unproxyMenu(Menu menu) {
-        menu.setRestaurant((Restaurant) Hibernate.unproxy(menu.getRestaurant()));
-        return (Menu) Hibernate.unproxy(menu);
+        menu.setDishes(menu.getDishes().stream().map(d -> Hibernate.unproxy(d, Dish.class)).collect(Collectors.toSet()));
+        return menu;
     }
 }
