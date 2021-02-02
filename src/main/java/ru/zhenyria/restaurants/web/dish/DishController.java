@@ -20,9 +20,7 @@ import static ru.zhenyria.restaurants.util.ValidationUtil.checkNew;
 @RestController
 @RequestMapping(value = DishController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class DishController {
-    static final String REST_URL = "/rest/admin";
-    static final String DISHES_URL = "/dishes";
-    static final String MENUS_URL = "/menus";
+    static final String REST_URL = "/rest/admin/dishes";
     private final Logger log = LoggerFactory.getLogger(getClass());
     protected final DishService service;
 
@@ -30,7 +28,7 @@ public class DishController {
         this.service = service;
     }
 
-    @PostMapping(DISHES_URL)
+    @PostMapping
     public ResponseEntity<Dish> createWithLocation(@RequestBody @Valid Dish dish) {
         log.info("create dish {}", dish);
         checkNew(dish);
@@ -41,19 +39,19 @@ public class DishController {
         return ResponseEntity.created(uriOfNewResource).body(created);
     }
 
-    @GetMapping(DISHES_URL + "/{id}")
+    @GetMapping("/{id}")
     public Dish get(@PathVariable int id) {
         log.info("get dish {}", id);
         return service.get(id);
     }
 
-    @GetMapping(DISHES_URL)
+    @GetMapping
     public List<Dish> getAll() {
         log.info("get all dishes");
         return service.getAll();
     }
 
-    @PutMapping(DISHES_URL + "/{id}")
+    @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void update(@PathVariable int id, @Valid @RequestBody Dish dish) {
         assureIdConsistent(dish, id);
@@ -61,21 +59,7 @@ public class DishController {
         service.update(dish);
     }
 
-    @PostMapping(MENUS_URL + "/{menuId}" + DISHES_URL + "/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void addToMenu(@PathVariable int id, @PathVariable int menuId) {
-        log.info("add dish {} to menu {}", id, menuId);
-        service.addToMenu(menuId, id);
-    }
-
-    @DeleteMapping(MENUS_URL + "/{menuId}" + DISHES_URL + "/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteFromMenu(@PathVariable int id, @PathVariable int menuId) {
-        log.info("delete dish {} from menu {}", id, menuId);
-        service.deleteFromMenu(menuId, id);
-    }
-
-    @DeleteMapping(DISHES_URL + "/{id}")
+    @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable int id) {
         log.info("delete dish {}", id);

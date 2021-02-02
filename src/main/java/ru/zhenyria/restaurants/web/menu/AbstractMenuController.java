@@ -46,6 +46,16 @@ public abstract class AbstractMenuController {
         service.update(menu);
     }
 
+    public void addDish(int id, int dishId) {
+        log.info("add dish {} to menu {}", dishId, id);
+        service.addDish(id, dishId);
+    }
+
+    public void deleteDish(int id, int dishId) {
+        log.info("delete dish {} from menu {}", dishId, id);
+        service.deleteDish(id, dishId);
+    }
+
     public void delete(int id) {
         log.info("delete menu {}", id);
         service.delete(id);

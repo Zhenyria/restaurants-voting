@@ -18,6 +18,7 @@ import static ru.zhenyria.restaurants.util.ValidationUtil.checkNew;
 @RequestMapping(value = AdminMenuController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class AdminMenuController extends AbstractMenuController {
     static final String REST_URL = "/rest/admin/menus";
+    static final String DISHES_URL = "/dishes";
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Menu> createWithLocation(@Valid @RequestBody MenuTo menu) {
@@ -34,6 +35,20 @@ public class AdminMenuController extends AbstractMenuController {
     public void update(@PathVariable int id, @Valid @RequestBody MenuTo menu) {
         assureIdConsistent(menu, id);
         super.update(menu);
+    }
+
+    @Override
+    @PutMapping("/{id}" + DISHES_URL + "/{dishId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void addDish(@PathVariable int id, @PathVariable int dishId) {
+        super.addDish(id, dishId);
+    }
+
+    @Override
+    @DeleteMapping("/{id}" + DISHES_URL + "/{dishId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteDish(@PathVariable int id, @PathVariable int dishId) {
+        super.deleteDish(id, dishId);
     }
 
     @Override

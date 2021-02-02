@@ -7,6 +7,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+import ru.zhenyria.restaurants.model.Dish;
 import ru.zhenyria.restaurants.model.Menu;
 import ru.zhenyria.restaurants.repository.MenuRepository;
 import ru.zhenyria.restaurants.to.MenuTo;
@@ -26,10 +27,12 @@ public class MenuService {
     private final MenuRepository repository;
 
     private final RestaurantService restaurantService;
+    private final DishService dishService;
 
-    public MenuService(MenuRepository repository, RestaurantService restaurantService) {
+    public MenuService(MenuRepository repository, RestaurantService restaurantService, DishService dishService) {
         this.repository = repository;
         this.restaurantService = restaurantService;
+        this.dishService = dishService;
     }
 
     @Caching(evict = {
@@ -89,6 +92,30 @@ public class MenuService {
     public void update(MenuTo menu) {
         Assert.notNull(menu, NULL_MENU_MSG);
         checkExisting(saveFromTo(menu));
+    }
+
+    @Caching(evict = {
+            @CacheEvict(value = "menusList", allEntries = true),
+            @CacheEvict(value = "menus", allEntries = true)
+    })
+    @Transactional
+    public void addDish(int id, int dishId) {
+        Dish dish = dishService.get(dishId);
+        Menu menu = get(id);
+        menu.addDish(dish);
+        update(menu);
+    }
+
+    @Caching(evict = {
+            @CacheEvict(value = "menusList", allEntries = true),
+            @CacheEvict(value = "menus", allEntries = true)
+    })
+    @Transactional
+    public void deleteDish(int id, int dishId) {
+        Dish dish = dishService.get(dishId);
+        Menu menu = get(id);
+        menu.deleteDish(dish);
+        update(menu);
     }
 
     @Caching(evict = {

@@ -51,7 +51,6 @@ CREATE TABLE dishes
     price INTEGER      NOT NULL,
     CONSTRAINT dishes_name_price_idx UNIQUE (name, price)
 );
-CREATE INDEX dishes_name_idx ON dishes (name);
 
 CREATE TABLE votes
 (

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import ru.zhenyria.restaurants.MenuTestData;
 import ru.zhenyria.restaurants.model.Menu;
 import ru.zhenyria.restaurants.model.Restaurant;
 import ru.zhenyria.restaurants.service.MenuService;
@@ -18,6 +19,7 @@ import ru.zhenyria.restaurants.web.AbstractControllerTest;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static ru.zhenyria.restaurants.DishTestData.FIRST_DISH_ID;
 import static ru.zhenyria.restaurants.MenuTestData.*;
 import static ru.zhenyria.restaurants.TestUtil.readFromJson;
 import static ru.zhenyria.restaurants.TestUtil.userHttpBasic;
@@ -26,6 +28,7 @@ import static ru.zhenyria.restaurants.UserTestData.admin;
 
 public class AdminMenuControllerTest extends AbstractControllerTest {
     private static final String REST_URL = AdminMenuController.REST_URL + "/";
+    private static final String DISHES_URL = AdminMenuController.DISHES_URL + "/";
 
     @Autowired
     private MenuService service;
@@ -79,6 +82,60 @@ public class AdminMenuControllerTest extends AbstractControllerTest {
                 .andDo(print())
                 .andExpect(status().isUnprocessableEntity())
                 .andExpect(errorType(ErrorType.WRONG_DATA));
+    }
+
+    @Test
+    void addDish() throws Exception {
+        perform(MockMvcRequestBuilders.put(REST_URL + FIRST_MENU_ID + DISHES_URL + (FIRST_DISH_ID + 1))
+                .with(userHttpBasic(admin)))
+                .andDo(print())
+                .andExpect(status().isNoContent());
+        MENU_MATCHER.assertMatch(service.get(FIRST_MENU_ID), MenuTestData.getWithAddedDish());
+    }
+
+    @Test
+    void addDishToNotFound() throws Exception {
+        perform(MockMvcRequestBuilders.put(REST_URL + NOT_FOUND_ID + DISHES_URL + FIRST_DISH_ID)
+                .with(userHttpBasic(admin)))
+                .andDo(print())
+                .andExpect(status().isNotFound())
+                .andExpect(errorType(ErrorType.NOT_FOUND));
+    }
+
+    @Test
+    void addNotFoundDish() throws Exception {
+        perform(MockMvcRequestBuilders.put(REST_URL + FIRST_MENU_ID + DISHES_URL + NOT_FOUND_ID)
+                .with(userHttpBasic(admin)))
+                .andDo(print())
+                .andExpect(status().isNotFound())
+                .andExpect(errorType(ErrorType.NOT_FOUND));
+    }
+
+    @Test
+    void deleteDish() throws Exception {
+        perform(MockMvcRequestBuilders.delete(REST_URL + FIRST_MENU_ID + DISHES_URL + FIRST_DISH_ID)
+                .with(userHttpBasic(admin)))
+                .andDo(print())
+                .andExpect(status().isNoContent());
+        MENU_MATCHER.assertMatch(service.get(FIRST_MENU_ID), MenuTestData.getWithoutDeletedDish());
+    }
+
+    @Test
+    void deleteDishFromNotFound() throws Exception {
+        perform(MockMvcRequestBuilders.delete(REST_URL + NOT_FOUND_ID + DISHES_URL + FIRST_DISH_ID)
+                .with(userHttpBasic(admin)))
+                .andDo(print())
+                .andExpect(status().isNotFound())
+                .andExpect(errorType(ErrorType.NOT_FOUND));
+    }
+
+    @Test
+    void deleteNotFoundDish() throws Exception {
+        perform(MockMvcRequestBuilders.delete(REST_URL + FIRST_MENU_ID + DISHES_URL + NOT_FOUND_ID)
+                .with(userHttpBasic(admin)))
+                .andDo(print())
+                .andExpect(status().isNotFound())
+                .andExpect(errorType(ErrorType.NOT_FOUND));
     }
 
     @Test

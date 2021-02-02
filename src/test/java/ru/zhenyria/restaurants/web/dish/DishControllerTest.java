@@ -7,10 +7,8 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import ru.zhenyria.restaurants.MenuTestData;
 import ru.zhenyria.restaurants.model.Dish;
 import ru.zhenyria.restaurants.service.DishService;
-import ru.zhenyria.restaurants.service.MenuService;
 import ru.zhenyria.restaurants.util.JsonUtil;
 import ru.zhenyria.restaurants.util.exception.ErrorType;
 import ru.zhenyria.restaurants.util.exception.NotFoundException;
@@ -21,8 +19,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.zhenyria.restaurants.DishTestData.*;
-import static ru.zhenyria.restaurants.MenuTestData.FIRST_MENU_ID;
-import static ru.zhenyria.restaurants.MenuTestData.MENU_MATCHER;
 import static ru.zhenyria.restaurants.TestUtil.readFromJson;
 import static ru.zhenyria.restaurants.TestUtil.userHttpBasic;
 import static ru.zhenyria.restaurants.UserTestData.NOT_FOUND_ID;
@@ -30,14 +26,10 @@ import static ru.zhenyria.restaurants.UserTestData.admin;
 import static ru.zhenyria.restaurants.web.ExceptionInfoHandler.EXCEPTION_DUPLICATE_NAME_PRICE;
 
 public class DishControllerTest extends AbstractControllerTest {
-    private static final String REST_URL = DishController.REST_URL + DishController.DISHES_URL + "/";
-    private static final String MENUS_URL = DishController.REST_URL + DishController.MENUS_URL + "/";
+    private static final String REST_URL = DishController.REST_URL + "/";
 
     @Autowired
     private DishService service;
-
-    @Autowired
-    private MenuService menuService;
 
     @Test
     void createWithLocation() throws Exception {
@@ -135,66 +127,6 @@ public class DishControllerTest extends AbstractControllerTest {
                 .andDo(print())
                 .andExpect(status().isUnprocessableEntity())
                 .andExpect(errorType(ErrorType.WRONG_DATA));
-    }
-
-    @Test
-    void addToMenu() throws Exception {
-        perform(MockMvcRequestBuilders.post(
-                MENUS_URL + FIRST_MENU_ID + DishController.DISHES_URL + "/" + (FIRST_DISH_ID + 1))
-                .with(userHttpBasic(admin)))
-                .andDo(print())
-                .andExpect(status().isNoContent());
-        MENU_MATCHER.assertMatch(menuService.get(FIRST_MENU_ID), MenuTestData.getWithAddedDish());
-    }
-
-    @Test
-    void addToNotFoundMenu() throws Exception {
-        perform(MockMvcRequestBuilders.post(
-                MENUS_URL + NOT_FOUND_ID + DishController.DISHES_URL + "/" + FIRST_DISH_ID)
-                .with(userHttpBasic(admin)))
-                .andDo(print())
-                .andExpect(status().isNotFound())
-                .andExpect(errorType(ErrorType.NOT_FOUND));
-    }
-
-    @Test
-    void addNotFoundToMenu() throws Exception {
-        perform(MockMvcRequestBuilders.post(
-                MENUS_URL + FIRST_MENU_ID + DishController.DISHES_URL + "/" + NOT_FOUND_ID)
-                .with(userHttpBasic(admin)))
-                .andDo(print())
-                .andExpect(status().isNotFound())
-                .andExpect(errorType(ErrorType.NOT_FOUND));
-    }
-
-    @Test
-    void deleteFromMenu() throws Exception {
-        perform(MockMvcRequestBuilders.delete(
-                MENUS_URL + FIRST_MENU_ID + DishController.DISHES_URL + "/" + FIRST_DISH_ID)
-                .with(userHttpBasic(admin)))
-                .andDo(print())
-                .andExpect(status().isNoContent());
-        MENU_MATCHER.assertMatch(menuService.get(FIRST_MENU_ID), MenuTestData.getWithoutDeletedDish());
-    }
-
-    @Test
-    void deleteFromNotFoundMenu() throws Exception {
-        perform(MockMvcRequestBuilders.delete(
-                MENUS_URL + NOT_FOUND_ID + DishController.DISHES_URL + "/" + FIRST_DISH_ID)
-                .with(userHttpBasic(admin)))
-                .andDo(print())
-                .andExpect(status().isNotFound())
-                .andExpect(errorType(ErrorType.NOT_FOUND));
-    }
-
-    @Test
-    void deleteNotFoundFromMenu() throws Exception {
-        perform(MockMvcRequestBuilders.delete(
-                MENUS_URL + FIRST_MENU_ID + DishController.DISHES_URL + "/" + NOT_FOUND_ID)
-                .with(userHttpBasic(admin)))
-                .andDo(print())
-                .andExpect(status().isNotFound())
-                .andExpect(errorType(ErrorType.NOT_FOUND));
     }
 
     @Test

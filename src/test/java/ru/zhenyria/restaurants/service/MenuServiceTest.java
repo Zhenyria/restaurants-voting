@@ -2,6 +2,7 @@ package ru.zhenyria.restaurants.service;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import ru.zhenyria.restaurants.MenuTestData;
 import ru.zhenyria.restaurants.RestaurantTestData;
 import ru.zhenyria.restaurants.model.Menu;
 import ru.zhenyria.restaurants.to.MenuTo;
@@ -10,6 +11,7 @@ import ru.zhenyria.restaurants.util.exception.NotFoundException;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static ru.zhenyria.restaurants.DishTestData.FIRST_DISH_ID;
 import static ru.zhenyria.restaurants.MenuTestData.*;
 import static ru.zhenyria.restaurants.RestaurantTestData.FIRST_RESTAURANT_ID;
 import static ru.zhenyria.restaurants.RestaurantTestData.restaurant3;
@@ -95,6 +97,18 @@ public class MenuServiceTest extends AbstractServiceTest {
         menu.setRestaurantId(RestaurantTestData.restaurant2.id());
         service.update(menu);
         MENU_MATCHER.assertMatch(service.get(FIRST_MENU_ID), getUpdated());
+    }
+
+    @Test
+    void addDish() {
+        service.addDish(FIRST_MENU_ID, FIRST_DISH_ID + 1);
+        MENU_MATCHER.assertMatch(service.get(FIRST_MENU_ID), MenuTestData.getWithAddedDish());
+    }
+
+    @Test
+    void deleteDish() {
+        service.deleteDish(FIRST_MENU_ID, FIRST_DISH_ID);
+        MENU_MATCHER.assertMatch(service.get(FIRST_MENU_ID), MenuTestData.getWithoutDeletedDish());
     }
 
     @Test

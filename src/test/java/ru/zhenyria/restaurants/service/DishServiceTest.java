@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.transaction.TransactionSystemException;
-import ru.zhenyria.restaurants.MenuTestData;
 import ru.zhenyria.restaurants.model.Dish;
 import ru.zhenyria.restaurants.util.exception.NotAvailableOperationException;
 import ru.zhenyria.restaurants.util.exception.NotFoundException;
@@ -13,17 +12,12 @@ import javax.validation.ConstraintViolationException;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static ru.zhenyria.restaurants.DishTestData.*;
-import static ru.zhenyria.restaurants.MenuTestData.FIRST_MENU_ID;
-import static ru.zhenyria.restaurants.MenuTestData.MENU_MATCHER;
 import static ru.zhenyria.restaurants.UserTestData.NOT_FOUND_ID;
 
 class DishServiceTest extends AbstractServiceTest {
 
     @Autowired
     private DishService service;
-
-    @Autowired
-    private MenuService menuService;
 
     @Test
     void create() {
@@ -76,18 +70,6 @@ class DishServiceTest extends AbstractServiceTest {
         Dish updated = getUpdated();
         updated.setName("  ");
         assertThrows(TransactionSystemException.class, () -> service.update(updated));
-    }
-
-    @Test
-    void addToMenu() {
-        service.addToMenu(FIRST_MENU_ID, FIRST_DISH_ID + 1);
-        MENU_MATCHER.assertMatch(menuService.get(FIRST_MENU_ID), MenuTestData.getWithAddedDish());
-    }
-
-    @Test
-    void deleteFromMenu() {
-        service.deleteFromMenu(FIRST_MENU_ID, FIRST_DISH_ID);
-        MENU_MATCHER.assertMatch(menuService.get(FIRST_MENU_ID), MenuTestData.getWithoutDeletedDish());
     }
 
     @Test
