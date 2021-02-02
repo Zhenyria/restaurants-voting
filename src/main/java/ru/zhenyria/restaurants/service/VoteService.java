@@ -22,19 +22,19 @@ public class VoteService {
     }
 
     @Cacheable("votes")
-    public int getVotesCount(int id, LocalDate date) {
-        checkExisting(repository.existsById(id));
-        return repository.getVotesCountByDate(id, date == null ? LocalDate.now() : date);
+    public int getVotesCount(int restaurantId, LocalDate date) {
+        checkExisting(repository.existsById(restaurantId));
+        return repository.getVotesCountByDate(restaurantId, date == null ? LocalDate.now() : date);
     }
 
     @CacheEvict(value = "votes", allEntries = true)
     @Transactional
-    public void vote(int id, int userId) {
+    public void vote(int restaurantId, int userId) {
         if (repository.isVotedToday(userId).isEmpty()) {
-            repository.vote(id, userId);
+            repository.vote(restaurantId, userId);
         } else {
             if (isCanReVote()) {
-                repository.reVote(id, userId);
+                repository.reVote(restaurantId, userId);
             } else {
                 throw new VotingException(
                         String.format("Re-voting after %d hours is impossible", VoteUtil.DEADLINE_HOURS));

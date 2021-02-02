@@ -42,11 +42,6 @@ public abstract class AbstractUserController {
         return service.getAll();
     }
 
-    public User getByEmail(String email) {
-        log.info("get user by email {}", email);
-        return service.getByEmail(email);
-    }
-
     public User create(User user) {
         log.info("create user {}", user);
         checkNew(user);

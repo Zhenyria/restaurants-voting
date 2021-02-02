@@ -15,7 +15,7 @@ import java.time.LocalDate;
 @RestController
 @RequestMapping(value = VoteController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class VoteController {
-    static final String REST_URL = "/rest/restaurants/{id}/votes";
+    static final String REST_URL = "/rest/restaurants/{restaurantId}/votes";
     private final Logger log = LoggerFactory.getLogger(getClass());
     protected final VoteService service;
 
@@ -24,15 +24,15 @@ public class VoteController {
     }
 
     @GetMapping
-    public int getVotesCount(@PathVariable int id, @Nullable @RequestParam(name = "date") LocalDate date) {
-        log.info("count votes for restaurant {} by date {}", id, date);
-        return service.getVotesCount(id, date);
+    public int getVotesCount(@PathVariable int restaurantId, @Nullable @RequestParam(name = "date") LocalDate date) {
+        log.info("count votes for restaurant {} by date {}", restaurantId, date);
+        return service.getVotesCount(restaurantId, date);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void vote(@PathVariable int id, @AuthenticationPrincipal AuthorizedUser authUser) {
-        log.info("vote by restaurant {}", id);
-        service.vote(id, authUser.getId());
+    public void vote(@PathVariable int restaurantId, @AuthenticationPrincipal AuthorizedUser authUser) {
+        log.info("vote by restaurant {}", restaurantId);
+        service.vote(restaurantId, authUser.getId());
     }
 }
